@@ -2,27 +2,188 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vsb="clr-namespace:Vestigium.Controls.StatusBar;assembly=Vestigium.Controls.StatusBar"
-        Title="Vestigium.Controls.StatusBar — laboratory"
-        Height="480" Width="720"
-        Background="#0B1A30" Foreground="#E2E8F0"
+        Title="Vestigium.Controls.StatusBar — gallery"
+        Height="780" Width="1100"
+        MinHeight="560" MinWidth="860"
+        Background="#0B1524" Foreground="#E2E8F0"
         FontFamily="Segoe UI" FontSize="13">
   <DockPanel>
-    <vsb:VestigiumStatusBar Position="{Binding Position}"
-                            Message="{Binding Message}"/>
+    <Menu DockPanel.Dock="Top" Background="#0F2744" Foreground="#E2E8F0" Padding="4,2">
+      <MenuItem Header="_File">
+        <MenuItem Header="Under Construction" IsEnabled="False"/>
+        <Separator/>
+        <MenuItem Header="E_xit" Click="Exit_Click"/>
+      </MenuItem>
+      <MenuItem Header="_View">
+        <MenuItem Header="Status bar at _Bottom" Command="{Binding DockBottomCommand}"/>
+        <MenuItem Header="Status bar at _Top" Command="{Binding DockTopCommand}"/>
+      </MenuItem>
+      <MenuItem Header="_Help">
+        <MenuItem Header="Under Construction" IsEnabled="False"/>
+      </MenuItem>
+    </Menu>
 
-    <StackPanel Margin="20">
-      <TextBlock FontSize="20" FontWeight="SemiBold" Text="StatusBar laboratory"/>
-      <TextBlock Margin="0,4,0,16" Opacity="0.7"
-                 Text="Skeleton only. Position and Message are live. Progress, clock, and trailing text wait for SRS acceptance."/>
+    <vsb:VestigiumStatusBar Engine="{Binding WindowBar}"
+                            Position="{Binding Position, Mode=TwoWay}"/>
 
-      <TextBlock Text="Message"/>
-      <TextBox Margin="0,4,0,12" Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20">
+      <StackPanel>
+        <TextBlock FontSize="11" Foreground="#94A3B8" Text="VESTIGIUM.CONTROLS"/>
+        <DockPanel LastChildFill="False" Margin="0,4,0,12">
+          <TextBlock FontSize="24" FontWeight="SemiBold" Text="StatusBar gallery"/>
+          <TextBlock DockPanel.Dock="Right" VerticalAlignment="Bottom" Foreground="#94A3B8"
+                     Text="{Binding IdleCountdown}"/>
+        </DockPanel>
+        <TextBlock TextWrapping="Wrap" Foreground="#94A3B8" Margin="0,0,0,16"
+                   Text="Window chrome plus nested bars. Idle defaults to Idle. . . after 3 seconds. Settings change the idle string and timeout. Each nested surface owns its own StatusBarEngine."/>
 
-      <TextBlock Text="Position"/>
-      <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-        <Button Content="Bottom" Command="{Binding DockBottomCommand}" Margin="0,0,8,0" Padding="12,4"/>
-        <Button Content="Top" Command="{Binding DockTopCommand}" Padding="12,4"/>
+        <TabControl Background="#102038" BorderBrush="#1E3A5F">
+          <TabItem Header="Gallery">
+            <UniformGrid Columns="2" Margin="12">
+              <GroupBox Header="Standard chrome">
+                <DockPanel Height="120">
+                  <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding WindowBar}"/>
+                  <TextBlock Margin="8" Foreground="#94A3B8" Text="Same engine as the window bar."/>
+                </DockPanel>
+              </GroupBox>
+              <GroupBox Header="Idle fallback">
+                <DockPanel Height="120">
+                  <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding IdleBar}"/>
+                  <StackPanel Margin="8">
+                    <TextBlock Foreground="#94A3B8" TextWrapping="Wrap"
+                               Text="Default Idle. . . after 3 s. Touch resets the timer."/>
+                    <Button Content="Touch" Command="{Binding TouchIdleCommand}"/>
+                  </StackPanel>
+                </DockPanel>
+              </GroupBox>
+              <GroupBox Header="Probe in flight">
+                <DockPanel Height="140">
+                  <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding ProbeBar}"/>
+                  <StackPanel Margin="8" Orientation="Horizontal">
+                    <Button Content="Run ping" Command="{Binding RunPingCommand}"/>
+                    <Button Content="Indeterminate" Command="{Binding IndeterminateProbeCommand}"/>
+                  </StackPanel>
+                </DockPanel>
+              </GroupBox>
+              <GroupBox Header="Compact 20 dip">
+                <DockPanel Height="80">
+                  <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding IdleBar}" Height="20"/>
+                  <TextBlock Margin="8" Foreground="#94A3B8" Text="Thickness floor is 20 dip."/>
+                </DockPanel>
+              </GroupBox>
+            </UniformGrid>
+          </TabItem>
+
+          <TabItem Header="Nested">
+            <Grid Margin="12">
+              <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+
+              <Border Grid.Row="0" Grid.Column="0" Margin="0,0,8,8" BorderBrush="#1E3A5F" BorderThickness="1">
+                <DockPanel>
+                  <Border DockPanel.Dock="Top" Background="#132744" Padding="8">
+                    <TextBlock Text="Editor.cs"/>
+                  </Border>
+                  <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding EditorBar}"/>
+                  <StackPanel Margin="8">
+                    <TextBlock FontFamily="Consolas" Text="status.Post("message", new("Compiling"));"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                      <Button Content="Build" Command="{Binding BuildEditorCommand}"/>
+                      <Button Content="Warn" Command="{Binding WarnEditorCommand}"/>
+                    </StackPanel>
+                  </StackPanel>
+                </DockPanel>
+              </Border>
+
+              <Border Grid.Row="0" Grid.Column="1" Margin="0,0,0,8" BorderBrush="#1E3A5F" BorderThickness="1">
+                <DockPanel>
+                  <Border DockPanel.Dock="Top" Background="#132744" Padding="8">
+                    <TextBlock Text="PingIQ — session"/>
+                  </Border>
+                  <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding SessionBar}"/>
+                  <StackPanel Margin="8">
+                    <TextBlock TextWrapping="Wrap" Foreground="#94A3B8"
+                               Text="Child module status is not the window bar."/>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                      <Button Content="Trace" Command="{Binding TraceSessionCommand}"/>
+                      <Button Content="Complete" Command="{Binding CompleteSessionCommand}"/>
+                    </StackPanel>
+                  </StackPanel>
+                </DockPanel>
+              </Border>
+
+              <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="#1E3A5F" BorderThickness="1">
+                <DockPanel>
+                  <Border DockPanel.Dock="Top" Background="#132744" Padding="8">
+                    <TextBlock Text="Outer document"/>
+                  </Border>
+                  <Border Margin="8" BorderBrush="#1E3A5F" BorderThickness="1">
+                    <DockPanel>
+                      <Border DockPanel.Dock="Top" Background="#102038" Padding="6">
+                        <TextBlock Text="Nested output pane"/>
+                      </Border>
+                      <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding NestedInnerBar}"/>
+                      <StackPanel Margin="8">
+                        <TextBlock Foreground="#94A3B8" TextWrapping="Wrap"
+                                   Text="A status bar inside a status-barred parent. Two drain loops, two idle timers."/>
+                        <Button Content="Write output" Command="{Binding WriteOutputCommand}"/>
+                      </StackPanel>
+                    </DockPanel>
+                  </Border>
+                </DockPanel>
+              </Border>
+            </Grid>
+          </TabItem>
+
+          <TabItem Header="Lab">
+            <StackPanel Margin="12">
+              <TextBlock Text="Message column"/>
+              <TextBox Margin="0,4,0,8" Text="{Binding LabMessage, UpdateSourceTrigger=PropertyChanged}"/>
+              <StackPanel Orientation="Horizontal">
+                <Button Content="Post" Command="{Binding PostLabCommand}"/>
+                <Button Content="Immediate" Command="{Binding PostLabImmediateCommand}"/>
+                <Button Content="Ready" Command="{Binding ReadyCommand}"/>
+                <Button Content="Flood worker" Command="{Binding FloodCommand}"/>
+              </StackPanel>
+              <TextBlock Margin="0,12,0,4" Text="Icon"/>
+              <StackPanel Orientation="Horizontal">
+                <Button Content="Success" Command="{Binding SetIconCommand}" CommandParameter="Success"/>
+                <Button Content="Warning" Command="{Binding SetIconCommand}" CommandParameter="Warning"/>
+                <Button Content="Error" Command="{Binding SetIconCommand}" CommandParameter="Error"/>
+                <Button Content="Info" Command="{Binding SetIconCommand}" CommandParameter="Info"/>
+                <Button Content="Busy" Command="{Binding SetIconCommand}" CommandParameter="Busy"/>
+              </StackPanel>
+              <TextBlock Margin="0,16,0,0" Foreground="#94A3B8"
+                         Text="Posts a hop every 8 ms. Drain floor is 100 ms so the bar coalesces."/>
+            </StackPanel>
+          </TabItem>
+
+          <TabItem Header="Settings">
+            <StackPanel Margin="12" MaxWidth="520" HorizontalAlignment="Left">
+              <CheckBox Content="Enable idle (default on)" IsChecked="{Binding IdleEnabled}"/>
+              <TextBlock Margin="0,12,0,4" Text="Idle message"/>
+              <TextBox Text="{Binding IdleText, UpdateSourceTrigger=PropertyChanged}"/>
+              <TextBlock Margin="0,12,0,4" Text="{Binding IdleTimeoutMs, StringFormat=Timeout {0} ms (default 3000)}"/>
+              <Slider Minimum="500" Maximum="10000" SmallChange="100" LargeChange="500"
+                      Value="{Binding IdleTimeoutMs, Mode=TwoWay}"/>
+              <Button Margin="0,16,0,0" Content="Restore defaults" Command="{Binding RestoreIdleDefaultsCommand}" HorizontalAlignment="Left"/>
+              <TextBlock Margin="0,16,0,0" Foreground="#94A3B8" TextWrapping="Wrap"
+                         Text="Watch the window chrome bar. After the timeout with no posts it rewrites in place to the idle message."/>
+            </StackPanel>
+          </TabItem>
+
+          <TabItem Header="Snapshot">
+            <TextBox Margin="12" IsReadOnly="True" FontFamily="Consolas"
+                     Text="{Binding SnapshotText, Mode=OneWay}" MinHeight="160"/>
+          </TabItem>
+        </TabControl>
       </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
   </DockPanel>
 </Window>

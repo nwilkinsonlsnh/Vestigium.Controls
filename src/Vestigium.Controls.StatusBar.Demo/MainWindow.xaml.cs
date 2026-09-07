@@ -9,4 +9,6 @@ public partial class MainWindow : Window
         InitializeComponent();
         DataContext = new MainViewModel();
     }
+
+    private void Exit_Click(object sender, RoutedEventArgs e) => Close();
 }

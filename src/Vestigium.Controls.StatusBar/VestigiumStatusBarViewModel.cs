@@ -4,24 +4,46 @@ namespace Vestigium.Controls.StatusBar;
 
 public partial class VestigiumStatusBarViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private VestigiumStatusBarPosition _position = VestigiumStatusBarPosition.Bottom;
+    public VestigiumStatusBarViewModel()
+        : this(new StatusBarEngine())
+    {
+    }
 
-    [ObservableProperty]
-    private string _message = "Ready";
+    public VestigiumStatusBarViewModel(StatusBarEngine engine)
+    {
+        Engine = engine;
+        Engine.Changed += () =>
+        {
+            OnPropertyChanged(nameof(Position));
+            OnPropertyChanged(nameof(Message));
+            OnPropertyChanged(nameof(IdleRemainingMs));
+        };
+    }
 
-    [ObservableProperty]
-    private string? _trailingText;
+    public StatusBarEngine Engine { get; }
 
-    [ObservableProperty]
-    private bool _isProgressVisible;
+    public VestigiumStatusBarPosition Position
+    {
+        get => Engine.Position;
+        set
+        {
+            if (Engine.Position == value) return;
+            Engine.Position = value;
+            OnPropertyChanged();
+        }
+    }
 
-    [ObservableProperty]
-    private double _progressValue;
+    public string Message
+    {
+        get => Engine.Columns.FirstOrDefault(c => c.IsLiveRegion)?.Text ?? StatusBarDefaults.ReadyText;
+        set => Engine.PostImmediate("message", new StatusBarUpdate { Text = value });
+    }
 
-    [ObservableProperty]
-    private bool _isIndeterminate;
+    public int IdleRemainingMs => Engine.Snapshot().IdleRemainingMs;
 
-    [ObservableProperty]
-    private bool _isClockVisible = true;
+    public bool IsClockVisible
+    {
+        get => Engine.Columns.Any(c => c.Kind == StatusBarColumnKind.Clock);
+        set { }
+    }
 }

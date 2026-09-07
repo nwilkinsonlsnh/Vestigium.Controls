@@ -29,9 +29,8 @@
       </MenuItem>
     </Menu>
 
-    <vsb:VestigiumStatusBar DockPanel.Dock="Bottom"
-                            Position="{Binding Status.Position}"
-                            Message="{Binding Status.Message}"/>
+    <vsb:VestigiumStatusBar Engine="{Binding Status.Engine}"
+                            Position="{Binding Status.Position}"/>
 
     <uc:UnderConstructionView Title="Vestigium"
                               Detail="Default form client area. Feature views land here after their requirements are accepted."/>
