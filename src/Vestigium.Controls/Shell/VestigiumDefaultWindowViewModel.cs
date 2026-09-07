@@ -22,9 +22,9 @@ public partial class VestigiumDefaultWindowViewModel : ObservableObject
 
     [ObservableProperty] private bool _showStatusBar = true;
 
-    public VestigiumShell? Shell { get; set; }
+    public VestigiumShell? RootShell { get; set; }
 
-    public VestigiumNavItem? this[string name] => Shell?[name];
+    public VestigiumNavItem? this[string name] => RootShell?[name];
 
     [RelayCommand]
     private void DockStatusBarBottom() => Status.Position = VestigiumStatusBarPosition.Bottom;

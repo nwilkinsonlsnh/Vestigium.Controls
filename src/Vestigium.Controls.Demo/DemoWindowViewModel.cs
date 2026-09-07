@@ -12,8 +12,8 @@ public partial class DemoWindowViewModel : VestigiumDefaultWindowViewModel
     [RelayCommand]
     private void StageIqSuite()
     {
-        if (Shell is null) return;
-        Shell.ApplySpec(new VestigiumShellSpec
+        if (RootShell is null) return;
+        RootShell.ApplySpec(new VestigiumShellSpec
         {
             Items =
             {
@@ -55,12 +55,12 @@ public partial class DemoWindowViewModel : VestigiumDefaultWindowViewModel
     [RelayCommand]
     private void ReplacePingWithInnerForm()
     {
-        if (Shell is null) return;
-        var ping = Shell["PingIQ"];
+        if (RootShell is null) return;
+        var ping = RootShell["PingIQ"];
         if (ping is null)
         {
             StageIqSuite();
-            ping = Shell["PingIQ"];
+            ping = RootShell["PingIQ"];
         }
         if (ping is null) return;
 
@@ -95,14 +95,14 @@ public partial class DemoWindowViewModel : VestigiumDefaultWindowViewModel
                 }
             }
         };
-        Shell.SelectedItem = ping;
+        RootShell.SelectedItem = ping;
         Status.Message = "PingIQ now hosts a TabControl and an inner shell.";
     }
 
     [RelayCommand]
     private void ResetDefaults()
     {
-        Shell?.SeedDefaults();
+        RootShell?.SeedDefaults();
         Status.Message = "Restored Home / Workspace / Settings.";
     }
 }

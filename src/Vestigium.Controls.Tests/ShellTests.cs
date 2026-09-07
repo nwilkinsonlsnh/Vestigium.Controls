@@ -127,8 +127,8 @@ public class ShellTests
     public void Default_window_exposes_shell()
     {
         var window = new VestigiumDefaultWindow();
-        Assert.NotNull(window.Shell);
-        Assert.Equal(3, window.Shell.NavItems.Count);
+        Assert.NotNull(window.HostShell);
+        Assert.Equal(3, window.HostShell.NavItems.Count);
         Assert.True(window.ViewModel.ShowStatusBar);
     }
 }

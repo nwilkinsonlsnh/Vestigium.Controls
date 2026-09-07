@@ -23,7 +23,7 @@ public partial class App : Application
         {
             Title = "Vestigium.Controls — default form"
         };
-        window.Shell.Status.Message = "Ready. Home / Workspace / Settings are placeholders.";
+        window.HostShell.Status.Message = "Ready. Home / Workspace / Settings are placeholders.";
         window.Show();
     }
 }

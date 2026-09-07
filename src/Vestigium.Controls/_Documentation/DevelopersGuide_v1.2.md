@@ -77,7 +77,7 @@ PingIQ’s construction page is gone. Other slots are unchanged. The inner radio
 
 `shell["pingiq"]` matches `Key` then `Header`, case-insensitive, including children.
 
-From the default window: `window.Shell["Settings"]` or `viewModel["Settings"]`.
+From the default window: `window.HostShell["Settings"]` or `viewModel["Settings"]`. Do not name a property `Shell` — that collides with the `Vestigium.Controls.Shell` namespace.
 
 ## Status bar
 

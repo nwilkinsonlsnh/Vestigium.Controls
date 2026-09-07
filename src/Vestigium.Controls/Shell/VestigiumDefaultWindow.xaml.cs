@@ -14,13 +14,13 @@ public partial class VestigiumDefaultWindow : Window
         InitializeComponent();
         ViewModel = viewModel;
         DataContext = viewModel;
-        viewModel.Shell = RootShell;
-        Loaded += (_, _) => viewModel.Shell = RootShell;
+        viewModel.RootShell = RootShell;
+        Loaded += (_, _) => viewModel.RootShell = RootShell;
     }
 
     public VestigiumDefaultWindowViewModel ViewModel { get; }
 
-    public VestigiumShell Shell => RootShell;
+    public VestigiumShell HostShell => RootShell;
 
     private void Exit_Click(object sender, RoutedEventArgs e) => Close();
 }

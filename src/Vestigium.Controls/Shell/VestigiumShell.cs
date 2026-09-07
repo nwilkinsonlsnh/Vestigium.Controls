@@ -34,7 +34,7 @@ public class VestigiumShell : Control
         SetCurrentValue(StatusProperty, CreateOwnedStatus());
         SelectItemCommand = new RelayCommand<VestigiumNavItem>(SelectItem, item => item is { IsEnabled: true });
         SeedDefaultsIfEmpty();
-        SelectedItem = NavItems.FirstOrDefault();
+        SelectedItem = NavItems.OfType<VestigiumNavItem>().FirstOrDefault();
         if (SelectedItem is not null)
             SelectedItem.IsSelected = true;
         GroupId = $"nav_{GetHashCode():x}";
