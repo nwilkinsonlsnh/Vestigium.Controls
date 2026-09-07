@@ -67,11 +67,11 @@ public class VestigiumPropertiesGrid : Control
 
     public static readonly DependencyProperty SelectedObjectProperty =
         DependencyProperty.Register(nameof(SelectedObject), typeof(object), typeof(VestigiumPropertiesGrid),
-            new FrameworkPropertyMetadata(null, OnSelectedObjectChanged));
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.None, OnSelectedObjectChanged));
 
     public static readonly DependencyProperty SelectedObjectsProperty =
         DependencyProperty.Register(nameof(SelectedObjects), typeof(IList), typeof(VestigiumPropertiesGrid),
-            new PropertyMetadata(null, OnSelectedObjectsChanged));
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.None, OnSelectedObjectsChanged));
 
     public static readonly DependencyProperty ItemsSourceProperty =
         DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable), typeof(VestigiumPropertiesGrid),

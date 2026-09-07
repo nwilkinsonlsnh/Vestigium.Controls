@@ -40,8 +40,22 @@ public partial class MainViewModel : ObservableObject
     public IList<VestigiumPropertyItem> HostItems { get; }
     public VestigiumCategoryIconCollection CategoryIcons { get; }
 
-    public object? GridTarget => MultiSelect ? null : Selected;
-    public System.Collections.IList? GridTargets => MultiSelect ? SelectedSet : null;
+    public object? GridTarget
+    {
+        get => MultiSelect ? null : Selected;
+        set
+        {
+            if (MultiSelect)
+                return;
+            Selected = value as ProbeSettings;
+        }
+    }
+
+    public System.Collections.IList? GridTargets
+    {
+        get => MultiSelect ? SelectedSet : null;
+        set { }
+    }
 
     partial void OnSelectedChanged(ProbeSettings? value)
     {

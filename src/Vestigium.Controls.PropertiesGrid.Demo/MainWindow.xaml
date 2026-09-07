@@ -27,7 +27,7 @@
                                       CategoryTextAlignment="{Binding CategoryTextAlignment}"
                                       IsCategoryBold="{Binding IsCategoryBold}"
                                       CategoryOrientation="{Binding CategoryOrientation}"
-                                      CategoryIcons="{Binding CategoryIcons}"/>
+                                      CategoryIcons="{Binding CategoryIcons, Mode=OneWay}"/>
           <DockPanel Grid.Column="1" Margin="12,0,0,0">
             <TextBlock DockPanel.Dock="Top" Margin="0,0,0,8" Foreground="#94A3B8" TextWrapping="Wrap"
                        Text="Live object. Edits in the grid appear here. TTL and Timeout follow EditorTextAlignment."/>
@@ -82,13 +82,13 @@
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="240"/>
             </Grid.ColumnDefinitions>
-            <pg:VestigiumPropertiesGrid SelectedObject="{Binding GridTarget, Mode=OneWay}"
+            <pg:VestigiumPropertiesGrid SelectedObject="{Binding Selected, Mode=OneWay}"
                                         SelectedObjects="{Binding GridTargets, Mode=OneWay}"
                                         EditorTextAlignment="{Binding EditorTextAlignment}"
                                         CategoryTextAlignment="{Binding CategoryTextAlignment}"
                                         IsCategoryBold="{Binding IsCategoryBold}"
                                         CategoryOrientation="{Binding CategoryOrientation}"
-                                        CategoryIcons="{Binding CategoryIcons}"/>
+                                        CategoryIcons="{Binding CategoryIcons, Mode=OneWay}"/>
             <StackPanel Grid.Column="1" Margin="12,0,0,0">
               <TextBlock Text="{Binding East.DisplayName, StringFormat='East: {0}'}"/>
               <TextBlock Text="{Binding West.DisplayName, StringFormat='West: {0}'}"/>
@@ -124,7 +124,7 @@
                                       CategoryTextAlignment="{Binding CategoryTextAlignment}"
                                       IsCategoryBold="{Binding IsCategoryBold}"
                                       CategoryOrientation="{Binding CategoryOrientation}"
-                                      CategoryIcons="{Binding CategoryIcons}"/>
+                                      CategoryIcons="{Binding CategoryIcons, Mode=OneWay}"/>
         </Grid>
       </TabItem>
 
