@@ -219,8 +219,10 @@ internal static class PropertyRules
         return Convert.ToString(value, CultureInfo.CurrentCulture) ?? string.Empty;
     }
 
-    public static object? CreateElement(Type type)
+    public static object? CreateElement(Type? type)
     {
+        if (type is null || type == typeof(void)) return null;
+        if (type == typeof(object)) return new object();
         type = Unwrap(type);
         if (type == typeof(string)) return string.Empty;
         if (type == typeof(bool)) return false;
@@ -234,39 +236,43 @@ internal static class PropertyRules
         if (IsColor(type)) return Color.FromRgb(0x4A, 0x90, 0xC8);
         try
         {
-            var ctor = type.GetConstructor(
-                System.Reflection.BindingFlags.Instance
-                | System.Reflection.BindingFlags.Public
-                | System.Reflection.BindingFlags.NonPublic,
-                binder: null,
-                types: Type.EmptyTypes,
-                modifiers: null);
-            if (ctor is not null)
-                return ctor.Invoke(null);
             return Activator.CreateInstance(type, nonPublic: true);
         }
         catch
         {
-            return null;
+            try
+            {
+                return System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(type);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 
     public static Type? ElementType(Type listType, System.Collections.IList? list)
     {
-        if (listType.IsArray) return listType.GetElementType();
-        if (listType.IsGenericType)
+        static Type? From(Type t)
         {
-            var args = listType.GetGenericArguments();
-            if (args.Length == 1) return args[0];
+            if (t.IsArray) return t.GetElementType();
+            for (var walk = t; walk is not null && walk != typeof(object); walk = walk.BaseType)
+            {
+                if (walk.IsGenericType && walk.GetGenericArguments().Length == 1
+                    && typeof(IEnumerable).IsAssignableFrom(walk))
+                    return walk.GetGenericArguments()[0];
+            }
+            foreach (var itf in t.GetInterfaces())
+            {
+                if (!itf.IsGenericType) continue;
+                var def = itf.GetGenericTypeDefinition();
+                if (def == typeof(IList<>) || def == typeof(ICollection<>) || def == typeof(IEnumerable<>))
+                    return itf.GetGenericArguments()[0];
+            }
+            return null;
         }
-        foreach (var itf in listType.GetInterfaces())
-        {
-            if (itf.IsGenericType && itf.GetGenericTypeDefinition() == typeof(IList<>))
-                return itf.GetGenericArguments()[0];
-        }
-        if (list is { Count: > 0 } && list[0] is not null)
-            return list[0]!.GetType();
-        return typeof(object);
+
+        return From(listType) ?? (list is not null ? From(list.GetType()) : null) ?? typeof(object);
     }
 
     public static int CoerceMaxDepth(int value) => value <= 0 ? DefaultMaxExpandDepth : value;

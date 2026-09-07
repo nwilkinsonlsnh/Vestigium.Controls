@@ -162,7 +162,10 @@ public class PropertyEngineTests
         var probe = new Probe();
         var engine = EngineOf(probe);
         var hops = engine.RootItems.Single(r => r.Name == "Hops");
-        Assert.True(engine.TryAdd(hops));
+        Assert.Equal(VestigiumPropertyEditorKind.Collection, hops.Kind);
+        Assert.False(hops.IsReadOnly);
+        Assert.True(engine.CanAdd(hops), "CanAdd should allow ObservableCollection<Hop>.");
+        Assert.True(engine.TryAdd(hops), "TryAdd should construct a Hop and append it.");
         Assert.Equal(1, probe.Hops.Count);
     }
 

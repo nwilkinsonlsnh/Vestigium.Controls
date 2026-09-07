@@ -250,9 +250,37 @@ public sealed class PropertyEngine
         RebuildVisible();
     }
 
-    public bool CanAdd(VestigiumPropertyItem item) =>
-        !IsReadOnly && !item.IsReadOnly && item.Kind == VestigiumPropertyEditorKind.Collection
-        && item.Owners.Count <= 1 && item.List is { IsReadOnly: false, IsFixedSize: false };
+    public bool CanAdd(VestigiumPropertyItem item)
+    {
+        if (IsReadOnly || item.IsReadOnly) return false;
+        if (item.Kind != VestigiumPropertyEditorKind.Collection) return false;
+        if (item.Owners.Count > 1) return false;
+        var list = item.List ?? item.Value as IList;
+        if (list is null || list.IsReadOnly || list is Array) return false;
+        return true;
+    }
+
+    public bool TryAdd(VestigiumPropertyItem item)
+    {
+        var list = item.List ?? item.Value as IList;
+        if (list is not null)
+            item.List = list;
+        if (!CanAdd(item) || item.List is null) return false;
+
+        var type = PropertyRules.ElementType(item.PropertyType ?? item.List.GetType(), item.List)
+                   ?? PropertyRules.ElementType(item.List.GetType(), item.List);
+        var created = PropertyRules.CreateElement(type);
+        if (created is null && type != typeof(string) && type is not null)
+            return false;
+        if (type == typeof(string) && created is null)
+            created = string.Empty;
+
+        item.List.Add(created);
+        item.Value = item.List;
+        InvalidateChildren(item);
+        RebuildVisible();
+        return true;
+    }
 
     public bool CanRemove(VestigiumPropertyItem item) =>
         CanAdd(item) && SelectedChild(item) is { Index: >= 0 };
@@ -264,28 +292,6 @@ public sealed class PropertyEngine
         if (child is null) return false;
         var next = child.Index + delta;
         return next >= 0 && next < item.List.Count;
-    }
-
-    public bool TryAdd(VestigiumPropertyItem item)
-    {
-        if (item.List is null && item.Value is IList bound)
-            item.List = bound;
-        if (!CanAdd(item) || item.List is null) return false;
-        var type = PropertyRules.ElementType(item.PropertyType ?? item.List.GetType(), item.List);
-        var created = PropertyRules.CreateElement(type);
-        if (created is null && type != typeof(string)) return false;
-        try
-        {
-            item.List.Add(created);
-        }
-        catch
-        {
-            return false;
-        }
-        item.Value = item.List;
-        InvalidateChildren(item);
-        RebuildVisible();
-        return true;
     }
 
     public bool TryRemoveSelected(VestigiumPropertyItem item)
