@@ -13,31 +13,70 @@
         <ControlTemplate TargetType="{x:Type local:VestigiumUnderConstruction}">
           <Border x:Name="Root"
                   Background="{TemplateBinding Background}"
+                  Padding="32,24"
                   SnapsToDevicePixels="True">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="16">
-              <Viewbox Width="64" Height="64" MaxWidth="96" MaxHeight="96">
-                <Path x:Name="PART_Icon"
-                      Data="{TemplateBinding IconData}"
-                      Fill="#E8A317"
-                      Stretch="Uniform"/>
+            <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Stretch"
+                        MaxWidth="720">
+              <Image x:Name="PART_Image"
+                     MaxHeight="160"
+                     MaxWidth="220"
+                     Stretch="Uniform"
+                     HorizontalAlignment="Center"
+                     Visibility="Collapsed"
+                     Source="{TemplateBinding ImageSource}"/>
+              <Viewbox x:Name="PART_DefaultArt"
+                       Width="120" Height="150"
+                       HorizontalAlignment="Center"
+                       Stretch="Uniform">
+                <Canvas Width="96" Height="120">
+                  <Path Fill="#2A3038" Data="M20,80 L76,80 L80,94 L16,94 Z"/>
+                  <Path Fill="#E85D04" Data="M45,8 L51,8 L67,78 L29,78 Z"/>
+                  <Path Fill="#C44A12" Data="M27,74 L69,74 L72,80 L24,80 Z"/>
+                  <Path Fill="#F4F0E6" Data="M41,26 L55,26 L57.5,36 L38.5,36 Z"/>
+                  <Path Fill="#F4F0E6" Data="M36,46 L60,46 L62.5,56 L33.5,56 Z"/>
+                  <Path Fill="#3A414C" Data="M12,78 L20,78 L16,114 L8,114 Z"/>
+                  <Path Fill="#3A414C" Data="M76,78 L84,78 L88,114 L80,114 Z"/>
+                  <Path Fill="#F5C518" Data="M18,80 L78,80 L78,102 L18,102 Z"/>
+                  <Path Fill="#1A1F2B" Data="M22,80 L32,80 L20,102 L10,102 Z"/>
+                  <Path Fill="#1A1F2B" Data="M38,80 L48,80 L36,102 L26,102 Z"/>
+                  <Path Fill="#1A1F2B" Data="M54,80 L64,80 L52,102 L42,102 Z"/>
+                  <Path Fill="#1A1F2B" Data="M70,80 L80,80 L68,102 L58,102 Z"/>
+                </Canvas>
               </Viewbox>
-              <TextBlock x:Name="PART_Header"
-                         Margin="0,16,0,0"
-                         FontSize="22"
+              <Path x:Name="PART_Icon"
+                    Width="96" Height="96"
+                    Fill="#E85D04"
+                    Stretch="Uniform"
+                    HorizontalAlignment="Center"
+                    Visibility="Collapsed"
+                    Data="{TemplateBinding IconData}"/>
+              <TextBlock x:Name="PART_Title"
+                         Margin="0,20,0,0"
+                         FontSize="24"
                          FontWeight="SemiBold"
                          TextAlignment="Center"
                          TextWrapping="Wrap"
-                         MaxWidth="420"
                          Foreground="{TemplateBinding Foreground}"
-                         Text="{TemplateBinding Header}"/>
-              <TextBlock x:Name="PART_Message"
+                         Text="{TemplateBinding Title}"/>
+              <TextBlock x:Name="PART_Subject"
                          Margin="0,8,0,0"
-                         FontSize="13"
+                         FontSize="15"
+                         FontWeight="SemiBold"
                          TextAlignment="Center"
                          TextWrapping="Wrap"
-                         MaxWidth="420"
+                         Visibility="Collapsed"
+                         Foreground="#CBD5E1"
+                         Text="{TemplateBinding Subject}"/>
+              <TextBlock x:Name="PART_Description"
+                         Margin="0,10,0,0"
+                         FontSize="13"
+                         LineHeight="20"
+                         TextAlignment="Center"
+                         TextWrapping="Wrap"
+                         Visibility="Collapsed"
                          Foreground="#94A3B8"
-                         Text="{TemplateBinding Message}"/>
+                         Text="{TemplateBinding Description}"/>
               <Button x:Name="PART_Action"
                       Margin="0,20,0,0"
                       MinHeight="32"
@@ -69,7 +108,7 @@
                         <Setter Property="Foreground" Value="#0B1524"/>
                       </Trigger>
                       <Trigger Property="IsPressed" Value="True">
-                        <Setter TargetName="bd" Property="Background" Value="#E8A317"/>
+                        <Setter TargetName="bd" Property="Background" Value="#E85D04"/>
                         <Setter Property="Foreground" Value="#0B1524"/>
                       </Trigger>
                     </ControlTemplate.Triggers>
@@ -83,12 +122,6 @@
               <Setter Property="Visibility" Value="Collapsed"/>
               <Setter Property="IsHitTestVisible" Value="False"/>
             </Trigger>
-            <DataTrigger Binding="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" Value="">
-              <Setter TargetName="PART_Header" Property="Visibility" Value="Collapsed"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Message, RelativeSource={RelativeSource TemplatedParent}}" Value="">
-              <Setter TargetName="PART_Message" Property="Visibility" Value="Collapsed"/>
-            </DataTrigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>

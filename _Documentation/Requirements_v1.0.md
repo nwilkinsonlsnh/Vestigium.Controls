@@ -87,7 +87,7 @@ src/Vestigium.Controls.Tests/
 |---|---|---|
 | 0 | Solution skeleton, default form chrome, stub controls, docs | This commit |
 | 1 | Accept and implement StatusBar per its SRS | Not started |
-| 2 | UnderConstruction visual language used by unfinished menus | Shipped — SRS v1.1 |
+| 2 | UnderConstruction visual language used by unfinished menus | Shipped — SRS v1.2 |
 | 3 | NumericUpDown requirements + build | Shipped — SRS v1.2 |
 | 4 | PropertiesGrid requirements + build | Not started |
 

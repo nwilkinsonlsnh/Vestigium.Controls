@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:uc="clr-namespace:Vestigium.Controls.UnderConstruction;assembly=Vestigium.Controls.UnderConstruction"
         Title="Vestigium.Controls.UnderConstruction — gallery"
-        Height="820" Width="1080"
+        Height="860" Width="1100"
         MinHeight="560" MinWidth="800"
         Background="#0B1524" Foreground="#E2E8F0"
         FontFamily="Segoe UI" FontSize="13">
@@ -16,8 +16,9 @@
     <TabControl Margin="16">
       <TabItem Header="Page">
         <uc:VestigiumUnderConstruction
-            Header="Vestigium"
-            Message="Default form client area. Feature views land here after their requirements are accepted."/>
+            Title="Vestigium"
+            Subject="Default form client area"
+            Description="Feature views land here after their requirements are accepted."/>
       </TabItem>
 
       <TabItem Header="Overlay">
@@ -47,8 +48,9 @@
               <Button Content="{Binding LiveClicks, StringFormat='Reports — clicks {0}'}"
                       Command="{Binding LiveTileCommand}"/>
               <uc:VestigiumUnderConstruction
-                  Header="Reports"
-                  Message="Scheduled for Q3."
+                  Title="Reports"
+                  Subject="Module in development"
+                  Description="Scheduled for Q3."
                   IsActive="{Binding IsActive}"
                   Command="{Binding ActionCommand}"
                   ActionText="Notify me"/>
@@ -59,23 +61,40 @@
 
       <TabItem Header="Lab">
         <ScrollViewer>
-          <StackPanel Margin="12" MaxWidth="640" HorizontalAlignment="Left">
-            <uc:VestigiumUnderConstruction Height="280"
-                Header="{Binding Header}"
-                Message="{Binding Message}"
+          <StackPanel Margin="12">
+            <uc:VestigiumUnderConstruction MinHeight="320"
+                Title="{Binding Title}"
+                TitleMaxLength="{Binding TitleMaxLength}"
+                Subject="{Binding Subject}"
+                SubjectMaxLength="{Binding SubjectMaxLength}"
+                Description="{Binding Description}"
                 IsActive="{Binding IsActive}"
                 Command="{Binding ActionCommand}"
                 ActionText="Notify me"
-                IconData="{Binding IconData}"/>
-            <TextBlock Margin="0,16,0,8" Text="Header"/>
-            <TextBox Text="{Binding Header, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Margin="0,12,0,8" Text="Message (empty hides the line)"/>
-            <TextBox Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"/>
+                IconData="{Binding IconData}"
+                ImageSource="{Binding ImageSource}"
+                ImageUri="{Binding ImageUri}"/>
+            <TextBlock Margin="0,16,0,8" Text="Title (default max 75)"/>
+            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Margin="0,12,0,8" Text="Subject (default max 125)"/>
+            <TextBox Text="{Binding Subject, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Margin="0,12,0,8" Text="Description (unlimited unless you set a max)"/>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                     TextWrapping="Wrap" MinHeight="64" AcceptsReturn="True"/>
+            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+              <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" Text="Title max"/>
+              <TextBox Width="72" Text="{Binding TitleMaxLength, UpdateSourceTrigger=PropertyChanged}"/>
+              <TextBlock VerticalAlignment="Center" Margin="16,0,8,0" Text="Subject max"/>
+              <TextBox Width="72" Text="{Binding SubjectMaxLength, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
             <CheckBox Content="IsActive" IsChecked="{Binding IsActive}"/>
             <CheckBox Content="Attach Command (shows the button)" IsChecked="{Binding AttachCommand}"/>
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-              <Button Content="Cone glyph" Command="{Binding UseConeCommand}"/>
-              <Button Content="Barrier glyph" Command="{Binding UseBarrierCommand}"/>
+            <TextBlock Margin="0,12,0,8" Text="Image — built-in, geometry, or a PNG/SVG file"/>
+            <StackPanel Orientation="Horizontal">
+              <Button Content="Built-in artwork" Command="{Binding UseBuiltInCommand}"/>
+              <Button Content="Cone geometry" Command="{Binding UseConeCommand}"/>
+              <Button Content="Barrier geometry" Command="{Binding UseBarrierCommand}"/>
+              <Button Content="Browse PNG / SVG" Command="{Binding BrowseImageCommand}"/>
             </StackPanel>
             <TextBlock Margin="0,12,0,0" Foreground="#94A3B8" Text="{Binding ActionLog}"/>
           </StackPanel>
