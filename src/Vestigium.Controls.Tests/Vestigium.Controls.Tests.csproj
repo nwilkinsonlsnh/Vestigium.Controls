@@ -18,5 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Vestigium.Controls\Vestigium.Controls.csproj" />
     <ProjectReference Include="..\Vestigium.Controls.StatusBar\Vestigium.Controls.StatusBar.csproj" />
+    <ProjectReference Include="..\Vestigium.Controls.NumericUpDown\Vestigium.Controls.NumericUpDown.csproj" />
   </ItemGroup>
 </Project>

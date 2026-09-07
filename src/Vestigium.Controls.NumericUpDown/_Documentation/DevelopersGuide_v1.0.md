@@ -1,6 +1,5 @@
-# Vestigium.Controls.NumericUpDown — Developers Guide
+# Vestigium.Controls.NumericUpDown — Developers Guide pointer
 
-**Version:** 1.0  
-**Status:** Placeholder
+**This file is superseded.**
 
-See [`Requirements_v1.0.md`](Requirements_v1.0.md). The control type `VestigiumNumericUpDown` is an empty `UserControl` so the demo project can reference it.
+Current guide: [`DevelopersGuide_v1.1.md`](DevelopersGuide_v1.1.md)

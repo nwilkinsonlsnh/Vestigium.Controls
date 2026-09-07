@@ -2,12 +2,206 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:nud="clr-namespace:Vestigium.Controls.NumericUpDown;assembly=Vestigium.Controls.NumericUpDown"
-        Title="Vestigium.Controls.NumericUpDown — stub"
-        Height="360" Width="560"
-        Background="#0B1A30" Foreground="#E2E8F0">
-  <StackPanel Margin="20">
-    <TextBlock FontSize="20" FontWeight="SemiBold" Text="NumericUpDown"/>
-    <TextBlock Margin="0,4,0,16" Opacity="0.7" Text="Requirements placeholder. Control is a stub."/>
-    <nud:VestigiumNumericUpDown/>
-  </StackPanel>
+        Title="Vestigium.Controls.NumericUpDown — gallery"
+        Height="860" Width="1100"
+        MinHeight="620" MinWidth="860"
+        Background="#0B1524" Foreground="#E2E8F0"
+        FontFamily="Segoe UI" FontSize="13">
+  <DockPanel>
+    <Menu DockPanel.Dock="Top" Background="#0F2744" Foreground="#E2E8F0" Padding="4,2">
+      <MenuItem Header="_File">
+        <MenuItem Header="E_xit" Click="Exit_Click"/>
+      </MenuItem>
+    </Menu>
+    <ScrollViewer Padding="20">
+      <StackPanel>
+        <TextBlock FontSize="11" Foreground="#94A3B8" Text="VESTIGIUM.CONTROLS.NUMERICUPDOWN"/>
+        <TextBlock FontSize="24" FontWeight="SemiBold" Margin="0,4,0,8" Text="NumericUpDown gallery"/>
+        <TextBlock TextWrapping="Wrap" Foreground="#94A3B8" Margin="0,0,0,16"
+                   Text="Display ticks on every RepeatButton interval. Value commits on Immediate drain (50–250 ms) or Deferred mouse-up. Typing is a buffer. Hosts do not write debounce timers."/>
+
+        <TabControl>
+          <TabItem Header="Gallery">
+            <StackPanel Margin="12">
+              <UniformGrid Columns="2">
+                <GroupBox Header="Default — Immediate + Auto">
+                  <StackPanel>
+                    <TextBlock Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,8"
+                               Text="Hold Up. Bound Value follows on the drain, not every 33 ms tick. Commits count DP writes."/>
+                    <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
+                                                Value="{Binding LiveValue, Mode=TwoWay}"/>
+                    <TextBlock Margin="0,8,0,0"
+                               Text="{Binding LiveValue, StringFormat='Value {0}'}"/>
+                    <TextBlock Foreground="#94A3B8"
+                               Text="{Binding LiveCommits, StringFormat='Commits {0}'}"/>
+                  </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Deferred vs Immediate hold">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                      <TextBlock Text="Deferred"/>
+                      <nud:VestigiumNumericUpDown Width="140" HorizontalAlignment="Left"
+                                                  UpdateMode="Deferred"
+                                                  Value="{Binding DeferredValue, Mode=TwoWay}"/>
+                      <TextBlock Margin="0,6,0,0" Foreground="#94A3B8"
+                                 Text="{Binding DeferredValue, StringFormat='Bound {0}'}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                      <TextBlock Text="Immediate"/>
+                      <nud:VestigiumNumericUpDown Width="140" HorizontalAlignment="Left"
+                                                  UpdateMode="Immediate"
+                                                  Value="{Binding ImmediateValue, Mode=TwoWay}"/>
+                      <TextBlock Margin="0,6,0,0" Foreground="#94A3B8"
+                                 Text="{Binding ImmediateValue, StringFormat='Bound {0}'}"/>
+                    </StackPanel>
+                  </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Snap Increment 5">
+                  <StackPanel>
+                    <TextBlock Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,8"
+                               Text="Snap on. Up from 7 goes to 10. Type 11, Tab, Round → 10."/>
+                    <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
+                                                Increment="5"
+                                                PageIncrement="20"
+                                                SnapToIncrement="True"
+                                                Value="{Binding SnapValue, Mode=TwoWay}"/>
+                    <TextBlock Margin="0,8,0,0" Text="{Binding SnapValue, StringFormat='Value {0}'}"/>
+                  </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="TTL 1–255">
+                  <StackPanel>
+                    <TextBlock Foreground="#94A3B8" Margin="0,0,0,8" Text="Host-defined bounds. Unbounded is the default."/>
+                    <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
+                                                Minimum="1" Maximum="255" Increment="1"
+                                                Value="{Binding Ttl, Mode=TwoWay}"/>
+                    <TextBlock Margin="0,8,0,0" Text="{Binding Ttl, StringFormat='TTL {0}'}"/>
+                  </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="DecimalPlaces 2 / N2">
+                  <StackPanel>
+                    <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
+                                                DecimalPlaces="2" FormatString="N2"
+                                                Increment="0.25" PageIncrement="1"
+                                                Value="{Binding Money, Mode=TwoWay}"/>
+                    <TextBlock Margin="0,8,0,0" Text="{Binding Money, StringFormat='Amount {0:N2}'}"/>
+                  </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Input modes">
+                  <StackPanel>
+                    <TextBlock Text="SpinOnly"/>
+                    <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
+                                                InputMode="SpinOnly"
+                                                Value="{Binding SpinOnly, Mode=TwoWay}"/>
+                    <TextBlock Margin="0,8,0,0" Text="ReadOnly"/>
+                    <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
+                                                InputMode="ReadOnly"
+                                                Value="{Binding ReadOnly}"/>
+                  </StackPanel>
+                </GroupBox>
+              </UniformGrid>
+            </StackPanel>
+          </TabItem>
+
+          <TabItem Header="Lab">
+            <StackPanel Margin="12" MaxWidth="640" HorizontalAlignment="Left">
+              <TextBlock TextWrapping="Wrap" Foreground="#94A3B8" Margin="0,0,0,12"
+                         Text="Toggle the two knobs. Hold, type, Tab, Enter, Escape. Watch Value vs the box."/>
+              <nud:VestigiumNumericUpDown Width="200" HorizontalAlignment="Left"
+                                          Value="{Binding LabValue, Mode=TwoWay}"
+                                          UpdateMode="{Binding LabUpdateMode}"
+                                          CommitMode="{Binding LabCommitMode}"
+                                          InputMode="{Binding LabInputMode}"
+                                          Increment="{Binding Increment}"
+                                          PageIncrement="{Binding PageIncrement}"
+                                          AccelerationDelay="{Binding AccelerationDelay}"
+                                          DecimalPlaces="{Binding DecimalPlaces}"
+                                          SnapToIncrement="{Binding SnapEnabled}"
+                                          SnapMode="{Binding SnapMode}"/>
+              <TextBlock Margin="0,12,0,8" FontSize="18"
+                         Text="{Binding LabValue, StringFormat='Committed Value {0}'}"/>
+              <TextBlock Text="UpdateMode"/>
+              <StackPanel Orientation="Horizontal">
+                <Button Content="Immediate" Command="{Binding SetImmediateCommand}"/>
+                <Button Content="Deferred" Command="{Binding SetDeferredCommand}"/>
+                <TextBlock VerticalAlignment="Center" Foreground="#94A3B8" Text="{Binding LabUpdateMode}"/>
+              </StackPanel>
+              <TextBlock Text="CommitMode"/>
+              <StackPanel Orientation="Horizontal">
+                <Button Content="Auto" Command="{Binding SetAutoCommand}"/>
+                <Button Content="Explicit" Command="{Binding SetExplicitCommand}"/>
+                <TextBlock VerticalAlignment="Center" Foreground="#94A3B8" Text="{Binding LabCommitMode}"/>
+              </StackPanel>
+              <TextBlock Text="InputMode"/>
+              <StackPanel Orientation="Horizontal">
+                <Button Content="Full" Command="{Binding SetFullCommand}"/>
+                <Button Content="SpinOnly" Command="{Binding SetSpinOnlyCommand}"/>
+                <Button Content="ReadOnly" Command="{Binding SetReadOnlyCommand}"/>
+                <TextBlock VerticalAlignment="Center" Foreground="#94A3B8" Text="{Binding LabInputMode}"/>
+              </StackPanel>
+
+            </StackPanel>
+          </TabItem>
+
+          <TabItem Header="Settings">
+            <StackPanel Margin="12" MaxWidth="520" HorizontalAlignment="Left">
+              <TextBlock Text="{Binding Increment, StringFormat='Increment {0}'}"/>
+              <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left" DecimalPlaces="2" FormatString="N2"
+                                          Increment="0.25" Minimum="0.01" Maximum="1000"
+                                          Value="{Binding Increment, Mode=TwoWay}"/>
+              <TextBlock Margin="0,12,0,0" Text="{Binding PageIncrement, StringFormat='PageIncrement {0}'}"/>
+              <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
+                                          Minimum="1" Maximum="10000"
+                                          Value="{Binding PageIncrement, Mode=TwoWay}"/>
+              <TextBlock Margin="0,12,0,0" Text="{Binding AccelerationDelay, StringFormat='AccelerationDelay {0} ms (0 = off)'}"/>
+              <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
+                                          Minimum="0" Maximum="10000" Increment="100" PageIncrement="500"
+                                          Value="{Binding AccelerationDelay, Mode=TwoWay}"/>
+              <TextBlock Margin="0,12,0,0" Text="{Binding DecimalPlaces, StringFormat='DecimalPlaces {0}'}"/>
+              <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
+                                          Minimum="0" Maximum="6"
+                                          Value="{Binding DecimalPlaces, Mode=TwoWay}"/>
+              <CheckBox Margin="0,16,0,0" Content="SnapToIncrement" IsChecked="{Binding SnapEnabled}"/>
+            </StackPanel>
+          </TabItem>
+
+          <TabItem Header="Nested">
+            <Border Margin="12" BorderBrush="#1E3A5F" BorderThickness="1" Padding="12">
+              <StackPanel>
+                <TextBlock Text="Probe form — several spinners, one ViewModel"/>
+                <Grid Margin="0,12,0,0">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="180"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+                  <TextBlock VerticalAlignment="Center" Text="Hops"/>
+                  <nud:VestigiumNumericUpDown Grid.Column="1" Minimum="1" Maximum="64"
+                                              Value="{Binding NestedHops, Mode=TwoWay}"/>
+                  <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="Timeout ms"/>
+                  <nud:VestigiumNumericUpDown Grid.Row="1" Grid.Column="1"
+                                              Minimum="10" Maximum="60000" Increment="10" PageIncrement="100"
+                                              AccelerationDelay="2000"
+                                              Value="{Binding NestedTimeout, Mode=TwoWay}"/>
+                </Grid>
+                <TextBlock Margin="0,16,0,0" Foreground="#94A3B8"
+                           Text="{Binding NestedHops, StringFormat='Will send {0} hops'}"/>
+              </StackPanel>
+            </Border>
+          </TabItem>
+        </TabControl>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
 </Window>
