@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Media;
 using Vestigium.Controls.PropertiesGrid;
 
@@ -226,13 +227,13 @@ public class PropertyEngineTests
     [Fact]
     public void Csproj_has_no_themes_or_winforms_reference()
     {
-        var path = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..",
+        var path = System.IO.Path.GetFullPath(System.IO.Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..",
             "Vestigium.Controls.PropertiesGrid", "Vestigium.Controls.PropertiesGrid.csproj"));
-        if (!File.Exists(path))
+        if (!System.IO.File.Exists(path))
         {
             path = "/tmp/Vestigium.Controls/src/Vestigium.Controls.PropertiesGrid/Vestigium.Controls.PropertiesGrid.csproj";
         }
-        var text = File.ReadAllText(path);
+        var text = System.IO.File.ReadAllText(path);
         Assert.DoesNotContain("Vestigium.Themes", text);
         Assert.DoesNotContain("System.Windows.Forms", text);
     }
