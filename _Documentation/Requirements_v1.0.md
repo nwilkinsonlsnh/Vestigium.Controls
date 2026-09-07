@@ -1,7 +1,7 @@
 # Vestigium.Controls — Umbrella Requirements
 
 **Document ID:** VEST-CTL-SRS-000  
-**Version:** 1.0  
+**Version:** 1.1  
 **Status:** Skeleton / planning  
 **Date:** 6 September 2026  
 **Target:** .NET 10 LTS, Visual Studio 2026, WPF MVVM
@@ -42,11 +42,13 @@ services.AddVestigiumControls();
 
 Feature libraries add their own extension (`AddVestigiumStatusBar`, and so on). The base extension may call feature extensions when those projects are referenced.
 
-### 2.4 Theme coexistence
+### 2.4 Theming is a host concern
 
-Visual tokens prefer `Vestigium.Themes` dynamic resources (`Vestigium.Brushes.*`). Each control ships fallback brushes in `Themes/Generic.xaml` so the library is usable without Themes referenced.
+No project under `Vestigium.Controls.slnx` SHALL reference `Vestigium.Themes`, `Vestigium.Themes.Controls`, or a palette assembly.
 
-`Vestigium.Themes.Controls` already styles the stock WPF `StatusBar`. `Vestigium.Controls.StatusBar` is a **new control** with its own template. Theme styles for the stock `StatusBar` remain valid for hosts that do not adopt this library yet.
+Controls paint with `{DynamicResource Vestigium.Brushes.*}` and ship fallback hex in their own `Themes/Generic.xaml` (WPF default-style dictionary). A consuming application that wants Light Blue, Dracula, or any other palette registers those packages and calls `ThemeManager.Initialize` in **its** `OnStartup`, per the Vestigium.Themes Developers Guide. `SwitchTheme` on that host repaints every Vestigium control already in the tree.
+
+`Vestigium.Themes.Controls` styles stock WPF types (`StatusBar.Standard`, `Button.Primary`, …). That catalog is not how custom Vestigium controls get a theme. Custom controls consume tokens; they do not take catalog style keys as a required `Style=`.
 
 ### 2.5 Target framework
 
@@ -97,9 +99,11 @@ Do not start Phase 1 until the StatusBar requirements document is accepted.
 - Designer-only packages in v1
 - Shipping NuGet to nuget.org in the skeleton phase
 - Coupling any control to PingIQ / DnsIQ / TraceIQ / HttpIQ assemblies
+- Shipping or initializing Vestigium.Themes from this solution
 
 ## 6. Document control
 
 | Version | Change | Source |
 |---|---|---|
 | 1.0 | Initial umbrella SRS and solution skeleton | Grok, 6 Sep 2026 |
+| 1.1 | Theming assigned by consuming hosts, not by this solution | Stakeholder, 6 Sep 2026 |
