@@ -2,12 +2,14 @@
 
 **Document ID:** VEST-CTL-PG-SRS-001  
 **Version:** 1.4  
-**Status:** Implemented  
+**Status:** Superseded by v1.5  
 **Date:** 7 September 2026  
 **Target:** .NET 10 LTS, Visual Studio 2026, WPF MVVM  
 **Supersedes:** v1.3
 
-v1.4 adds **grouping header presentation**: orientation, alignment, and bold. Editor alignment from v1.3 is unchanged.
+Kept for history. Current contract: [`Requirements_v1.5.md`](Requirements_v1.5.md).
+
+v1.4 added grouping header presentation: orientation, alignment, and bold. Editor alignment from v1.3 is unchanged.
 
 ---
 
@@ -24,24 +26,3 @@ Category rows are independent of editor cells. Changing `EditorTextAlignment` SH
 Alphabetical sort has no headers, so these DPs have no visible effect until Categorized is on.
 
 Live: DPs bind in the template from the grid (AncestorType). No rebuild required.
-
----
-
-## v1.3 still applies
-
-`EditorTextAlignment` (default Left), `[VestigiumTextAlignment]`, `CategoryIcons`, NumericUpDown standalone Right.
-
----
-
-## Tests added in v1.4
-
-| ID | Assertion |
-|---|---|
-| PG-T32 | Defaults: category Left, Bold true, Horizontal |
-| PG-T33 | Category Center + Vertical + unbold does not change EditorTextAlignment |
-
----
-
-## Demo
-
-Probe tab: Grouping Left / Center / Right, Horizontal / Vertical, Bold grouping text checkbox (on).

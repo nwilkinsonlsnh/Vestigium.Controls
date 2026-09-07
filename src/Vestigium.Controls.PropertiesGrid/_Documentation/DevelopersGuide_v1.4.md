@@ -2,47 +2,18 @@
 
 **Document ID:** VEST-CTL-PG-DEV-001  
 **Version:** 1.4  
-**Status:** Implemented  
+**Status:** Superseded by v1.5  
 **Date:** 7 September 2026  
-**Contract:** [`Requirements_v1.4.md`](Requirements_v1.4.md)
+**Contract:** [`Requirements_v1.5.md`](Requirements_v1.5.md)
 
-v1.3 editor alignment and category images still apply. This page covers grouping headers.
+Kept for history. Current guide: [`DevelopersGuide_v1.5.md`](DevelopersGuide_v1.5.md).
 
-## Grouping headers
-
-Separate from editors. Bold and left by default.
+v1.4 covered grouping headers only.
 
 ```xml
-<pg:VestigiumPropertiesGrid SelectedObject="{Binding Selected, Mode=OneWay}"
-                            EditorTextAlignment="Left"
-                            CategoryTextAlignment="Left"
-                            IsCategoryBold="True"
-                            CategoryOrientation="Horizontal"
-                            CategoryIcons="{Binding CategoryIcons}"/>
+CategoryTextAlignment="Left"
+IsCategoryBold="True"
+CategoryOrientation="Horizontal"
 ```
 
-Center the TIMING / GENERAL labels without moving TTL:
-
-```xml
-CategoryTextAlignment="Center"
-EditorTextAlignment="Left"
-```
-
-Unbold:
-
-```xml
-IsCategoryBold="False"
-```
-
-Stack chevron, icon, and name:
-
-```xml
-CategoryOrientation="Vertical"
-```
-
-`CategoryOrientation` is `System.Windows.Controls.Orientation` (Horizontal / Vertical), not a text rotation.
-
-## Do not
-
-- Bind grouping alignment to `EditorTextAlignment`. They are two DPs on purpose.
-- Expect grouping chrome in Alphabetical sort. There are no headers.
+Do not bind grouping alignment to `EditorTextAlignment`. Alphabetical sort has no headers.
