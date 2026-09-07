@@ -1,7 +1,7 @@
 # Vestigium.Controls (base) — Software Requirements Specification
 
 **Document ID:** VEST-CTL-BASE-SRS-001  
-**Version:** 1.0  
+**Version:** 1.1  
 **Status:** Skeleton / planning  
 **Date:** 6 September 2026  
 **Target:** .NET 10 LTS, Visual Studio 2026, WPF MVVM
@@ -14,7 +14,7 @@
 - DI registration (`AddVestigiumControls`).
 - The **default Vestigium form** — an empty `Window` with a top-level horizontal menu (currently Under Construction) and a hosted `VestigiumStatusBar`.
 
-Feature visuals (StatusBar internals, NumericUpDown, PropertiesGrid, UnderConstruction glyph) live in sibling assemblies. The base assembly may reference those siblings when the default form needs to host them.
+Feature visuals (StatusBar internals, NumericUpDown, PropertiesGrid, UnderConstruction glyph) live in sibling assemblies. The base assembly may reference those siblings when the default form needs to host them. It SHALL NOT reference Vestigium.Themes.
 
 ## 2. Default form
 
@@ -61,7 +61,11 @@ File → Exit is the only real command in the skeleton besides the View position
 - `Content` → `object?` (null in the skeleton)
 - `SetStatusBarPositionCommand` or two-way bound `Status.Position`
 
-No networking, no logging, no IQ-specific state.
+No networking, no logging, no IQ-specific state, no `IThemeManager`.
+
+### 2.5 Theming
+
+`VestigiumDefaultWindow` does not initialize a theme. A host that wants Light Blue / Dracula / … calls `ThemeManager.Initialize` in its own `Application.OnStartup` before showing this window. The window and the hosted status bar then pick up `Vestigium.Brushes.*` already merged into application resources.
 
 ## 3. Shared contracts (future)
 
@@ -75,16 +79,18 @@ Reserved namespaces, empty in the skeleton except DI:
 
 ## 4. Demo
 
-`Vestigium.Controls.Demo` starts `VestigiumDefaultWindow`. It is the Visual Studio startup project for this repository.
+`Vestigium.Controls.Demo` starts `VestigiumDefaultWindow`. It is the Visual Studio startup project for this repository. The demo is not required to reference Vestigium.Themes.
 
 ## 5. Non-goals
 
 - Ribbon / Fluent navigation in v1
-- Window chrome / caption-button restyle (Themes will own that)
+- Window chrome / caption-button restyle (the host applies Vestigium.Themes for that)
 - Documenting NumericUpDown or PropertiesGrid behavior here
+- Embedding ThemeManager in the base assembly
 
 ## 6. Document control
 
 | Version | Change | Source |
 |---|---|---|
 | 1.0 | Default form + shared assembly scope | Grok, 6 Sep 2026 |
+| 1.1 | Host assigns theme; base assembly stays theme-agnostic | Stakeholder, 6 Sep 2026 |
