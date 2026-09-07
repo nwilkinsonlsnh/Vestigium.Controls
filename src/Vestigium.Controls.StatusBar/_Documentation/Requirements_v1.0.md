@@ -1,7 +1,7 @@
 # Vestigium.Controls.StatusBar — Software Requirements Specification
 
 **Document ID:** VEST-CTL-SB-SRS-001  
-**Version:** 1.0  
+**Version:** 1.1  
 **Status:** First draft — awaiting acceptance before Build Mode  
 **Date:** 6 September 2026  
 **Target:** .NET 10 LTS, Visual Studio 2026, WPF MVVM
@@ -14,15 +14,9 @@ This is the first feature control in `Vestigium.Controls`. The default form in `
 
 ## 2. Why a custom control
 
-`System.Windows.Controls.Primitives.StatusBar` already exists. `Vestigium.Themes.Controls` already styles it (`StatusBar.Standard`, height 28, header surface, top hairline).
+`System.Windows.Controls.Primitives.StatusBar` already exists. `Vestigium.Themes.Controls` already styles that stock type (`StatusBar.Standard`). That catalog does not give the stock bar a Top/Bottom position contract or a bindable message/progress/clock surface.
 
-That stock control does **not**:
-
-- Expose a first-class `Position` of Top / Bottom that re-docks itself inside a shell.
-- Own a documented item contract (message, progress, clock) that ViewModels can bind without assembling `StatusBarItem` trees in every window.
-- Guarantee a stable automation name and live-region announcement for screen readers.
-
-`VestigiumStatusBar` wraps those gaps. Internally it may still compose the stock `StatusBar` so Themes styles continue to apply when the host merges Vestigium.Themes.
+`VestigiumStatusBar` is a **different type**. It owns Position and the five regions below. It is not a restyle of the stock `StatusBar`, and it does not require `Style="{StaticResource StatusBar.Standard}"`.
 
 ## 3. Architectural constraints (binding)
 
@@ -36,9 +30,32 @@ Code-behind of the control may change dock, template parts, and visual state. It
 
 Invalid values (unknown enum, negative progress, null message) snap to a defined fallback. Convert / coerce never throw on the UI thread.
 
-### 3.3 Theme coexistence
+### 3.3 Theming is assigned by the host, never by this library
 
-| Token | Fallback if Themes is absent |
+`Vestigium.Controls.StatusBar` SHALL NOT:
+
+- Project-reference `Vestigium.Themes`, `Vestigium.Themes.Controls`, or any `Vestigium.Themes.*` palette.
+- Call `ThemeManager.Register` / `Initialize` / `SwitchTheme` / `Unload`.
+- Expose a `Theme` dependency property.
+- Ship a palette package.
+
+The consuming application (PingIQ, DnsIQ, the Controls demo if we later opt in, a future shell) owns theming. That host references Themes, registers the palettes it ships, and calls `ThemeManager.Initialize` **before** the first window, exactly as [Vestigium.Themes Developers Guide §4](https://github.com/nwilkinsonlsnh/Vestigium.Themes/blob/main/_Documentation/DevelopersGuide_v1.0.md) already requires.
+
+This control only **consumes** tokens if they are already in `Application.Resources`:
+
+| Role | Resource key |
+|---|---|
+| Bar background | `Vestigium.Brushes.Surface.StatusBar` (fallback `Surface.Header`) |
+| Message / clock text | `Vestigium.Brushes.Text.Primary` |
+| Muted / trailing text | `Vestigium.Brushes.Text.Secondary` |
+| Hairline | `Vestigium.Brushes.Stroke.Subtle` |
+| Progress fill | `Vestigium.Brushes.Accent.Primary` |
+
+Templates bind those keys with `{DynamicResource}` so `SwitchTheme("Dracula")` on the host repaints the bar without touching this assembly.
+
+`Themes/Generic.xaml` in **this** project is WPF default-style plumbing, not Vestigium.Themes. It ships fallback hex so the control renders when no host has initialized a palette:
+
+| Token | Fallback if the host has not loaded Themes |
 |---|---|
 | Background | `#0F2744` |
 | Foreground | `#E2E8F0` |
@@ -46,11 +63,11 @@ Invalid values (unknown enum, negative progress, null message) snap to a defined
 | Muted text | `#94A3B8` |
 | Height | `28` |
 
-When Themes is present, prefer `Vestigium.Brushes.Surface.Header`, `Vestigium.Brushes.Text.Primary`, `Vestigium.Brushes.Stroke.Subtle`.
+Those fallbacks are the default look. A host theme **replaces** them by merging palette dictionaries at the application level. `ThemeManager.Unload()` returns the control to the Generic.xaml fallbacks; it does not break the control.
 
 ### 3.4 No suite module references
 
-The control assembly must not reference PingIQ, DnsIQ, TraceIQ, HttpIQ, or Vestigium.Logging in v1. A later revision may subscribe to `VestigiumLog.Events` behind an optional adapter. That adapter is out of scope for this document.
+The control assembly must not reference PingIQ, DnsIQ, TraceIQ, HttpIQ, Vestigium.Logging, or Vestigium.Themes in v1. A later revision may subscribe to `VestigiumLog.Events` behind an optional adapter in a different assembly. That adapter is out of scope for this document.
 
 ## 4. Positioning
 
@@ -147,7 +164,7 @@ public class VestigiumStatusBar : Control
 }
 ```
 
-All listed members are dependency properties.
+All listed members are dependency properties. There is no `Theme` property.
 
 ### 6.2 ViewModel (for hosts that bind a VM)
 
@@ -178,6 +195,8 @@ Example:
                         IsClockVisible="True"/>
 ```
 
+A PingIQ (or any other) host that has already called `ThemeManager.Initialize` does not pass a theme into this element. The bar picks up `Vestigium.Brushes.*` from application resources.
+
 ## 7. Accessibility
 
 - Control `AutomationProperties.Name` defaults to `"Status"`.
@@ -198,7 +217,7 @@ Initial values:
 | IsClockVisible | true |
 | IsProgressVisible | false |
 
-The default-form demo exposes a command or toggle that flips `Position` between Top and Bottom so the requirement can be accepted visually.
+The default-form demo exposes a command or toggle that flips `Position` between Top and Bottom so the requirement can be accepted visually. That demo does **not** have to initialize Vestigium.Themes. Host applications that want a palette do that in their own `OnStartup`.
 
 ## 9. Demo project requirements
 
@@ -210,6 +229,8 @@ The default-form demo exposes a command or toggle that flips `Position` between 
 4. A checkbox that shows/hides progress and a slider that drives 0–100.
 5. A checkbox that shows/hides the clock.
 6. Trailing text sample (for example `"UTF-8"` or `"net10.0-windows"`).
+
+The dedicated StatusBar demo is allowed to run on Generic.xaml fallbacks only. Proving palette swap belongs in a host (or a later optional demo page that references Themes). It is not a StatusBar-library requirement.
 
 The umbrella demo (`Vestigium.Controls.Demo`) shows the same bar inside the default form, not a second copy of the full StatusBar laboratory.
 
@@ -224,6 +245,7 @@ The umbrella demo (`Vestigium.Controls.Demo`) shows the same bar inside the defa
 | SB-T05 | `ProgressValue = -10` coerces to `0`; `ProgressValue = 140` coerces to `100` |
 | SB-T06 | `IsProgressVisible = false` does not leave a visible gap or stray separator |
 | SB-T07 | ViewModel property changes raise `PropertyChanged` for every v1 property |
+| SB-T08 | `Vestigium.Controls.StatusBar.csproj` has no ProjectReference to any `Vestigium.Themes*` assembly |
 
 UI-thread tests may live in `Vestigium.Controls.Tests` with `UseWPF=true`.
 
@@ -232,9 +254,10 @@ UI-thread tests may live in `Vestigium.Controls.Tests` with `UseWPF=true`.
 1. A host can place one control in a `DockPanel` and switch Top / Bottom at runtime.
 2. On `VestigiumDefaultWindow`, Top places the bar under the menu, never over it.
 3. Message, progress, trailing text, and clock bind from a ViewModel with no code-behind.
-4. The control renders with fallback brushes when Vestigium.Themes is not referenced.
-5. Clock ticks do not flood accessibility live regions.
-6. The dedicated StatusBar demo covers every region listed in §5.
+4. The control renders with Generic.xaml fallbacks when the host has not loaded Vestigium.Themes.
+5. A host that initialized Light Blue (or any other palette) and then calls `SwitchTheme` repaints the bar through `{DynamicResource}` with no code change in this assembly.
+6. Clock ticks do not flood accessibility live regions.
+7. The dedicated StatusBar demo covers every region listed in §5.
 
 ## 12. Non-goals (v1)
 
@@ -245,6 +268,8 @@ UI-thread tests may live in `Vestigium.Controls.Tests` with `UseWPF=true`.
 - Vertical (left/right) placement
 - Localization of `"Ready"` (en-US only in v1)
 - Designer toolbox bitmap / Visual Studio extension packaging
+- Any project reference from this library to Vestigium.Themes
+- A theme picker or `Theme` DP on the control
 
 ## 13. Open questions for acceptance
 
@@ -260,3 +285,4 @@ Answer these before Build Mode. Suggested defaults are in parentheses.
 | Version | Change | Source |
 |---|---|---|
 | 1.0 | First-stab SRS: Top/Bottom position, five regions, default-form integration | Grok, 6 Sep 2026 |
+| 1.1 | Theming is host-assigned. Control consumes tokens; no Themes project reference. | Stakeholder, 6 Sep 2026 |
