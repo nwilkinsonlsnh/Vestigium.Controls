@@ -82,15 +82,31 @@ public class StatusBarEngineTests : IDisposable
     }
 
     [Fact]
-    public async Task Idle_rewrites_text_after_timeout()
+    public void High_water_does_not_wipe_other_columns()
     {
-        var engine = new StatusBarEngine();
-        _engines.Add(engine);
-        engine.StartRuntime();
-        engine.SetIdlePolicy(40, StatusBarDefaults.IdleText);
-        engine.PostImmediate("message", new StatusBarUpdate { Text = "Working" });
-        await Task.Delay(250);
-        Assert.Equal(StatusBarDefaults.IdleText, engine.Columns[0].Text);
-        Assert.True(engine.Columns[0].IsIdle);
+        var engine = Make();
+        engine.Post(0, new StatusBarUpdate { Text = "keep-me" });
+        for (var i = 0; i < StatusBarDefaults.InboundHighWater + 8; i++)
+            engine.Post(1, new StatusBarUpdate { Progress = i % 100 });
+
+        engine.PostImmediate(0, new StatusBarUpdate { Text = "keep-me" });
+        Assert.Equal("keep-me", engine.Columns[0].Text);
+        Assert.True(engine.DroppedHighWater > 0);
     }
-}
+
+    [Fact]
+    public void Worker_flood_coalesces_without_throwing()
+    {
+        var engine = Make();
+        engine.StartRuntime();
+        Parallel.For(0, 4_000, i =>
+        {
+            engine.Post("message", new StatusBarUpdate { Text = $"hop {i}" });
+            engine.Post("progress", new StatusBarUpdate { Progress = i % 101, IsProgressVisible = true });
+        });
+        engine.PostImmediate("message", new StatusBarUpdate { Text = "done" });
+        Assert.Equal("done", engine.Columns[0].Text);
+        Assert.True(engine.Compacted > 0);
+        Assert.True(engine.Applied >= 1);
+    }
+

@@ -74,7 +74,7 @@ public partial class VestigiumStatusBar : UserControl
         MinHeight = Engine.BarThickness;
         if (!_runtimeStarted)
         {
-            Engine.StartRuntime();
+            Engine.StartRuntime(Dispatcher);
             _runtimeStarted = true;
         }
     }
