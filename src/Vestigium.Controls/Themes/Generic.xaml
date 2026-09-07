@@ -1,0 +1,118 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Vestigium.Controls.Shell"
+    xmlns:vsb="clr-namespace:Vestigium.Controls.StatusBar;assembly=Vestigium.Controls.StatusBar">
+
+  <SolidColorBrush x:Key="Vestigium.Brushes.Background" Color="#0B1524"/>
+  <SolidColorBrush x:Key="Vestigium.Brushes.Chrome" Color="#0F2744"/>
+  <SolidColorBrush x:Key="Vestigium.Brushes.Text" Color="#E2E8F0"/>
+  <SolidColorBrush x:Key="Vestigium.Brushes.Muted" Color="#94A3B8"/>
+  <SolidColorBrush x:Key="Vestigium.Brushes.Hairline" Color="#1E3A5F"/>
+  <SolidColorBrush x:Key="Vestigium.Brushes.Accent" Color="#4A90C8"/>
+
+  <local:PositionToDockConverter x:Key="PosDock"/>
+  <local:BoolToVisibilityConverter x:Key="BoolVis"/>
+  <local:CountToVisibilityConverter x:Key="CountVis"/>
+  <local:DepthToMarginConverter x:Key="DepthMargin"/>
+
+  <Style x:Key="VestigiumNavRadio" TargetType="RadioButton">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Foreground" Value="{DynamicResource Vestigium.Brushes.Muted}"/>
+    <Setter Property="FontFamily" Value="Segoe UI"/>
+    <Setter Property="FontSize" Value="13"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="Padding" Value="12,8"/>
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="RadioButton">
+          <StackPanel Background="Transparent">
+            <ContentPresenter HorizontalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+            <Border x:Name="Underline" Height="2" Margin="12,0,12,0" Background="Transparent"/>
+          </StackPanel>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+              <Setter TargetName="Underline" Property="Background" Value="{DynamicResource Vestigium.Brushes.Accent}"/>
+              <Setter Property="Foreground" Value="{DynamicResource Vestigium.Brushes.Text}"/>
+              <Setter Property="FontWeight" Value="SemiBold"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Opacity" Value="0.45"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <DataTemplate x:Key="VestigiumNavItemTemplate" DataType="{x:Type local:VestigiumNavItem}">
+    <RadioButton Style="{StaticResource VestigiumNavRadio}"
+                 Content="{Binding Header}"
+                 IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                 IsEnabled="{Binding IsEnabled}"
+                 Command="{Binding SelectItemCommand, RelativeSource={RelativeSource AncestorType=local:VestigiumShell}}"
+                 CommandParameter="{Binding}"/>
+  </DataTemplate>
+
+  <Style TargetType="{x:Type local:VestigiumShell}">
+    <Setter Property="Background" Value="{DynamicResource Vestigium.Brushes.Background}"/>
+    <Setter Property="Foreground" Value="{DynamicResource Vestigium.Brushes.Text}"/>
+    <Setter Property="FontFamily" Value="Segoe UI"/>
+    <Setter Property="FontSize" Value="13"/>
+    <Setter Property="SnapsToDevicePixels" Value="True"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type local:VestigiumShell}">
+          <Border Background="{TemplateBinding Background}" TextElement.Foreground="{TemplateBinding Foreground}">
+            <DockPanel>
+              <StackPanel x:Name="PART_Nav" DockPanel.Dock="Top"
+                          Background="{DynamicResource Vestigium.Brushes.Chrome}"
+                          Visibility="{Binding ShowNav, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolVis}}">
+                <ItemsControl ItemsSource="{Binding Level0Items, RelativeSource={RelativeSource TemplatedParent}}"
+                              ItemTemplate="{StaticResource VestigiumNavItemTemplate}"
+                              Margin="{Binding ShellDepth, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource DepthMargin}, ConverterParameter=0}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                </ItemsControl>
+                <ItemsControl ItemsSource="{Binding Level1Items, RelativeSource={RelativeSource TemplatedParent}}"
+                              ItemTemplate="{StaticResource VestigiumNavItemTemplate}"
+                              Visibility="{Binding Level1Items, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CountVis}}"
+                              Margin="{Binding ShellDepth, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource DepthMargin}, ConverterParameter=1}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                </ItemsControl>
+                <ItemsControl ItemsSource="{Binding Level2Items, RelativeSource={RelativeSource TemplatedParent}}"
+                              ItemTemplate="{StaticResource VestigiumNavItemTemplate}"
+                              Visibility="{Binding Level2Items, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CountVis}}"
+                              Margin="{Binding ShellDepth, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource DepthMargin}, ConverterParameter=2}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                </ItemsControl>
+              </StackPanel>
+
+              <vsb:VestigiumStatusBar x:Name="PART_Status"
+                                      Engine="{Binding Status.Engine, RelativeSource={RelativeSource TemplatedParent}}"
+                                      Position="{Binding StatusBarPosition, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                      DockPanel.Dock="{Binding StatusBarPosition, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource PosDock}}"
+                                      Visibility="{Binding ShowStatusBar, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolVis}}"/>
+
+              <ContentPresenter x:Name="PART_ContentHost"
+                                Content="{Binding DisplayContent, RelativeSource={RelativeSource TemplatedParent}}"/>
+            </DockPanel>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

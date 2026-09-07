@@ -1,39 +1,31 @@
 <Window x:Class="Vestigium.Controls.Shell.VestigiumDefaultWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:uc="clr-namespace:Vestigium.Controls.UnderConstruction;assembly=Vestigium.Controls.UnderConstruction"
-        xmlns:vsb="clr-namespace:Vestigium.Controls.StatusBar;assembly=Vestigium.Controls.StatusBar"
+        xmlns:local="clr-namespace:Vestigium.Controls.Shell"
         Title="Vestigium"
-        Height="640" Width="960"
+        Height="720" Width="1100"
         MinHeight="480" MinWidth="720"
-        Background="#0B1A30" Foreground="#E2E8F0"
+        Background="#0B1524" Foreground="#E2E8F0"
         FontFamily="Segoe UI" FontSize="13">
   <DockPanel>
-    <Menu DockPanel.Dock="Top"
-          Background="#0F2744"
-          Foreground="#E2E8F0"
-          Padding="4,2">
+    <Menu DockPanel.Dock="Top" Background="#0F2744" Foreground="#E2E8F0" Padding="4,2">
       <MenuItem Header="_File">
-        <MenuItem Header="Under Construction" IsEnabled="False"/>
-        <Separator/>
         <MenuItem Header="E_xit" Click="Exit_Click"/>
       </MenuItem>
       <MenuItem Header="_View">
-        <MenuItem Header="Status bar at _Bottom"
-                  Command="{Binding DockStatusBarBottomCommand}"/>
-        <MenuItem Header="Status bar at _Top"
-                  Command="{Binding DockStatusBarTopCommand}"/>
-      </MenuItem>
-      <MenuItem Header="_Help">
-        <MenuItem Header="Under Construction" IsEnabled="False"/>
+        <MenuItem Header="Status bar _visible" IsCheckable="True" IsChecked="{Binding ShowStatusBar}"/>
+        <Separator/>
+        <MenuItem Header="Status bar at _Bottom" Command="{Binding DockStatusBarBottomCommand}"/>
+        <MenuItem Header="Status bar at _Top" Command="{Binding DockStatusBarTopCommand}"/>
+        <Separator/>
+        <MenuItem Header="Stage _PingIQ suite" Command="{Binding StageIqSuiteCommand}"/>
+        <MenuItem Header="Replace PingIQ with _inner form" Command="{Binding ReplacePingWithInnerFormCommand}"/>
+        <MenuItem Header="_Reset Home / Workspace / Settings" Command="{Binding ResetDefaultsCommand}"/>
       </MenuItem>
     </Menu>
-
-    <vsb:VestigiumStatusBar Engine="{Binding Status.Engine}"
-                            Position="{Binding Status.Position}"/>
-
-    <uc:VestigiumUnderConstruction Title="Vestigium"
-                                   Subject="Default form client area"
-                                   Description="Feature views land here after their requirements are accepted.&#10;&#10;Use this paragraph for schedule, owner, or a short note to the user."/>
+    <local:VestigiumShell x:Name="RootShell"
+                          Status="{Binding Status}"
+                          StatusBarPosition="{Binding Status.Position, Mode=TwoWay}"
+                          ShowStatusBar="{Binding ShowStatusBar}"/>
   </DockPanel>
 </Window>

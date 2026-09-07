@@ -2,7 +2,7 @@
 
 **Document ID:** VEST-CTL-BASE-DEV-001  
 **Version:** 1.0  
-**Date:** 6 September 2026
+**Status:** Superseded by v1.2
 
 ## Default window
 

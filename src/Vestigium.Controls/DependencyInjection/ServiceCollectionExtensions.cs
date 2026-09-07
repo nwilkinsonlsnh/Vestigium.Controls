@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
         services.AddTransient<VestigiumStatusBarViewModel>();
         services.AddTransient<VestigiumDefaultWindowViewModel>();
+        services.AddTransient<VestigiumShell>();
         return services;
     }
 }

@@ -12,11 +12,15 @@ public partial class VestigiumDefaultWindow : Window
     public VestigiumDefaultWindow(VestigiumDefaultWindowViewModel viewModel)
     {
         InitializeComponent();
+        ViewModel = viewModel;
         DataContext = viewModel;
+        viewModel.Shell = RootShell;
+        Loaded += (_, _) => viewModel.Shell = RootShell;
     }
 
-    private void Exit_Click(object sender, RoutedEventArgs e)
-    {
-        Close();
-    }
+    public VestigiumDefaultWindowViewModel ViewModel { get; }
+
+    public VestigiumShell Shell => RootShell;
+
+    private void Exit_Click(object sender, RoutedEventArgs e) => Close();
 }
