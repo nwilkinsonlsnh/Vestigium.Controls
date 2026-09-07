@@ -159,17 +159,18 @@ Chrome uses `DynamicResource` keys with Generic.xaml fallbacks:
 
 ## 9. Demo
 
-`Vestigium.Controls.Demo` starts `VestigiumDefaultWindow`.
+`Vestigium.Controls.Demo` SHALL open a gallery window that:
 
-View menu SHALL:
+1. Hosts a live `VestigiumShell` (radios + construction pages + status bar).
+2. Keeps File / View on the **gallery window** only, with a caption that the live shell has no File menu.
+3. Shows an always-nested inner shell (`IsSubShell`, no status bar).
+4. Lets the host stage PingIQ / TraceIQ / DnsIQ / CertIQ / Settings.
+5. Replaces PingIQ with a `TabControl` + inner `VestigiumShell`.
+6. Restores the selected placeholder.
+7. Toggles status bar visibility, Top / Bottom, nested submenu, and `NavIndent` (slider 0–80).
+8. Resets to Home / Workspace / Settings including Home's nested pages.
 
-1. Show the three default placeholders and swap content per radio.
-2. Toggle status bar visibility and Top / Bottom.
-3. Stage PingIQ, TraceIQ, DnsIQ, CertIQ, Settings with distinct construction copy.
-4. Replace PingIQ with a `TabControl` whose first tab is a nested `VestigiumShell` (`IsSubShell`, no status bar).
-5. Reset to Home / Workspace / Settings.
-
-File → Exit closes the window. The demo does not initialize Vestigium.Themes.
+The demo does not initialize Vestigium.Themes.
 
 ---
 

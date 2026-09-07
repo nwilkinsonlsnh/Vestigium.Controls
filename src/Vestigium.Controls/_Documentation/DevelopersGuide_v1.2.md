@@ -15,6 +15,15 @@
 | Window | `Vestigium.Controls.Shell.VestigiumDefaultWindow` |
 | Demo | `src/Vestigium.Controls.Demo` |
 
+## Demo gallery
+
+`Vestigium.Controls.Demo` starts a **gallery window**, not a bare form.
+
+- Left: live `VestigiumShell` (radios + construction + status bar). Caption: this control has no File menu.
+- Bottom-left: always-nested sample (`IsSubShell`, no status bar, no File / View).
+- Right: staging, independence, indent slider, status placement, contract.
+- File / View on the gallery window are host chrome only.
+
 ## Default form
 
 ```csharp
@@ -131,3 +140,4 @@ Use this inside a grid cell, a `TabItem`, or another shell’s content.
 - Expect a fourth indented nav level. Depth 3 is the cap.
 - Share one Under Construction instance across items. Each slot owns one.
 - Turn on an inner status bar unless that module really needs its own rail.
+- Name a view-model property `Shell`.

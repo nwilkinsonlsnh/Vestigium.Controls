@@ -1,7 +1,6 @@
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Vestigium.Controls.DependencyInjection;
-using Vestigium.Controls.Shell;
 
 namespace Vestigium.Controls.Demo;
 
@@ -13,17 +12,13 @@ public partial class App : Application
     {
         var collection = new ServiceCollection();
         collection.AddVestigiumControls();
-        collection.AddTransient<DemoWindowViewModel>();
+        collection.AddTransient<GalleryViewModel>();
         Services = collection.BuildServiceProvider();
 
         base.OnStartup(e);
 
-        var vm = Services.GetRequiredService<DemoWindowViewModel>();
-        vm.Status.Message = "Ready. Home / Workspace / Settings are placeholders.";
-        var window = new VestigiumDefaultWindow(vm)
-        {
-            Title = "Vestigium.Controls — default form"
-        };
+        var vm = Services.GetRequiredService<GalleryViewModel>();
+        var window = new MainWindow(vm);
         window.Show();
     }
 }
