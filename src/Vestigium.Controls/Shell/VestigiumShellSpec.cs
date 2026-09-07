@@ -28,6 +28,7 @@ public sealed class VestigiumShellSpec
     public bool? ShowStatusBar { get; set; }
     public bool IsSubShell { get; set; }
     public int ShellDepth { get; set; }
+    public int? NavIndent { get; set; }
     public ResourceDictionary? ThemeResources { get; set; }
     public IList<VestigiumNavItemSpec> Items { get; } = new List<VestigiumNavItemSpec>();
 }

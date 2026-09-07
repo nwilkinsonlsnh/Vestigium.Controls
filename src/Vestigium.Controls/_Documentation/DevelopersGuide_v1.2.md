@@ -81,6 +81,12 @@ PingIQ’s construction page is gone. Other slots are unchanged. The inner radio
 
 From the default window: `window.HostShell["Settings"]` or `viewModel["Settings"]`. Do not name a property `Shell` — that collides with the `Vestigium.Controls.Shell` namespace.
 
+```xml
+<shell:VestigiumShell NavIndent="28"/>
+```
+
+Default is 20 dip. Range 0–80. Nested rows use `NavIndent × (ShellDepth + row)`. View menu Increase / Decrease nav indent steps by 4. `0` stacks the rows flush left.
+
 ## Status bar
 
 ```xml

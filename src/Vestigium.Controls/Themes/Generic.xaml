@@ -83,7 +83,7 @@
                           Visibility="{Binding ShowNav, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolVis}}">
                 <ItemsControl ItemsSource="{Binding Level0Items, RelativeSource={RelativeSource TemplatedParent}}"
                               ItemTemplate="{StaticResource VestigiumNavItemTemplate}"
-                              Margin="{Binding ShellDepth, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource DepthMargin}, ConverterParameter=0}">
+                              Margin="{Binding Level0Margin, RelativeSource={RelativeSource TemplatedParent}}">
                   <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                       <StackPanel Orientation="Horizontal"/>
@@ -93,7 +93,7 @@
                 <ItemsControl ItemsSource="{Binding Level1Items, RelativeSource={RelativeSource TemplatedParent}}"
                               ItemTemplate="{StaticResource VestigiumNavItemTemplate}"
                               Visibility="{Binding Level1Items, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CountVis}}"
-                              Margin="{Binding ShellDepth, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource DepthMargin}, ConverterParameter=1}">
+                              Margin="{Binding Level1Margin, RelativeSource={RelativeSource TemplatedParent}}">
                   <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                       <StackPanel Orientation="Horizontal"/>
@@ -103,7 +103,7 @@
                 <ItemsControl ItemsSource="{Binding Level2Items, RelativeSource={RelativeSource TemplatedParent}}"
                               ItemTemplate="{StaticResource VestigiumNavItemTemplate}"
                               Visibility="{Binding Level2Items, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CountVis}}"
-                              Margin="{Binding ShellDepth, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource DepthMargin}, ConverterParameter=2}">
+                              Margin="{Binding Level2Margin, RelativeSource={RelativeSource TemplatedParent}}">
                   <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                       <StackPanel Orientation="Horizontal"/>

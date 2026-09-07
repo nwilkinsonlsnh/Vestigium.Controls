@@ -45,6 +45,9 @@
         <MenuItem Header="Status bar at _Bottom" Command="{Binding DockStatusBarBottomCommand}" Foreground="#F8FAFC"/>
         <MenuItem Header="Status bar at _Top" Command="{Binding DockStatusBarTopCommand}" Foreground="#F8FAFC"/>
         <Separator/>
+        <MenuItem Header="Increase nav _indent" Command="{Binding IncreaseNavIndentCommand}" Foreground="#F8FAFC"/>
+        <MenuItem Header="Decrease nav i_ndent" Command="{Binding DecreaseNavIndentCommand}" Foreground="#F8FAFC"/>
+        <Separator/>
         <MenuItem Header="Stage _PingIQ suite" Command="{Binding StageIqSuiteCommand}" Foreground="#F8FAFC"/>
         <MenuItem Header="Replace PingIQ with _inner form" Command="{Binding ReplacePingWithInnerFormCommand}" Foreground="#F8FAFC"/>
         <MenuItem Header="_Reset Home / Workspace / Settings" Command="{Binding ResetDefaultsCommand}" Foreground="#F8FAFC"/>
@@ -53,6 +56,7 @@
     <local:VestigiumShell x:Name="RootShell"
                           Status="{Binding Status}"
                           StatusBarPosition="{Binding Status.Position, Mode=TwoWay}"
-                          ShowStatusBar="{Binding ShowStatusBar}"/>
+                          ShowStatusBar="{Binding ShowStatusBar}"
+                          NavIndent="{Binding NavIndent, Mode=TwoWay}"/>
   </DockPanel>
 </Window>

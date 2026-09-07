@@ -61,7 +61,7 @@ Three default top-level items when the host passes no spec. **Home includes nest
 
 Each placeholder is a **separate** instance. Renaming `Header` updates the radio and, until Title is overridden, the placeholder Title.
 
-Children of an item render on the next row, indented `20 × (ShellDepth + row)` dip. Maximum tree depth is **3**. A fourth level is not created.
+Children of an item render on the next row, indented `NavIndent × (ShellDepth + row)` dip. `NavIndent` default is **20**, range **0–80**. Maximum tree depth is **3**. A fourth level is not created.
 
 ---
 
@@ -148,6 +148,7 @@ Chrome uses `DynamicResource` keys with Generic.xaml fallbacks:
 | `IsSubShell` | `bool` | false |
 | `ShellDepth` | `int` | 0 |
 | `MaxNavDepth` | `int` | 3 |
+| `NavIndent` | `int` | 20 (0–80) |
 | `Status` | `VestigiumStatusBarViewModel` | Owned "Ready" / Bottom |
 | `StatusBarPosition` | `VestigiumStatusBarPosition` | Bottom |
 | `ThemeResources` | `ResourceDictionary?` | null |

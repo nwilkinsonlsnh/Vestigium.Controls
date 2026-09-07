@@ -129,6 +129,25 @@ public class ShellTests
     }
 
     [Fact]
+    public void Nav_indent_is_settable_and_coerced()
+    {
+        var shell = VestigiumShell.Stage();
+        Assert.Equal(20, shell.NavIndent);
+        Assert.Equal(0, shell.Level0Margin.Left);
+        Assert.Equal(20, shell.Level1Margin.Left);
+
+        shell.NavIndent = 8;
+        Assert.Equal(8, shell.Level1Margin.Left);
+        Assert.Equal(16, shell.Level2Margin.Left);
+
+        shell.NavIndent = -10;
+        Assert.Equal(0, shell.NavIndent);
+        shell.NavIndent = 400;
+        Assert.Equal(80, shell.NavIndent);
+        Assert.Equal(80, shell.Level1Margin.Left);
+    }
+
+    [Fact]
     public void Default_window_exposes_shell()
     {
         var window = new VestigiumDefaultWindow();

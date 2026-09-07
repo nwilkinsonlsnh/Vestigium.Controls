@@ -38,6 +38,7 @@ public class VestigiumShell : Control
         if (SelectedItem is not null)
             SelectedItem.IsSelected = true;
         GroupId = $"nav_{GetHashCode():x}";
+        UpdateMargins();
     }
 
     public ICommand SelectItemCommand { get; }
@@ -74,7 +75,11 @@ public class VestigiumShell : Control
 
     public static readonly DependencyProperty ShellDepthProperty =
         DependencyProperty.Register(nameof(ShellDepth), typeof(int), typeof(VestigiumShell),
-            new PropertyMetadata(0, null, CoerceShellDepth));
+            new PropertyMetadata(0, OnNavIndentChanged, CoerceShellDepth));
+
+    public static readonly DependencyProperty NavIndentProperty =
+        DependencyProperty.Register(nameof(NavIndent), typeof(int), typeof(VestigiumShell),
+            new PropertyMetadata(ShellRules.DefaultNavIndent, OnNavIndentChanged, CoerceNavIndent));
 
     public static readonly DependencyProperty MaxNavDepthProperty =
         DependencyProperty.Register(nameof(MaxNavDepth), typeof(int), typeof(VestigiumShell),
@@ -111,6 +116,18 @@ public class VestigiumShell : Control
     public static readonly DependencyProperty Level1SelectedProperty =
         DependencyProperty.Register(nameof(Level1Selected), typeof(VestigiumNavItem), typeof(VestigiumShell),
             new PropertyMetadata(null));
+
+    public static readonly DependencyProperty Level0MarginProperty =
+        DependencyProperty.Register(nameof(Level0Margin), typeof(Thickness), typeof(VestigiumShell),
+            new PropertyMetadata(new Thickness(0)));
+
+    public static readonly DependencyProperty Level1MarginProperty =
+        DependencyProperty.Register(nameof(Level1Margin), typeof(Thickness), typeof(VestigiumShell),
+            new PropertyMetadata(new Thickness(ShellRules.DefaultNavIndent, 0, 0, 0)));
+
+    public static readonly DependencyProperty Level2MarginProperty =
+        DependencyProperty.Register(nameof(Level2Margin), typeof(Thickness), typeof(VestigiumShell),
+            new PropertyMetadata(new Thickness(ShellRules.DefaultNavIndent * 2, 0, 0, 0)));
 
     public IList NavItems
     {
@@ -166,6 +183,12 @@ public class VestigiumShell : Control
         set => SetValue(MaxNavDepthProperty, value);
     }
 
+    public int NavIndent
+    {
+        get => (int)GetValue(NavIndentProperty);
+        set => SetValue(NavIndentProperty, value);
+    }
+
     public VestigiumStatusBarViewModel Status
     {
         get
@@ -196,6 +219,9 @@ public class VestigiumShell : Control
     public IList? Level2Items => (IList?)GetValue(Level2ItemsProperty);
     public VestigiumNavItem? Level0Selected => (VestigiumNavItem?)GetValue(Level0SelectedProperty);
     public VestigiumNavItem? Level1Selected => (VestigiumNavItem?)GetValue(Level1SelectedProperty);
+    public Thickness Level0Margin => (Thickness)GetValue(Level0MarginProperty);
+    public Thickness Level1Margin => (Thickness)GetValue(Level1MarginProperty);
+    public Thickness Level2Margin => (Thickness)GetValue(Level2MarginProperty);
 
     public VestigiumNavItem? this[string name] => Find(NavItems, name);
 
@@ -228,6 +254,9 @@ public class VestigiumShell : Control
 
         if (spec.ThemeResources is not null)
             ThemeResources = spec.ThemeResources;
+
+        if (spec.NavIndent is int indent)
+            NavIndent = indent;
 
         var items = BuildItems(spec.Items, depth: 1);
         if (items.Count == 0)
@@ -531,6 +560,22 @@ public class VestigiumShell : Control
             }
         }
     }
+
+    private static void OnNavIndentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is VestigiumShell shell)
+            shell.UpdateMargins();
+    }
+
+    private void UpdateMargins()
+    {
+        SetValue(Level0MarginProperty, ShellRules.NavMargin(ShellDepth, 0, NavIndent));
+        SetValue(Level1MarginProperty, ShellRules.NavMargin(ShellDepth, 1, NavIndent));
+        SetValue(Level2MarginProperty, ShellRules.NavMargin(ShellDepth, 2, NavIndent));
+    }
+
+    private static object CoerceNavIndent(DependencyObject d, object baseValue) =>
+        ShellRules.CoerceNavIndent(baseValue is int i ? i : ShellRules.DefaultNavIndent);
 
     private static void OnMaxNavDepthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
