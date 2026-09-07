@@ -92,7 +92,7 @@
                   </Border>
                   <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding EditorBar}"/>
                   <StackPanel Margin="8">
-                    <TextBlock FontFamily="Consolas" Text="status.Post("message", new("Compiling"));"/>
+                    <TextBlock FontFamily="Consolas" Text="status.Post(message, Compiling);"/>
                     <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                       <Button Content="Build" Command="{Binding BuildEditorCommand}"/>
                       <Button Content="Warn" Command="{Binding WarnEditorCommand}"/>
@@ -169,7 +169,7 @@
               <CheckBox Content="Enable idle (default on)" IsChecked="{Binding IdleEnabled}"/>
               <TextBlock Margin="0,12,0,4" Text="Idle message"/>
               <TextBox Text="{Binding IdleText, UpdateSourceTrigger=PropertyChanged}"/>
-              <TextBlock Margin="0,12,0,4" Text="{Binding IdleTimeoutMs, StringFormat=Timeout {0} ms (default 3000)}"/>
+              <TextBlock Margin="0,12,0,4" Text="{Binding IdleTimeoutMs, StringFormat='Timeout {0} ms (default 3000)'}"/>
               <Slider Minimum="500" Maximum="10000" SmallChange="100" LargeChange="500"
                       Value="{Binding IdleTimeoutMs, Mode=TwoWay}"/>
               <Button Margin="0,16,0,0" Content="Restore defaults" Command="{Binding RestoreIdleDefaultsCommand}" HorizontalAlignment="Left"/>
