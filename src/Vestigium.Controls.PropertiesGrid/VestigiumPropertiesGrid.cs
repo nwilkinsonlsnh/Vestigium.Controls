@@ -121,6 +121,18 @@ public class VestigiumPropertiesGrid : Control
         DependencyProperty.Register(nameof(CategoryIcons), typeof(IList), typeof(VestigiumPropertiesGrid),
             new PropertyMetadata(null, OnCategoryIconsChanged));
 
+    public static readonly DependencyProperty CategoryTextAlignmentProperty =
+        DependencyProperty.Register(nameof(CategoryTextAlignment), typeof(TextAlignment), typeof(VestigiumPropertiesGrid),
+            new FrameworkPropertyMetadata(TextAlignment.Left, FrameworkPropertyMetadataOptions.AffectsRender, null, CoerceEditorTextAlignment));
+
+    public static readonly DependencyProperty IsCategoryBoldProperty =
+        DependencyProperty.Register(nameof(IsCategoryBold), typeof(bool), typeof(VestigiumPropertiesGrid),
+            new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
+
+    public static readonly DependencyProperty CategoryOrientationProperty =
+        DependencyProperty.Register(nameof(CategoryOrientation), typeof(Orientation), typeof(VestigiumPropertiesGrid),
+            new FrameworkPropertyMetadata(Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+
     public static readonly DependencyProperty ObjectCountTextProperty =
         DependencyProperty.Register(nameof(ObjectCountText), typeof(string), typeof(VestigiumPropertiesGrid),
             new PropertyMetadata(string.Empty));
@@ -211,6 +223,24 @@ public class VestigiumPropertiesGrid : Control
     {
         get => (IList?)GetValue(CategoryIconsProperty);
         set => SetValue(CategoryIconsProperty, value);
+    }
+
+    public TextAlignment CategoryTextAlignment
+    {
+        get => (TextAlignment)GetValue(CategoryTextAlignmentProperty);
+        set => SetValue(CategoryTextAlignmentProperty, value);
+    }
+
+    public bool IsCategoryBold
+    {
+        get => (bool)GetValue(IsCategoryBoldProperty);
+        set => SetValue(IsCategoryBoldProperty, value);
+    }
+
+    public Orientation CategoryOrientation
+    {
+        get => (Orientation)GetValue(CategoryOrientationProperty);
+        set => SetValue(CategoryOrientationProperty, value);
     }
 
     public string ObjectCountText

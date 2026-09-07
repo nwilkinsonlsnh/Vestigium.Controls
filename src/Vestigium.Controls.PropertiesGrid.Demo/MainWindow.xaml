@@ -24,6 +24,9 @@
                                       Sort="{Binding Sort}"
                                       IsReadOnly="{Binding IsReadOnly}"
                                       EditorTextAlignment="{Binding EditorTextAlignment}"
+                                      CategoryTextAlignment="{Binding CategoryTextAlignment}"
+                                      IsCategoryBold="{Binding IsCategoryBold}"
+                                      CategoryOrientation="{Binding CategoryOrientation}"
                                       CategoryIcons="{Binding CategoryIcons}"/>
           <DockPanel Grid.Column="1" Margin="12,0,0,0">
             <TextBlock DockPanel.Dock="Top" Margin="0,0,0,8" Foreground="#94A3B8" TextWrapping="Wrap"
@@ -41,6 +44,17 @@
                 <Button Content="Center" Command="{Binding AlignCenterCommand}" Margin="0,0,6,0" Padding="10,4"/>
                 <Button Content="Right" Command="{Binding AlignRightCommand}" Padding="10,4"/>
               </StackPanel>
+              <TextBlock Margin="0,4,0,6" Foreground="#94A3B8" Text="Grouping headers"/>
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                <Button Content="Left" Command="{Binding CategoryAlignLeftCommand}" Margin="0,0,6,0" Padding="10,4"/>
+                <Button Content="Center" Command="{Binding CategoryAlignCenterCommand}" Margin="0,0,6,0" Padding="10,4"/>
+                <Button Content="Right" Command="{Binding CategoryAlignRightCommand}" Padding="10,4"/>
+              </StackPanel>
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                <Button Content="Horizontal" Command="{Binding CategoryHorizontalCommand}" Margin="0,0,6,0" Padding="10,4"/>
+                <Button Content="Vertical" Command="{Binding CategoryVerticalCommand}" Padding="10,4"/>
+              </StackPanel>
+              <CheckBox Content="Bold grouping text" IsChecked="{Binding IsCategoryBold}" Margin="0,0,0,8"/>
             </StackPanel>
             <Border Background="#132744" BorderBrush="#1E3A5F" BorderThickness="1" Padding="10">
               <StackPanel>
@@ -71,6 +85,9 @@
             <pg:VestigiumPropertiesGrid SelectedObject="{Binding GridTarget, Mode=OneWay}"
                                         SelectedObjects="{Binding GridTargets, Mode=OneWay}"
                                         EditorTextAlignment="{Binding EditorTextAlignment}"
+                                        CategoryTextAlignment="{Binding CategoryTextAlignment}"
+                                        IsCategoryBold="{Binding IsCategoryBold}"
+                                        CategoryOrientation="{Binding CategoryOrientation}"
                                         CategoryIcons="{Binding CategoryIcons}"/>
             <StackPanel Grid.Column="1" Margin="12,0,0,0">
               <TextBlock Text="{Binding East.DisplayName, StringFormat='East: {0}'}"/>
@@ -104,6 +121,9 @@
           <pg:VestigiumPropertiesGrid Grid.Row="1" Grid.Column="1" Margin="4"
                                       SelectedObject="{Binding East, Mode=OneWay}"
                                       EditorTextAlignment="{Binding EditorTextAlignment}"
+                                      CategoryTextAlignment="{Binding CategoryTextAlignment}"
+                                      IsCategoryBold="{Binding IsCategoryBold}"
+                                      CategoryOrientation="{Binding CategoryOrientation}"
                                       CategoryIcons="{Binding CategoryIcons}"/>
         </Grid>
       </TabItem>
@@ -113,7 +133,10 @@
           <TextBlock DockPanel.Dock="Top" Margin="0,0,0,8" Foreground="#94A3B8"
                      Text="Hand-built VestigiumPropertyItem rows. No reflection."/>
           <pg:VestigiumPropertiesGrid ItemsSource="{Binding HostItems, Mode=OneWay}"
-                                      EditorTextAlignment="{Binding EditorTextAlignment}"/>
+                                      EditorTextAlignment="{Binding EditorTextAlignment}"
+                                      CategoryTextAlignment="{Binding CategoryTextAlignment}"
+                                      IsCategoryBold="{Binding IsCategoryBold}"
+                                      CategoryOrientation="{Binding CategoryOrientation}"/>
         </DockPanel>
       </TabItem>
     </TabControl>

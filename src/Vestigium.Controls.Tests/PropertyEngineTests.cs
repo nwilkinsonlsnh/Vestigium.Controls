@@ -310,6 +310,32 @@ public class PropertyEngineTests
         Assert.False(icon.HasGlyph);
     }
 
+    [Fact]
+    public void Category_header_defaults_are_left_bold_horizontal()
+    {
+        var grid = new VestigiumPropertiesGrid();
+        Assert.Equal(TextAlignment.Left, grid.CategoryTextAlignment);
+        Assert.True(grid.IsCategoryBold);
+        Assert.Equal(System.Windows.Controls.Orientation.Horizontal, grid.CategoryOrientation);
+        Assert.Equal(TextAlignment.Left, grid.EditorTextAlignment);
+    }
+
+    [Fact]
+    public void Category_alignment_is_independent_of_editors()
+    {
+        var grid = new VestigiumPropertiesGrid
+        {
+            EditorTextAlignment = TextAlignment.Right,
+            CategoryTextAlignment = TextAlignment.Center,
+            IsCategoryBold = false,
+            CategoryOrientation = System.Windows.Controls.Orientation.Vertical
+        };
+        Assert.Equal(TextAlignment.Right, grid.EditorTextAlignment);
+        Assert.Equal(TextAlignment.Center, grid.CategoryTextAlignment);
+        Assert.False(grid.IsCategoryBold);
+        Assert.Equal(System.Windows.Controls.Orientation.Vertical, grid.CategoryOrientation);
+    }
+
     private static PropertyEngine EngineOf(object target)
     {
         var engine = new PropertyEngine();

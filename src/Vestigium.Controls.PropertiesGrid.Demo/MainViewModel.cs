@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Vestigium.Controls.PropertiesGrid;
@@ -31,6 +32,9 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private string _log = "Ready.";
     [ObservableProperty] private VestigiumPropertySort _sort = VestigiumPropertySort.Categorized;
     [ObservableProperty] private TextAlignment _editorTextAlignment = TextAlignment.Left;
+    [ObservableProperty] private TextAlignment _categoryTextAlignment = TextAlignment.Left;
+    [ObservableProperty] private bool _isCategoryBold = true;
+    [ObservableProperty] private Orientation _categoryOrientation = Orientation.Horizontal;
 
     public ObservableCollection<ProbeSettings> SelectedSet { get; } = [];
     public IList<VestigiumPropertyItem> HostItems { get; }
@@ -91,4 +95,10 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand] private void AlignLeft() => EditorTextAlignment = TextAlignment.Left;
     [RelayCommand] private void AlignCenter() => EditorTextAlignment = TextAlignment.Center;
     [RelayCommand] private void AlignRight() => EditorTextAlignment = TextAlignment.Right;
+
+    [RelayCommand] private void CategoryAlignLeft() => CategoryTextAlignment = TextAlignment.Left;
+    [RelayCommand] private void CategoryAlignCenter() => CategoryTextAlignment = TextAlignment.Center;
+    [RelayCommand] private void CategoryAlignRight() => CategoryTextAlignment = TextAlignment.Right;
+    [RelayCommand] private void CategoryHorizontal() => CategoryOrientation = Orientation.Horizontal;
+    [RelayCommand] private void CategoryVertical() => CategoryOrientation = Orientation.Vertical;
 }
