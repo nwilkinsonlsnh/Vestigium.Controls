@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Vestigium.Controls.PropertiesGrid.Demo</RootNamespace>
+    <AssemblyName>Vestigium.Controls.PropertiesGrid.Demo</AssemblyName>
+    <ApplicationTitle>Vestigium.Controls.PropertiesGrid Demo</ApplicationTitle>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vestigium.Controls.PropertiesGrid\Vestigium.Controls.PropertiesGrid.csproj" />
+  </ItemGroup>
+</Project>
