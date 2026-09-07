@@ -1,7 +1,0 @@
-<UserControl x:Class="Vestigium.Controls.PropertiesGrid.VestigiumPropertiesGrid"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <Border Background="#0F2744" BorderBrush="#1E3A5F" BorderThickness="1" Padding="8">
-    <TextBlock Foreground="#94A3B8" Text="VestigiumPropertiesGrid — stub. Requirements not accepted."/>
-  </Border>
-</UserControl>

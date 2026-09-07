@@ -6,4 +6,7 @@
     <AssemblyName>Vestigium.Controls.PropertiesGrid</AssemblyName>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vestigium.Controls.NumericUpDown\Vestigium.Controls.NumericUpDown.csproj" />
+  </ItemGroup>
 </Project>

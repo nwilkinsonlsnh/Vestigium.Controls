@@ -8,6 +8,9 @@
     <ApplicationTitle>Vestigium.Controls.PropertiesGrid Demo</ApplicationTitle>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Vestigium.Controls.PropertiesGrid\Vestigium.Controls.PropertiesGrid.csproj" />
   </ItemGroup>
 </Project>

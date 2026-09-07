@@ -8,7 +8,7 @@ WPF control library for the Vestigium suite (PingIQ, DnsIQ, TraceIQ, HttpIQ, Pro
 **Architecture:** MVVM + `Microsoft.Extensions.DependencyInjection`  
 **Startup project:** `Vestigium.Controls.Demo` (default Vestigium shell form)
 
-This repository ships **Vestigium.Controls.StatusBar**, **Vestigium.Controls.NumericUpDown**, and **Vestigium.Controls.UnderConstruction**. PropertiesGrid remains a stub.
+This repository ships **Vestigium.Controls.StatusBar**, **Vestigium.Controls.NumericUpDown**, **Vestigium.Controls.UnderConstruction**, and **Vestigium.Controls.PropertiesGrid**.
 
 Umbrella requirements: [`_Documentation/Requirements_v1.0.md`](_Documentation/Requirements_v1.0.md)  
 Umbrella developer notes: [`_Documentation/DevelopersGuide_v1.0.md`](_Documentation/DevelopersGuide_v1.0.md)
@@ -20,7 +20,7 @@ Umbrella developer notes: [`_Documentation/DevelopersGuide_v1.0.md`](_Documentat
 | `Vestigium.Controls` | Shared primitives, DI host, **default Vestigium form** (menu + content + status bar) | [`src/Vestigium.Controls/_Documentation`](src/Vestigium.Controls/_Documentation) |
 | `Vestigium.Controls.StatusBar` | Bindable status bar, dock **Top** or **Bottom**, Left/Center/Right slots | [SRS v1.3](src/Vestigium.Controls.StatusBar/_Documentation/Requirements_v1.3.md) · [Guide v1.3](src/Vestigium.Controls.StatusBar/_Documentation/DevelopersGuide_v1.3.md) |
 | `Vestigium.Controls.NumericUpDown` | Decimal spinner, Immediate/Deferred, Signed/Unsigned, snap Round/Floor/Ceiling | [SRS v1.2](src/Vestigium.Controls.NumericUpDown/_Documentation/Requirements_v1.2.md) · [Guide v1.2](src/Vestigium.Controls.NumericUpDown/_Documentation/DevelopersGuide_v1.2.md) |
-| `Vestigium.Controls.PropertiesGrid` | Property inspector (stub) | [`src/Vestigium.Controls.PropertiesGrid/_Documentation`](src/Vestigium.Controls.PropertiesGrid/_Documentation) |
+| `Vestigium.Controls.PropertiesGrid` | Windows 11 property inspector: multi-select, collections, reset, nested expand | [SRS v1.2](src/Vestigium.Controls.PropertiesGrid/_Documentation/Requirements_v1.2.md) · [Guide v1.2](src/Vestigium.Controls.PropertiesGrid/_Documentation/DevelopersGuide_v1.2.md) |
 | `Vestigium.Controls.UnderConstruction` | Page/overlay placeholder, Title 75 / Subject 125, multi-line Description, host PNG/SVG | [SRS v1.4](src/Vestigium.Controls.UnderConstruction/_Documentation/Requirements_v1.4.md) · [Guide v1.4](src/Vestigium.Controls.UnderConstruction/_Documentation/DevelopersGuide_v1.4.md) |
 
 Each library has a matching `*.Demo` WPF host. `Vestigium.Controls.Demo` is the suite default form.

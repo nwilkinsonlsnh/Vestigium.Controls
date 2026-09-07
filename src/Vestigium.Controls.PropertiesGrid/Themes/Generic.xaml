@@ -1,0 +1,380 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Vestigium.Controls.PropertiesGrid"
+                    xmlns:nud="clr-namespace:Vestigium.Controls.NumericUpDown;assembly=Vestigium.Controls.NumericUpDown">
+
+  <local:DepthMarginConverter x:Key="DepthMargin"/>
+  <local:BoolNotConverter x:Key="BoolNot"/>
+  <local:ExpandGlyphConverter x:Key="ExpandGlyph"/>
+  <local:SignModeConverter x:Key="SignMode"/>
+  <local:InputModeConverter x:Key="InputMode"/>
+  <local:DoubleToGridLengthConverter x:Key="GridLen"/>
+
+  <Style x:Key="GridButton" TargetType="Button">
+    <Setter Property="Background" Value="#132744"/>
+    <Setter Property="Foreground" Value="#E2E8F0"/>
+    <Setter Property="BorderBrush" Value="#1E3A5F"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="Padding" Value="8,4"/>
+    <Setter Property="Margin" Value="0,0,6,0"/>
+    <Setter Property="MinHeight" Value="28"/>
+    <Setter Property="SnapsToDevicePixels" Value="True"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="2"
+                  Padding="{TemplateBinding Padding}">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter Property="Background" Value="#1E3A5F"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Opacity" Value="0.4"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="{x:Type local:VestigiumPropertiesGrid}">
+    <Setter Property="Background" Value="#0F2744"/>
+    <Setter Property="Foreground" Value="#E2E8F0"/>
+    <Setter Property="BorderBrush" Value="#1E3A5F"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="FontFamily" Value="Segoe UI"/>
+    <Setter Property="FontSize" Value="13"/>
+    <Setter Property="SnapsToDevicePixels" Value="True"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type local:VestigiumPropertiesGrid}">
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}">
+            <DockPanel>
+              <StackPanel x:Name="PART_Toolbar" DockPanel.Dock="Top" Orientation="Horizontal" Margin="8,8,8,4">
+                <Button Style="{StaticResource GridButton}" Content="Categorized"
+                        Command="{x:Static local:VestigiumPropertiesGrid.CategorizedCommand}"/>
+                <Button Style="{StaticResource GridButton}" Content="Alphabetical"
+                        Command="{x:Static local:VestigiumPropertiesGrid.AlphabeticalCommand}"/>
+                <Button Content="Reset" Style="{StaticResource GridButton}"
+                        Command="{x:Static local:VestigiumPropertiesGrid.ResetCommand}"/>
+                <Button Content="Reset all" Style="{StaticResource GridButton}"
+                        Command="{x:Static local:VestigiumPropertiesGrid.ResetAllCommand}"/>
+                <TextBlock VerticalAlignment="Center" Margin="8,0,0,0" Foreground="#94A3B8"
+                           Text="{TemplateBinding ObjectCountText}"/>
+              </StackPanel>
+              <TextBox x:Name="PART_Search" DockPanel.Dock="Top" Margin="8,0,8,8" Height="32"
+                       VerticalContentAlignment="Center" Padding="8,0"
+                       Background="#132744" Foreground="#E2E8F0" BorderBrush="#1E3A5F" CaretBrush="#E2E8F0"
+                       ToolTip="Filter properties"
+                       Text="{Binding SearchText, RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"/>
+              <Border x:Name="PART_Description" DockPanel.Dock="Bottom" MinHeight="72" Margin="0"
+                      Background="#0B1524" BorderBrush="#1E3A5F" BorderThickness="0,1,0,0" Padding="12,8">
+                <StackPanel>
+                  <TextBlock FontWeight="SemiBold" TextWrapping="Wrap"
+                             Text="{Binding SelectedProperty.Name, RelativeSource={RelativeSource TemplatedParent}}"/>
+                  <TextBlock Margin="0,4,0,0" Foreground="#94A3B8" TextWrapping="Wrap"
+                             Text="{Binding SelectedProperty.Description, RelativeSource={RelativeSource TemplatedParent}}"/>
+                  <TextBlock Margin="0,4,0,0" Foreground="#64748B" FontSize="11"
+                             Text="{Binding SelectedProperty.Path, RelativeSource={RelativeSource TemplatedParent}}"/>
+                </StackPanel>
+              </Border>
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="28"/>
+                  <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Background="#0B1524">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource GridLen}}"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" FontSize="11" Foreground="#94A3B8"
+                             Text="PROPERTY"/>
+                  <Thumb x:Name="PART_Splitter" Grid.Column="1" Cursor="SizeWE" Background="#1E3A5F"/>
+                  <TextBlock Grid.Column="2" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="11" Foreground="#94A3B8"
+                             Text="VALUE"/>
+                </Grid>
+                <ListBox x:Name="PART_List" Grid.Row="1"
+                         Background="Transparent" BorderThickness="0"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         VirtualizingPanel.IsVirtualizing="True"
+                         VirtualizingPanel.VirtualizationMode="Recycling"
+                         SnapsToDevicePixels="True">
+                  <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                      <Setter Property="Padding" Value="0"/>
+                      <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                      <Setter Property="Background" Value="Transparent"/>
+                      <Setter Property="Template">
+                        <Setter.Value>
+                          <ControlTemplate TargetType="ListBoxItem">
+                            <Border x:Name="Row" Background="Transparent" BorderBrush="#1E3A5F" BorderThickness="0,0,0,1" Height="32">
+                              <Grid>
+                                <Border Width="3" HorizontalAlignment="Left" Background="Transparent" x:Name="Accent"/>
+                                <ContentPresenter/>
+                              </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                              <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Row" Property="Background" Value="#132744"/>
+                                <Setter TargetName="Accent" Property="Background" Value="#4A90C8"/>
+                              </Trigger>
+                              <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Row" Property="Background" Value="#132744"/>
+                              </Trigger>
+                            </ControlTemplate.Triggers>
+                          </ControlTemplate>
+                        </Setter.Value>
+                      </Setter>
+                    </Style>
+                  </ListBox.ItemContainerStyle>
+                  <ListBox.ItemTemplate>
+                    <DataTemplate>
+                      <ContentControl Content="{Binding}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                        <ContentControl.ContentTemplateSelector>
+                          <local:PropertyEditorSelector>
+                            <local:PropertyEditorSelector.Category>
+                              <DataTemplate>
+                                <Button Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch"
+                                        Command="{Binding ToggleCommand}" Cursor="Hand">
+                                  <Grid>
+                                    <Grid.ColumnDefinitions>
+                                      <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource AncestorType=local:VestigiumPropertiesGrid}, Converter={StaticResource GridLen}}"/>
+                                      <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal">
+                                      <TextBlock VerticalAlignment="Center" Margin="8,0,6,0" Foreground="#4A90C8"
+                                                 Text="{Binding IsExpanded, Converter={StaticResource ExpandGlyph}}"/>
+                                      <TextBlock VerticalAlignment="Center" FontSize="11" FontWeight="SemiBold"
+                                                 Foreground="#94A3B8" Text="{Binding Name}"/>
+                                    </StackPanel>
+                                  </Grid>
+                                </Button>
+                              </DataTemplate>
+                            </local:PropertyEditorSelector.Category>
+                            <local:PropertyEditorSelector.Text>
+                              <DataTemplate>
+                                <Grid>
+                                  <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource AncestorType=local:VestigiumPropertiesGrid}, Converter={StaticResource GridLen}}"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                  </Grid.ColumnDefinitions>
+                                  <TextBlock VerticalAlignment="Center" Text="{Binding Name}"
+                                             Margin="{Binding Depth, Converter={StaticResource DepthMargin}}" TextTrimming="CharacterEllipsis"/>
+                                  <TextBox Grid.Column="2" Margin="4,2" VerticalContentAlignment="Center"
+                                           Background="#132744" Foreground="#E2E8F0" BorderBrush="#1E3A5F" CaretBrush="#E2E8F0"
+                                           IsReadOnly="{Binding IsReadOnly}"
+                                           Text="{Binding EditText, UpdateSourceTrigger=LostFocus}"/>
+                                </Grid>
+                              </DataTemplate>
+                            </local:PropertyEditorSelector.Text>
+                            <local:PropertyEditorSelector.Mixed>
+                              <DataTemplate>
+                                <Grid>
+                                  <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource AncestorType=local:VestigiumPropertiesGrid}, Converter={StaticResource GridLen}}"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                  </Grid.ColumnDefinitions>
+                                  <TextBlock VerticalAlignment="Center" Text="{Binding Name}"
+                                             Margin="{Binding Depth, Converter={StaticResource DepthMargin}}" TextTrimming="CharacterEllipsis"/>
+                                  <TextBox Grid.Column="2" Margin="4,2" VerticalContentAlignment="Center"
+                                           Background="#132744" Foreground="#64748B" BorderBrush="#1E3A5F" CaretBrush="#E2E8F0"
+                                           ToolTip="Multiple values"
+                                           Text="{Binding EditText, UpdateSourceTrigger=LostFocus}"/>
+                                </Grid>
+                              </DataTemplate>
+                            </local:PropertyEditorSelector.Mixed>
+                            <local:PropertyEditorSelector.Boolean>
+                              <DataTemplate>
+                                <Grid>
+                                  <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource AncestorType=local:VestigiumPropertiesGrid}, Converter={StaticResource GridLen}}"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                  </Grid.ColumnDefinitions>
+                                  <TextBlock VerticalAlignment="Center" Text="{Binding Name}"
+                                             Margin="{Binding Depth, Converter={StaticResource DepthMargin}}" TextTrimming="CharacterEllipsis"/>
+                                  <CheckBox Grid.Column="2" Margin="8,0" VerticalAlignment="Center" IsThreeState="True"
+                                            IsEnabled="{Binding IsReadOnly, Converter={StaticResource BoolNot}}"
+                                            IsChecked="{Binding BoolValue}"/>
+                                </Grid>
+                              </DataTemplate>
+                            </local:PropertyEditorSelector.Boolean>
+                            <local:PropertyEditorSelector.Enum>
+                              <DataTemplate>
+                                <Grid>
+                                  <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource AncestorType=local:VestigiumPropertiesGrid}, Converter={StaticResource GridLen}}"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                  </Grid.ColumnDefinitions>
+                                  <TextBlock VerticalAlignment="Center" Text="{Binding Name}"
+                                             Margin="{Binding Depth, Converter={StaticResource DepthMargin}}" TextTrimming="CharacterEllipsis"/>
+                                  <ComboBox Grid.Column="2" Margin="4,2" ItemsSource="{Binding Choices}"
+                                            IsEnabled="{Binding IsReadOnly, Converter={StaticResource BoolNot}}"
+                                            SelectedItem="{Binding EnumValue}"/>
+                                </Grid>
+                              </DataTemplate>
+                            </local:PropertyEditorSelector.Enum>
+                            <local:PropertyEditorSelector.Numeric>
+                              <DataTemplate>
+                                <Grid>
+                                  <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource AncestorType=local:VestigiumPropertiesGrid}, Converter={StaticResource GridLen}}"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                  </Grid.ColumnDefinitions>
+                                  <TextBlock VerticalAlignment="Center" Text="{Binding Name}"
+                                             Margin="{Binding Depth, Converter={StaticResource DepthMargin}}" TextTrimming="CharacterEllipsis"/>
+                                  <nud:VestigiumNumericUpDown Grid.Column="2" Margin="4,2" Height="28"
+                                      Value="{Binding NumericValue, UpdateSourceTrigger=PropertyChanged}"
+                                      DecimalPlaces="{Binding DecimalPlaces}"
+                                      SignMode="{Binding IsUnsigned, Converter={StaticResource SignMode}}"
+                                      InputMode="{Binding IsReadOnly, Converter={StaticResource InputMode}}"/>
+                                </Grid>
+                              </DataTemplate>
+                            </local:PropertyEditorSelector.Numeric>
+                            <local:PropertyEditorSelector.DateTime>
+                              <DataTemplate>
+                                <Grid>
+                                  <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource AncestorType=local:VestigiumPropertiesGrid}, Converter={StaticResource GridLen}}"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                  </Grid.ColumnDefinitions>
+                                  <TextBlock VerticalAlignment="Center" Text="{Binding Name}"
+                                             Margin="{Binding Depth, Converter={StaticResource DepthMargin}}" TextTrimming="CharacterEllipsis"/>
+                                  <DatePicker Grid.Column="2" Margin="4,2" SelectedDate="{Binding DateValue}"/>
+                                </Grid>
+                              </DataTemplate>
+                            </local:PropertyEditorSelector.DateTime>
+                            <local:PropertyEditorSelector.Color>
+                              <DataTemplate>
+                                <Grid>
+                                  <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource AncestorType=local:VestigiumPropertiesGrid}, Converter={StaticResource GridLen}}"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                  </Grid.ColumnDefinitions>
+                                  <TextBlock VerticalAlignment="Center" Text="{Binding Name}"
+                                             Margin="{Binding Depth, Converter={StaticResource DepthMargin}}" TextTrimming="CharacterEllipsis"/>
+                                  <DockPanel Grid.Column="2" Margin="4,2">
+                                    <Border DockPanel.Dock="Left" Width="22" Height="22" Margin="0,0,6,0" BorderBrush="#1E3A5F" BorderThickness="1">
+                                      <Border.Background>
+                                        <SolidColorBrush Color="{Binding Swatch}"/>
+                                      </Border.Background>
+                                    </Border>
+                                    <TextBox VerticalContentAlignment="Center" Background="#132744" Foreground="#E2E8F0"
+                                             BorderBrush="#1E3A5F" CaretBrush="#E2E8F0"
+                                             Text="{Binding EditText, UpdateSourceTrigger=LostFocus}"/>
+                                  </DockPanel>
+                                </Grid>
+                              </DataTemplate>
+                            </local:PropertyEditorSelector.Color>
+                            <local:PropertyEditorSelector.ReadOnly>
+                              <DataTemplate>
+                                <Grid>
+                                  <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource AncestorType=local:VestigiumPropertiesGrid}, Converter={StaticResource GridLen}}"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                  </Grid.ColumnDefinitions>
+                                  <TextBlock VerticalAlignment="Center" Text="{Binding Name}"
+                                             Margin="{Binding Depth, Converter={StaticResource DepthMargin}}" TextTrimming="CharacterEllipsis"/>
+                                  <TextBlock Grid.Column="2" Margin="8,0" VerticalAlignment="Center" Foreground="#94A3B8"
+                                             Text="{Binding Display}"/>
+                                </Grid>
+                              </DataTemplate>
+                            </local:PropertyEditorSelector.ReadOnly>
+                            <local:PropertyEditorSelector.Expandable>
+                              <DataTemplate>
+                                <Grid>
+                                  <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource AncestorType=local:VestigiumPropertiesGrid}, Converter={StaticResource GridLen}}"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                  </Grid.ColumnDefinitions>
+                                  <StackPanel Orientation="Horizontal" Margin="{Binding Depth, Converter={StaticResource DepthMargin}}">
+                                    <Button Background="Transparent" BorderThickness="0" Padding="0" Width="16" Focusable="False"
+                                            Command="{Binding ToggleCommand}" Foreground="#4A90C8"
+                                            Content="{Binding IsExpanded, Converter={StaticResource ExpandGlyph}}"/>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
+                                  </StackPanel>
+                                  <TextBlock Grid.Column="2" Margin="8,0" VerticalAlignment="Center" Foreground="#94A3B8"
+                                             Text="{Binding Display}"/>
+                                </Grid>
+                              </DataTemplate>
+                            </local:PropertyEditorSelector.Expandable>
+                            <local:PropertyEditorSelector.Collection>
+                              <DataTemplate>
+                                <Grid>
+                                  <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding NameColumnWidth, RelativeSource={RelativeSource AncestorType=local:VestigiumPropertiesGrid}, Converter={StaticResource GridLen}}"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                  </Grid.ColumnDefinitions>
+                                  <StackPanel Orientation="Horizontal" Margin="{Binding Depth, Converter={StaticResource DepthMargin}}">
+                                    <Button Background="Transparent" BorderThickness="0" Padding="0" Width="16" Focusable="False"
+                                            Command="{Binding ToggleCommand}" Foreground="#4A90C8"
+                                            Content="{Binding IsExpanded, Converter={StaticResource ExpandGlyph}}"/>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
+                                  </StackPanel>
+                                  <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="4,0">
+                                    <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" Foreground="#94A3B8" Text="{Binding Display}"/>
+                                    <Button Style="{StaticResource GridButton}" Content="Add" Padding="6,2" MinHeight="24" Command="{Binding AddCommand}"/>
+                                    <Button Style="{StaticResource GridButton}" Content="Remove" Padding="6,2" MinHeight="24" Command="{Binding RemoveCommand}"/>
+                                    <Button Style="{StaticResource GridButton}" Content="Up" Padding="6,2" MinHeight="24" Command="{Binding MoveUpCommand}"/>
+                                    <Button Style="{StaticResource GridButton}" Content="Down" Padding="6,2" MinHeight="24" Command="{Binding MoveDownCommand}"/>
+                                  </StackPanel>
+                                </Grid>
+                              </DataTemplate>
+                            </local:PropertyEditorSelector.Collection>
+                          </local:PropertyEditorSelector>
+                        </ContentControl.ContentTemplateSelector>
+                      </ContentControl>
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="#64748B" Text="No object selected."
+                           IsHitTestVisible="False">
+                  <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                      <Setter Property="Visibility" Value="Collapsed"/>
+                      <Style.Triggers>
+                        <DataTrigger Binding="{Binding Items.Count, ElementName=PART_List}" Value="0">
+                          <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                      </Style.Triggers>
+                    </Style>
+                  </TextBlock.Style>
+                </TextBlock>
+              </Grid>
+            </DockPanel>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="ShowToolbar" Value="False">
+              <Setter TargetName="PART_Toolbar" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="ShowSearch" Value="False">
+              <Setter TargetName="PART_Search" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="ShowDescription" Value="False">
+              <Setter TargetName="PART_Description" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>
