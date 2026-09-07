@@ -23,6 +23,18 @@ public sealed class NumericEngine
     public VestigiumNumericCommitMode CommitMode { get; set; } = VestigiumNumericCommitMode.Auto;
     public VestigiumNumericInputMode InputMode { get; set; } = VestigiumNumericInputMode.Full;
     public VestigiumNumericSnapMode SnapMode { get; set; } = VestigiumNumericSnapMode.Round;
+    private VestigiumNumericSignMode _signMode = VestigiumNumericSignMode.Signed;
+
+    public VestigiumNumericSignMode SignMode
+    {
+        get => _signMode;
+        set
+        {
+            _signMode = value;
+            ApplyCommitted(Value, count: false);
+        }
+    }
+
     public bool SnapToIncrement { get; set; }
     public decimal SnapBase { get; set; }
     public int AccelerationDelayMs { get; set; } = NumericDefaults.AccelerationDelayMs;
@@ -85,6 +97,12 @@ public sealed class NumericEngine
     public bool CanSpin => InputMode != VestigiumNumericInputMode.ReadOnly;
     public bool CanType => InputMode == VestigiumNumericInputMode.Full;
 
+    public decimal EffectiveMinimum =>
+        SignMode == VestigiumNumericSignMode.Unsigned && _minimum < 0
+            ? 0
+            : _minimum;
+
+
     public string FormattedDisplay => Format(DisplayValue);
 
     public bool IsAccelerated
@@ -117,7 +135,7 @@ public sealed class NumericEngine
         if (SnapToIncrement)
             v = NumericMath.Snap(v, Increment, SnapBase, SnapMode);
         v = NumericMath.RoundPlaces(v, DecimalPlaces);
-        return NumericMath.Clamp(v, Minimum, Maximum);
+        return NumericMath.Clamp(v, EffectiveMinimum, Maximum);
     }
 
     public void SetCommitted(decimal value) => ApplyCommitted(value, count: false);

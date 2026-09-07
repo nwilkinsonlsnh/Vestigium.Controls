@@ -26,6 +26,13 @@ public enum VestigiumNumericSnapMode
     Ceiling = 2
 }
 
+public enum VestigiumNumericSignMode
+{
+    Signed = 0,
+    Unsigned = 1
+}
+
+
 public static class NumericDefaults
 {
     public const decimal Value = 0;

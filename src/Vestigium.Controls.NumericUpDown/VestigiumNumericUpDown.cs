@@ -78,6 +78,10 @@ public class VestigiumNumericUpDown : Control
         DependencyProperty.Register(nameof(InputMode), typeof(VestigiumNumericInputMode), typeof(VestigiumNumericUpDown),
             new PropertyMetadata(VestigiumNumericInputMode.Full, OnInputModeChanged));
 
+    public static readonly DependencyProperty SignModeProperty =
+        DependencyProperty.Register(nameof(SignMode), typeof(VestigiumNumericSignMode), typeof(VestigiumNumericUpDown),
+            new PropertyMetadata(VestigiumNumericSignMode.Signed, OnSignModeChanged));
+
     public static readonly DependencyProperty SnapToIncrementProperty =
         DependencyProperty.Register(nameof(SnapToIncrement), typeof(bool), typeof(VestigiumNumericUpDown),
             new PropertyMetadata(false, OnSnapChanged));
@@ -165,6 +169,13 @@ public class VestigiumNumericUpDown : Control
         get => (VestigiumNumericInputMode)GetValue(InputModeProperty);
         set => SetValue(InputModeProperty, value);
     }
+
+    public VestigiumNumericSignMode SignMode
+    {
+        get => (VestigiumNumericSignMode)GetValue(SignModeProperty);
+        set => SetValue(SignModeProperty, value);
+    }
+
 
     public bool SnapToIncrement
     {
@@ -336,12 +347,23 @@ public class VestigiumNumericUpDown : Control
         control.UpdateButtons();
     }
 
+    private static void OnSignModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var control = (VestigiumNumericUpDown)d;
+        control._engine.SignMode = (VestigiumNumericSignMode)e.NewValue;
+        control.CoerceValue(ValueProperty);
+        control.UpdateButtons();
+    }
+
+
     private static void OnSnapChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var control = (VestigiumNumericUpDown)d;
         control._engine.SnapToIncrement = control.SnapToIncrement;
         control._engine.SnapMode = control.SnapMode;
         control._engine.SnapBase = control.SnapBase;
+        control.CoerceValue(ValueProperty);
+
     }
 
     private static void OnRepeatTimingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
@@ -535,12 +557,15 @@ public class VestigiumNumericUpDown : Control
         return current.Remove(start, length).Insert(start, incoming);
     }
 
-    private static bool IsLegalBuffer(string text)
+    private bool IsLegalBuffer(string text)
     {
+        if (_engine.SignMode == VestigiumNumericSignMode.Unsigned && text.Contains('-'))
+            return false;
         if (text.Length == 0 || text == "-" || text == CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator)
             return true;
         return decimal.TryParse(text, NumberStyles.Number, CultureInfo.CurrentCulture, out _);
     }
+
 
     private void SyncTextFromEngine()
     {
@@ -592,6 +617,7 @@ public class VestigiumNumericUpDown : Control
         _engine.UpdateMode = UpdateMode;
         _engine.CommitMode = CommitMode;
         _engine.InputMode = InputMode;
+        _engine.SignMode = SignMode;
         _engine.SnapToIncrement = SnapToIncrement;
         _engine.SnapMode = SnapMode;
         _engine.SnapBase = SnapBase;

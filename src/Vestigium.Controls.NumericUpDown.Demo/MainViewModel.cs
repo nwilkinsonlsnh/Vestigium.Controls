@@ -9,7 +9,11 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private decimal _liveValue;
     [ObservableProperty] private decimal _deferredValue = 8;
     [ObservableProperty] private decimal _immediateValue = 8;
-    [ObservableProperty] private decimal _snapValue = 7;
+    [ObservableProperty] private decimal _snapValue = 11;
+    [ObservableProperty] private decimal _signedValue = -3;
+    [ObservableProperty] private decimal _unsignedValue;
+    [ObservableProperty] private VestigiumNumericSignMode _labSignMode = VestigiumNumericSignMode.Signed;
+
     [ObservableProperty] private decimal _ttl = 64;
     [ObservableProperty] private decimal _money = 12.5m;
     [ObservableProperty] private decimal _spinOnly = 3;
@@ -25,7 +29,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private decimal _pageIncrement = 10;
     [ObservableProperty] private int _accelerationDelay = 2000;
     [ObservableProperty] private int _decimalPlaces;
-    [ObservableProperty] private bool _snapEnabled;
+    [ObservableProperty] private bool _snapEnabled = true;
     [ObservableProperty] private VestigiumNumericSnapMode _snapMode = VestigiumNumericSnapMode.Round;
 
     partial void OnLiveValueChanged(decimal value) => LiveCommits++;
@@ -37,4 +41,12 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand] private void SetFull() => LabInputMode = VestigiumNumericInputMode.Full;
     [RelayCommand] private void SetSpinOnly() => LabInputMode = VestigiumNumericInputMode.SpinOnly;
     [RelayCommand] private void SetReadOnly() => LabInputMode = VestigiumNumericInputMode.ReadOnly;
+    [RelayCommand] private void SetSigned() => LabSignMode = VestigiumNumericSignMode.Signed;
+    [RelayCommand] private void SetUnsigned() => LabSignMode = VestigiumNumericSignMode.Unsigned;
+    [RelayCommand] private void EnableSnap() => SnapEnabled = true;
+    [RelayCommand] private void DisableSnap() => SnapEnabled = false;
+    [RelayCommand] private void SnapRound() => SnapMode = VestigiumNumericSnapMode.Round;
+    [RelayCommand] private void SnapFloor() => SnapMode = VestigiumNumericSnapMode.Floor;
+    [RelayCommand] private void SnapCeiling() => SnapMode = VestigiumNumericSnapMode.Ceiling;
+
 }

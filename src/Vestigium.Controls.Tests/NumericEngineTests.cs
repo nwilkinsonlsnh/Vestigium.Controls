@@ -96,6 +96,22 @@ public class NumericEngineTests
     }
 
     [Fact]
+    public void Snap_floor_and_ceiling()
+    {
+        var engine = new NumericEngine
+        {
+            SnapToIncrement = true,
+            Increment = 5,
+            SnapMode = VestigiumNumericSnapMode.Floor
+        };
+        engine.TryCommitText("11", isExplicit: true);
+        Assert.Equal(10m, engine.Value);
+        engine.SnapMode = VestigiumNumericSnapMode.Ceiling;
+        engine.TryCommitText("11", isExplicit: true);
+        Assert.Equal(15m, engine.Value);
+    }
+
+    [Fact]
     public void Explicit_lost_focus_reverts_typed_draft()
     {
         var engine = new NumericEngine
@@ -158,5 +174,24 @@ public class NumericEngineTests
         engine.CancelHold();
         Assert.Equal(5m, engine.Value);
         Assert.Equal(5m, engine.DisplayValue);
+    }
+
+    [Fact]
+    public void Unsigned_rejects_negative_and_stops_at_zero()
+    {
+        var engine = new NumericEngine { SignMode = VestigiumNumericSignMode.Unsigned };
+        engine.SetCommitted(-8);
+        Assert.Equal(0m, engine.Value);
+        engine.Step(-1, false);
+        engine.CommitDisplay();
+        Assert.Equal(0m, engine.Value);
+    }
+
+    [Fact]
+    public void Signed_allows_negative()
+    {
+        var engine = new NumericEngine { SignMode = VestigiumNumericSignMode.Signed };
+        engine.SetCommitted(-8);
+        Assert.Equal(-8m, engine.Value);
     }
 }

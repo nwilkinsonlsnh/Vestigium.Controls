@@ -64,6 +64,9 @@ When the setter is expensive (starts a probe):
 | `UpdateMode` | Immediate | Deferred if the setter is not free |
 | `CommitMode` | Auto | Explicit if typed text must press Enter |
 | `InputMode` | Full | SpinOnly = picker; ReadOnly = frozen |
+| `SignMode` | Signed | Unsigned if the field cannot go below 0 |
+| `SnapToIncrement` | false | true to land on Increment grid |
+| `SnapMode` | Round | Floor / Ceiling when snap is on |
 | `SnapToIncrement` | false | true to land on Increment grid |
 | `AccelerationDelay` | 2000 | `0` to disable; after this hold, step is `PageIncrement` |
 

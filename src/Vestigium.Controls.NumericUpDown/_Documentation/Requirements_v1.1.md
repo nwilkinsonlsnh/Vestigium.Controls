@@ -87,8 +87,9 @@ All public numeric properties are `decimal`. `double` is not on the public surfa
 | `UpdateMode` | enum | **Immediate** | OneWay | Spin/wheel/keys. Not typing. |
 | `CommitMode` | enum | **Auto** | OneWay | Typed text accept. |
 | `InputMode` | enum | **Full** | OneWay | Full / SpinOnly / ReadOnly. |
-| `SnapToIncrement` | `bool` | **false** | OneWay | |
-| `SnapMode` | enum | `Round` | OneWay | Typed/bound commits. Buttons use direction-aware grid. |
+| `SignMode` | enum | **Signed** | OneWay | `Unsigned` clamps at 0 and rejects `-`. Host Min still applies if it is already ≥ 0. |
+| `SnapToIncrement` | `bool` | **false** | OneWay | Gallery demo exposes on/off. |
+| `SnapMode` | enum | `Round` | OneWay | Round / Floor / Ceiling. Gallery demo exposes all three. |
 | `SnapBase` | `decimal` | `0` | OneWay | Grid origin. |
 | `Delay` | `int` | `400` | OneWay | RepeatButton start delay (ms). |
 | `Interval` | `int` | `33` | OneWay | RepeatButton visual tick (ms). Not the DP drain. |
@@ -223,8 +224,9 @@ Automation peer exposes name, value, min, max, small change. Announce **committe
 2. Deferred vs Immediate side by side during a hold.
 3. Auto vs Explicit typing (click away vs Enter).
 4. InputMode Full / SpinOnly / ReadOnly.
-5. Snap Round/Floor/Ceiling with Increment 5.
-6. Bounded TTL 1–255.
+5. Snap on/off plus Round / Floor / Ceiling (Increment 5, type 11).
+6. Signed vs Unsigned (negatives vs clamp at 0).
+7. Bounded TTL 1–255.
 7. `DecimalPlaces = 2` with FormatString `N2`.
 8. Acceleration (2 s → PageIncrement) and AccelerationDelay = 0.
 9. Nested form of several spinners.

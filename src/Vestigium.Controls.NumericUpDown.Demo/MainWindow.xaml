@@ -62,18 +62,52 @@
                   </Grid>
                 </GroupBox>
 
-                <GroupBox Header="Snap Increment 5">
+                <GroupBox Header="Snap — enable and mode">
                   <StackPanel>
                     <TextBlock Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,8"
-                               Text="Snap on. Up from 7 goes to 10. Type 11, Tab, Round → 10."/>
+                               Text="Increment 5. Type 11 then Tab. Round → 10, Floor → 10, Ceiling → 15. Toggle snap off to keep 11."/>
                     <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
                                                 Increment="5"
                                                 PageIncrement="20"
-                                                SnapToIncrement="True"
+                                                SnapToIncrement="{Binding SnapEnabled}"
+                                                SnapMode="{Binding SnapMode}"
                                                 Value="{Binding SnapValue, Mode=TwoWay}"/>
-                    <TextBlock Margin="0,8,0,0" Text="{Binding SnapValue, StringFormat='Value {0}'}"/>
+                    <TextBlock Margin="0,8,0,8"
+                               Text="{Binding SnapValue, StringFormat='Value {0}'}"/>
+                    <StackPanel Orientation="Horizontal">
+                      <Button Content="Snap on" Command="{Binding EnableSnapCommand}"/>
+                      <Button Content="Snap off" Command="{Binding DisableSnapCommand}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                      <Button Content="Round" Command="{Binding SnapRoundCommand}"/>
+                      <Button Content="Floor" Command="{Binding SnapFloorCommand}"/>
+                      <Button Content="Ceiling" Command="{Binding SnapCeilingCommand}"/>
+                    </StackPanel>
+                    <TextBlock Foreground="#94A3B8"
+                               Text="{Binding SnapEnabled, StringFormat='SnapToIncrement = {0}'}"/>
+                    <TextBlock Foreground="#94A3B8" Text="{Binding SnapMode, StringFormat='SnapMode = {0}'}"/>
                   </StackPanel>
                 </GroupBox>
+
+                <GroupBox Header="Signed / Unsigned">
+                  <StackPanel>
+                    <TextBlock Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,8"
+                               Text="Signed allows negatives. Unsigned clamps at 0 and rejects the minus key."/>
+                    <TextBlock Text="Signed"/>
+                    <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
+                                                SignMode="Signed"
+                                                Value="{Binding SignedValue, Mode=TwoWay}"/>
+                    <TextBlock Margin="0,6,0,12" Foreground="#94A3B8"
+                               Text="{Binding SignedValue, StringFormat='Signed {0}'}"/>
+                    <TextBlock Text="Unsigned"/>
+                    <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
+                                                SignMode="Unsigned"
+                                                Value="{Binding UnsignedValue, Mode=TwoWay}"/>
+                    <TextBlock Margin="0,6,0,0" Foreground="#94A3B8"
+                               Text="{Binding UnsignedValue, StringFormat='Unsigned {0}'}"/>
+                  </StackPanel>
+                </GroupBox>
+
 
                 <GroupBox Header="TTL 1–255">
                   <StackPanel>
@@ -125,7 +159,8 @@
                                           AccelerationDelay="{Binding AccelerationDelay}"
                                           DecimalPlaces="{Binding DecimalPlaces}"
                                           SnapToIncrement="{Binding SnapEnabled}"
-                                          SnapMode="{Binding SnapMode}"/>
+                                          SnapMode="{Binding SnapMode}"
+                                          SignMode="{Binding LabSignMode}"/>
               <TextBlock Margin="0,12,0,8" FontSize="18"
                          Text="{Binding LabValue, StringFormat='Committed Value {0}'}"/>
               <TextBlock Text="UpdateMode"/>
@@ -147,6 +182,24 @@
                 <Button Content="ReadOnly" Command="{Binding SetReadOnlyCommand}"/>
                 <TextBlock VerticalAlignment="Center" Foreground="#94A3B8" Text="{Binding LabInputMode}"/>
               </StackPanel>
+              <TextBlock Text="SignMode"/>
+              <StackPanel Orientation="Horizontal">
+                <Button Content="Signed" Command="{Binding SetSignedCommand}"/>
+                <Button Content="Unsigned" Command="{Binding SetUnsignedCommand}"/>
+                <TextBlock VerticalAlignment="Center" Foreground="#94A3B8" Text="{Binding LabSignMode}"/>
+              </StackPanel>
+              <TextBlock Text="Snap"/>
+              <StackPanel Orientation="Horizontal">
+                <Button Content="Snap on" Command="{Binding EnableSnapCommand}"/>
+                <Button Content="Snap off" Command="{Binding DisableSnapCommand}"/>
+                <Button Content="Round" Command="{Binding SnapRoundCommand}"/>
+                <Button Content="Floor" Command="{Binding SnapFloorCommand}"/>
+                <Button Content="Ceiling" Command="{Binding SnapCeilingCommand}"/>
+              </StackPanel>
+              <TextBlock Foreground="#94A3B8"
+                         Text="{Binding SnapEnabled, StringFormat='Snap {0}'}"/>
+              <TextBlock Foreground="#94A3B8" Text="{Binding SnapMode}"/>
+
 
             </StackPanel>
           </TabItem>
@@ -169,7 +222,20 @@
               <nud:VestigiumNumericUpDown Width="160" HorizontalAlignment="Left"
                                           Minimum="0" Maximum="6"
                                           Value="{Binding DecimalPlaces, Mode=TwoWay}"/>
-              <CheckBox Margin="0,16,0,0" Content="SnapToIncrement" IsChecked="{Binding SnapEnabled}"/>
+              <CheckBox Margin="0,16,0,8" Content="SnapToIncrement" IsChecked="{Binding SnapEnabled}"/>
+              <TextBlock Text="SnapMode"/>
+              <StackPanel Orientation="Horizontal">
+                <Button Content="Round" Command="{Binding SnapRoundCommand}"/>
+                <Button Content="Floor" Command="{Binding SnapFloorCommand}"/>
+                <Button Content="Ceiling" Command="{Binding SnapCeilingCommand}"/>
+                <TextBlock VerticalAlignment="Center" Foreground="#94A3B8" Text="{Binding SnapMode}"/>
+              </StackPanel>
+              <TextBlock Margin="0,12,0,0" Text="Lab SignMode (also on Lab tab)"/>
+              <StackPanel Orientation="Horizontal">
+                <Button Content="Signed" Command="{Binding SetSignedCommand}"/>
+                <Button Content="Unsigned" Command="{Binding SetUnsignedCommand}"/>
+                <TextBlock VerticalAlignment="Center" Foreground="#94A3B8" Text="{Binding LabSignMode}"/>
+              </StackPanel>
             </StackPanel>
           </TabItem>
 
