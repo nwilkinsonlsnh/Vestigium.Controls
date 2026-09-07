@@ -464,14 +464,15 @@ public sealed class PropertyEngine
 
         var mixed = values.Skip(1).Any(v => !ValuesEqual(v, values[0]));
         var type = pd.PropertyType;
-        var attrReadOnly = pd.Attributes[typeof(ReadOnlyAttribute)] is ReadOnlyAttribute ra && ra.IsReadOnly;
-        var kind = PropertyRules.Classify(type, attrReadOnly || (pd.IsReadOnly && !PropertyRules.IsCollection(type)));
+        var declaredReadOnly = PropertyRules.HasDeclaredReadOnly(pd);
+        var kind = PropertyRules.Classify(type, declaredReadOnly || (pd.IsReadOnly && !PropertyRules.IsCollection(type)));
         var defaultAttr = pd.Attributes[typeof(DefaultValueAttribute)] as DefaultValueAttribute;
         var value = mixed ? null : values[0];
         var circular = kind == VestigiumPropertyEditorKind.Expandable
             && value is not null
             && ancestors.Contains(value);
 
+        var engineReadOnly = IsReadOnly;
         var item = new VestigiumPropertyItem
         {
             Name = pd.DisplayName,
@@ -480,7 +481,8 @@ public sealed class PropertyEngine
             Path = string.IsNullOrEmpty(path) ? pd.Name : $"{path}.{pd.Name}",
             Depth = depth,
             Kind = kind,
-            IsReadOnly = IsReadOnly || attrReadOnly || (pd.IsReadOnly && kind != VestigiumPropertyEditorKind.Collection),
+            IsReadOnly = engineReadOnly || declaredReadOnly
+                || (pd.IsReadOnly && kind != VestigiumPropertyEditorKind.Collection),
             Choices = type.IsEnum ? Enum.GetNames(PropertyRules.Unwrap(type)) : null,
         };
         item.Engine = this;

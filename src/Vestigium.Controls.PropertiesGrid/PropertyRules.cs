@@ -91,6 +91,15 @@ internal static class PropertyRules
         return prop?.GetIndexParameters().Length > 0;
     }
 
+    public static bool HasDeclaredReadOnly(PropertyDescriptor pd)
+    {
+        var prop = pd.ComponentType.GetProperty(pd.Name,
+            System.Reflection.BindingFlags.Instance
+            | System.Reflection.BindingFlags.Public
+            | System.Reflection.BindingFlags.NonPublic);
+        return prop?.GetCustomAttribute<ReadOnlyAttribute>() is { IsReadOnly: true };
+    }
+
     public static bool TryChangeType(object? value, Type target, out object? result)
     {
         target = Unwrap(target);
