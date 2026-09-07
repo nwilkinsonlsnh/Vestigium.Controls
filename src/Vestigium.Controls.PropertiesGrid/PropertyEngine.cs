@@ -268,6 +268,8 @@ public sealed class PropertyEngine
 
     public bool TryAdd(VestigiumPropertyItem item)
     {
+        if (item.List is null && item.Value is IList bound)
+            item.List = bound;
         if (!CanAdd(item) || item.List is null) return false;
         var type = PropertyRules.ElementType(item.PropertyType ?? item.List.GetType(), item.List);
         var created = PropertyRules.CreateElement(type);

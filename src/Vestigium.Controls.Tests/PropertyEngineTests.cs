@@ -416,7 +416,7 @@ public class PropertyEngineTests
         public decimal Latency { get; set; }
     }
 
-    private sealed class Hop
+    public sealed class Hop
     {
         public string Host { get; set; } = "0.0.0.0";
         public int Port { get; set; } = 80;

@@ -282,8 +282,8 @@ public class VestigiumShell : Control
         return
         [
             home,
-            Child("Workspace", "Workspace", ShellRules.PlaceholderDescription),
-            Child("Settings", "Settings", ShellRules.PlaceholderDescription)
+            Child("Workspace", ShellRules.PlaceholderSubject, ShellRules.PlaceholderDescription),
+            Child("Settings", ShellRules.PlaceholderSubject, ShellRules.PlaceholderDescription)
         ];
 
         static VestigiumNavItem Child(string header, string subject, string description)

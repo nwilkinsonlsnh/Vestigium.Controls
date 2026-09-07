@@ -234,12 +234,16 @@ internal static class PropertyRules
         if (IsColor(type)) return Color.FromRgb(0x4A, 0x90, 0xC8);
         try
         {
-            return Activator.CreateInstance(
-                type,
-                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic,
+            var ctor = type.GetConstructor(
+                System.Reflection.BindingFlags.Instance
+                | System.Reflection.BindingFlags.Public
+                | System.Reflection.BindingFlags.NonPublic,
                 binder: null,
-                args: null,
-                culture: CultureInfo.InvariantCulture);
+                types: Type.EmptyTypes,
+                modifiers: null);
+            if (ctor is not null)
+                return ctor.Invoke(null);
+            return Activator.CreateInstance(type, nonPublic: true);
         }
         catch
         {
