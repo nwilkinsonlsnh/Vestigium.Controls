@@ -1,0 +1,18 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <Platform Name="Any CPU" />
+  </Configurations>
+  <Project Path="src/Vestigium.Controls/Vestigium.Controls.csproj" />
+  <Project Path="src/Vestigium.Controls.StatusBar/Vestigium.Controls.StatusBar.csproj" />
+  <Project Path="src/Vestigium.Controls.NumericUpDown/Vestigium.Controls.NumericUpDown.csproj" />
+  <Project Path="src/Vestigium.Controls.PropertiesGrid/Vestigium.Controls.PropertiesGrid.csproj" />
+  <Project Path="src/Vestigium.Controls.UnderConstruction/Vestigium.Controls.UnderConstruction.csproj" />
+  <Project Path="src/Vestigium.Controls.Demo/Vestigium.Controls.Demo.csproj" />
+  <Project Path="src/Vestigium.Controls.StatusBar.Demo/Vestigium.Controls.StatusBar.Demo.csproj" />
+  <Project Path="src/Vestigium.Controls.NumericUpDown.Demo/Vestigium.Controls.NumericUpDown.Demo.csproj" />
+  <Project Path="src/Vestigium.Controls.PropertiesGrid.Demo/Vestigium.Controls.PropertiesGrid.Demo.csproj" />
+  <Project Path="src/Vestigium.Controls.UnderConstruction.Demo/Vestigium.Controls.UnderConstruction.Demo.csproj" />
+  <Project Path="src/Vestigium.Controls.Tests/Vestigium.Controls.Tests.csproj" />
+</Solution>
