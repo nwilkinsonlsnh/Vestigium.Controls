@@ -18,7 +18,7 @@
         <uc:VestigiumUnderConstruction
             Title="Vestigium"
             Subject="Default form client area"
-            Description="Feature views land here after their requirements are accepted."/>
+            Description="Feature views land here after their requirements are accepted.&#10;&#10;Use this paragraph for schedule, owner, or a short note to the user."/>
       </TabItem>
 
       <TabItem Header="Overlay">
@@ -89,10 +89,24 @@
                      MaxLength="{Binding SubjectMaxLength}"/>
             <DockPanel Margin="0,12,0,8">
               <TextBlock DockPanel.Dock="Right" Foreground="#94A3B8" Text="{Binding DescriptionCountLabel}"/>
-              <TextBlock Text="Description (unlimited unless you set a max)"/>
+              <TextBlock Text="Description (Enter for a new line · unlimited unless you set a max)"/>
             </DockPanel>
-            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                     TextWrapping="Wrap" MinHeight="64" AcceptsReturn="True"
+            <TextBox x:Name="DescriptionEditor"
+                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                     AcceptsReturn="True"
+                     AcceptsTab="False"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     HorizontalScrollBarVisibility="Disabled"
+                     VerticalContentAlignment="Top"
+                     HorizontalContentAlignment="Left"
+                     MinHeight="200"
+                     Height="220"
+                     MaxHeight="400"
+                     Padding="10,8"
+                     FontSize="13"
+                     SpellCheck.IsEnabled="True"
+                     IsUndoEnabled="True"
                      MaxLength="{Binding DescriptionMaxLength}"/>
             <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
               <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" Text="Title max"/>

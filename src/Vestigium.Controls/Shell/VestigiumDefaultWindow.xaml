@@ -34,6 +34,6 @@
 
     <uc:VestigiumUnderConstruction Title="Vestigium"
                                    Subject="Default form client area"
-                                   Description="Feature views land here after their requirements are accepted."/>
+                                   Description="Feature views land here after their requirements are accepted.&#10;&#10;Use this paragraph for schedule, owner, or a short note to the user."/>
   </DockPanel>
 </Window>

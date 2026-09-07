@@ -11,7 +11,7 @@ public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty] private string _title = "Vestigium";
     [ObservableProperty] private string _subject = "Default form client area";
-    [ObservableProperty] private string _description = "Feature views land here after their requirements are accepted.";
+    [ObservableProperty] private string _description = "Feature views land here after their requirements are accepted.\n\nUse this paragraph for schedule, owner, or a short note to the user.";
     [ObservableProperty] private int _titleMaxLength = UnderConstructionRules.DefaultTitleMaxLength;
     [ObservableProperty] private int _subjectMaxLength = UnderConstructionRules.DefaultSubjectMaxLength;
     [ObservableProperty] private int _descriptionMaxLength;
@@ -33,9 +33,9 @@ public partial class MainViewModel : ObservableObject
 
     partial void OnAttachCommandChanged(bool value) => OnPropertyChanged(nameof(ActionCommand));
 
-    partial void OnTitleChanged(string value) => ApplyLimit(nameof(Title), value, TitleMaxLength, v => Title = v);
-    partial void OnSubjectChanged(string value) => ApplyLimit(nameof(Subject), value, SubjectMaxLength, v => Subject = v);
-    partial void OnDescriptionChanged(string value) => ApplyLimit(nameof(Description), value, DescriptionMaxLength, v => Description = v);
+    partial void OnTitleChanged(string value) => ApplyLimit(value, TitleMaxLength, v => Title = v, multiline: false);
+    partial void OnSubjectChanged(string value) => ApplyLimit(value, SubjectMaxLength, v => Subject = v, multiline: false);
+    partial void OnDescriptionChanged(string value) => ApplyLimit(value, DescriptionMaxLength, v => Description = v, multiline: true);
 
     partial void OnTitleMaxLengthChanged(int value)
     {
@@ -66,7 +66,7 @@ public partial class MainViewModel : ObservableObject
             DescriptionMaxLength = 0;
             return;
         }
-        Description = UnderConstructionRules.Limit(Description, DescriptionMaxLength);
+        Description = UnderConstructionRules.Limit(Description, DescriptionMaxLength, multiline: true);
         RaiseCounts();
     }
 
@@ -120,9 +120,9 @@ public partial class MainViewModel : ObservableObject
         ActionLog = $"Live tile clicks: {LiveClicks}";
     }
 
-    private void ApplyLimit(string property, string value, int max, Action<string> set)
+    private void ApplyLimit(string value, int max, Action<string> set, bool multiline)
     {
-        var limited = UnderConstructionRules.Limit(value, max);
+        var limited = UnderConstructionRules.Limit(value, max, multiline);
         if (limited != value)
             set(limited);
         RaiseCounts();

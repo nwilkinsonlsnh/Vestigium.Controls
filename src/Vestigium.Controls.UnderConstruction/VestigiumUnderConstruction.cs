@@ -180,7 +180,7 @@ public class VestigiumUnderConstruction : Control
         UnderConstructionRules.Limit(baseValue as string, ((VestigiumUnderConstruction)d).SubjectMaxLength);
 
     private static object CoerceDescription(DependencyObject d, object baseValue) =>
-        UnderConstructionRules.Limit(baseValue as string, ((VestigiumUnderConstruction)d).DescriptionMaxLength);
+        UnderConstructionRules.Limit(baseValue as string, ((VestigiumUnderConstruction)d).DescriptionMaxLength, multiline: true);
 
     private static object CoerceTitleMax(DependencyObject d, object baseValue) =>
         UnderConstructionRules.CoerceMaxLength(baseValue is int n ? n : UnderConstructionRules.DefaultTitleMaxLength,

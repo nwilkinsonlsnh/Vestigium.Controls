@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Vestigium.Controls.UnderConstruction;
@@ -30,6 +31,13 @@ public class UnderConstructionTests
     }
 
     [Fact]
+    public void Paste_overflow_is_dropped()
+    {
+        var pasted = string.Concat(Enumerable.Repeat("Vestigium", 12));
+        Assert.Equal(75, UnderConstructionRules.Limit(pasted, 75).Length);
+    }
+
+    [Fact]
     public void Subject_truncates_at_default_125()
     {
         var text = new string('B', 200);
@@ -51,12 +59,17 @@ public class UnderConstructionTests
     }
 
     [Fact]
-    public void Limit_drops_overflow_on_paste()
+    public void Description_keeps_newlines()
     {
-        var pasted = string.Concat(Enumerable.Repeat("Vestigium", 12));
-        var limited = UnderConstructionRules.Limit(pasted, 75);
-        Assert.Equal(75, limited.Length);
-        Assert.StartsWith("Vestigium", limited);
+        const string text = "Line one.\n\nLine two.";
+        Assert.Equal(text, UnderConstructionRules.Limit(text, 0, multiline: true));
+        Assert.Equal("Line one.\n", UnderConstructionRules.Limit("Line one.\n", 0, multiline: true));
+    }
+
+    [Fact]
+    public void Title_flattens_newlines()
+    {
+        Assert.Equal("Hello world", UnderConstructionRules.Limit("Hello\nworld", 75));
     }
 
     [Fact]
