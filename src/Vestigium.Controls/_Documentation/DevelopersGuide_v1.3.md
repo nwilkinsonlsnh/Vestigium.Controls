@@ -1,10 +1,10 @@
 # Vestigium.Controls (base) — Developers Guide
 
 **Document ID:** VEST-CTL-BASE-DEV-001  
-**Version:** 1.2  
-**Status:** Superseded by v1.3  
+**Version:** 1.3  
+**Status:** Implemented  
 **Date:** 7 September 2026  
-**Contract:** [`Requirements_v1.3.md`](Requirements_v1.3.md) — this file is superseded.
+**Contract:** [`Requirements_v1.3.md`](Requirements_v1.3.md)
 
 ## Project
 
@@ -132,6 +132,16 @@ The shell never names Light Blue / Dracula.
 ```
 
 Use this inside a grid cell, a `TabItem`, or another shell’s content.
+
+## Tests
+
+`Vestigium.Controls.Tests` uses **xunit** plus **Xunit.StaFact**. Any test that constructs `VestigiumShell`, `VestigiumDefaultWindow`, `VestigiumPropertiesGrid`, or another `FrameworkElement` must be `[StaFact]`. Engine-only tests stay `[Fact]`.
+
+Collection add (`PropertyEngine.TryAdd`) uses `Activator.CreateInstance` with public **and** non-public instance constructors so nested host types (the demo `Hop` class) can be created.
+
+## Compact construction
+
+`VestigiumUnderConstruction` is compact in nested cells: ~72×88 default glyph, 16,12 padding, `ScrollViewer`. The shell content host also scrolls so title / subject / description stay reachable.
 
 ## Do not
 

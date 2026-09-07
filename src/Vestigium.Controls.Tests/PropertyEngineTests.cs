@@ -310,7 +310,7 @@ public class PropertyEngineTests
         Assert.False(icon.HasGlyph);
     }
 
-    [Fact]
+    [StaFact]
     public void Category_header_defaults_are_left_bold_horizontal()
     {
         var grid = new VestigiumPropertiesGrid();
@@ -320,7 +320,7 @@ public class PropertyEngineTests
         Assert.Equal(TextAlignment.Left, grid.EditorTextAlignment);
     }
 
-    [Fact]
+    [StaFact]
     public void Category_alignment_is_independent_of_editors()
     {
         var grid = new VestigiumPropertiesGrid

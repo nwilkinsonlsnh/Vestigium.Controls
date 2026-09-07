@@ -5,7 +5,7 @@ namespace Vestigium.Controls.Tests;
 
 public class ShellTests
 {
-    [Fact]
+    [StaFact]
     public void Stage_without_spec_seeds_home_workspace_settings()
     {
         var shell = VestigiumShell.Stage();
@@ -21,7 +21,7 @@ public class ShellTests
         Assert.NotNull(shell["Favorites"]);
     }
 
-    [Fact]
+    [StaFact]
     public void Each_seed_uses_its_own_construction_page()
     {
         var shell = VestigiumShell.Stage();
@@ -30,7 +30,7 @@ public class ShellTests
         Assert.Equal(ShellRules.PlaceholderSubject, shell["Workspace"]!.Placeholder.Subject);
     }
 
-    [Fact]
+    [StaFact]
     public void Stage_named_items_and_indexer_are_case_insensitive()
     {
         var shell = VestigiumShell.Stage(new VestigiumShellSpec
@@ -51,7 +51,7 @@ public class ShellTests
         Assert.IsType<VestigiumUnderConstruction>(ping.DisplayContent);
     }
 
-    [Fact]
+    [StaFact]
     public void Replacing_content_hides_placeholder_until_restored()
     {
         var shell = VestigiumShell.Stage();
@@ -63,7 +63,7 @@ public class ShellTests
         Assert.Same(home.Placeholder, home.DisplayContent);
     }
 
-    [Fact]
+    [StaFact]
     public void Header_rename_updates_placeholder_title_until_overridden()
     {
         var item = new VestigiumNavItem("Home");
@@ -75,7 +75,7 @@ public class ShellTests
         Assert.True(item.TitleOverridden);
     }
 
-    [Fact]
+    [StaFact]
     public void Sub_shell_hides_status_bar_until_host_sets_it()
     {
         var nested = VestigiumShell.Stage(new VestigiumShellSpec { IsSubShell = true });
@@ -87,7 +87,7 @@ public class ShellTests
         Assert.True(shown.ShowStatusBar);
     }
 
-    [Fact]
+    [StaFact]
     public void Max_nav_depth_clips_fourth_level()
     {
         var spec = new VestigiumShellSpec
@@ -119,7 +119,7 @@ public class ShellTests
         Assert.Null(shell["Four"]);
     }
 
-    [Fact]
+    [StaFact]
     public void Pinned_content_wins_over_selected_item()
     {
         var shell = VestigiumShell.Stage();
@@ -128,7 +128,7 @@ public class ShellTests
         Assert.Same(pin, shell.DisplayContent);
     }
 
-    [Fact]
+    [StaFact]
     public void Nav_indent_is_settable_and_coerced()
     {
         var shell = VestigiumShell.Stage();
@@ -147,7 +147,7 @@ public class ShellTests
         Assert.Equal(80, shell.Level1Margin.Left);
     }
 
-    [Fact]
+    [StaFact]
     public void Default_window_exposes_shell()
     {
         var window = new VestigiumDefaultWindow();

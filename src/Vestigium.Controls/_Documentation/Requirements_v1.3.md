@@ -1,11 +1,11 @@
 # Vestigium.Controls (base) — Software Requirements Specification
 
 **Document ID:** VEST-CTL-BASE-SRS-001  
-**Version:** 1.2  
-**Status:** Superseded by v1.3  
+**Version:** 1.3  
+**Status:** Implemented  
 **Date:** 7 September 2026  
 **Target:** .NET 10 LTS, Visual Studio 2026, WPF MVVM  
-**Supersedes:** v1.0 / v1.1
+**Supersedes:** v1.0 / v1.1 / v1.2
 
 Source of truth for the shared assembly and the reusable Vestigium form.
 
@@ -36,7 +36,7 @@ Top to bottom when the status bar is Bottom:
 
 When position is Top: nav, status bar, content.
 
-Nav is always above the status bar. **File → Exit and View live only on `VestigiumDefaultWindow`.** Nested shells do not get another File / View menu. Module navigation is the underlined radio strip on the shell.
+Nav is always above the status bar. **File → Exit and View live only on `VestigiumDefaultWindow`.** Nested shells do not get another File / View menu. Module navigation is the underlined radio strip on the shell. The accent underline is painted **inside** the radio cell (bottom edge) so it is not clipped by the nav strip. Selected state follows `IsSelected`, not only `RadioButton.IsChecked`.
 
 ---
 
@@ -131,7 +131,9 @@ Optional `ThemeResources` (`ResourceDictionary`) merges onto **that** shell inst
 
 Chrome uses `DynamicResource` keys with Generic.xaml fallbacks:
 
-`Vestigium.Brushes.Background`, `Chrome`, `Text`, `Muted`, `Hairline`, `Accent`.
+`Vestigium.Brushes.Background`, `Chrome`, `Text`, `Muted`, `Hairline`, `Accent`, `OnChrome`, `OnChromeMuted`.
+
+Nav labels use OnChrome / OnChromeMuted (not body Muted) so they stay readable on chrome.
 
 ---
 
@@ -169,12 +171,17 @@ Chrome uses `DynamicResource` keys with Generic.xaml fallbacks:
 6. Restores the selected placeholder.
 7. Toggles status bar visibility, Top / Bottom, nested submenu, and `NavIndent` (slider 0–80).
 8. Resets to Home / Workspace / Settings including Home's nested pages.
+9. Keeps title, subject, and description readable in the nested sample (compact construction glyph + scroll).
 
 The demo does not initialize Vestigium.Themes.
+
+Construction pages hosted in a nested shell SHALL remain readable: smaller default glyph, reduced padding, `ScrollViewer` around the stack. The shell content host also scrolls.
 
 ---
 
 ## 10. Tests
+
+Tests that construct `FrameworkElement` / `Window` SHALL run as `[StaFact]` (Xunit.StaFact). Engine-only tests stay `[Fact]`.
 
 | ID | Assertion |
 |---|---|
@@ -187,6 +194,9 @@ The demo does not initialize Vestigium.Themes.
 | SH-T07 | Fourth nav level is clipped |
 | SH-T08 | Pinned `Content` wins over the selected item |
 | SH-T09 | Default window exposes a shell with three items |
+| SH-T10 | `NavIndent` default 20, coerced 0–80, margins update |
+
+Collection `TryAdd` SHALL construct element types even when the item type is non-public (host nested types).
 
 ---
 
@@ -207,3 +217,4 @@ The demo does not initialize Vestigium.Themes.
 | 1.0 | Skeleton window + DI |
 | 1.1 | Host assigns theme |
 | 1.2 | `VestigiumShell`, staging factory, nested forms, per-item construction, parent-down theme |
+| 1.3 | Gallery demo, `NavIndent`, nested Home pages, on-chrome nav, compact construction, STA tests |
