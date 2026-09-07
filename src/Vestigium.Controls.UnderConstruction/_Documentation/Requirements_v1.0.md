@@ -1,5 +1,4 @@
-# Vestigium.Controls.UnderConstruction — SRS pointer
+# Vestigium.Controls.UnderConstruction — SRS v1.0 (superseded)
 
-**This file is superseded.**
-
-Current contract: [`Requirements_v1.1.md`](Requirements_v1.1.md)
+**Status:** Superseded  
+**Current contract:** [`Requirements_v1.3.md`](Requirements_v1.3.md)

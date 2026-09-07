@@ -1,5 +1,4 @@
-# Vestigium.Controls.UnderConstruction — Developers Guide pointer
+# Vestigium.Controls.UnderConstruction — Developers Guide v1.0 (superseded)
 
-**This file is superseded.**
-
-Current guide: [`DevelopersGuide_v1.1.md`](DevelopersGuide_v1.1.md)
+**Status:** Superseded  
+**Current guide:** [`DevelopersGuide_v1.3.md`](DevelopersGuide_v1.3.md)
