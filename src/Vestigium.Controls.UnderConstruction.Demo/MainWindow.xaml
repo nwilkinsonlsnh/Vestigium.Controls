@@ -63,29 +63,44 @@
         <ScrollViewer>
           <StackPanel Margin="12">
             <uc:VestigiumUnderConstruction MinHeight="320"
-                Title="{Binding Title}"
+                Title="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 TitleMaxLength="{Binding TitleMaxLength}"
-                Subject="{Binding Subject}"
+                Subject="{Binding Subject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SubjectMaxLength="{Binding SubjectMaxLength}"
-                Description="{Binding Description}"
+                Description="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                DescriptionMaxLength="{Binding DescriptionMaxLength}"
                 IsActive="{Binding IsActive}"
                 Command="{Binding ActionCommand}"
                 ActionText="Notify me"
                 IconData="{Binding IconData}"
                 ImageSource="{Binding ImageSource}"
                 ImageUri="{Binding ImageUri}"/>
-            <TextBlock Margin="0,16,0,8" Text="Title (default max 75)"/>
-            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Margin="0,12,0,8" Text="Subject (default max 125)"/>
-            <TextBox Text="{Binding Subject, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Margin="0,12,0,8" Text="Description (unlimited unless you set a max)"/>
+            <DockPanel Margin="0,16,0,8">
+              <TextBlock DockPanel.Dock="Right" Foreground="#94A3B8" Text="{Binding TitleCountLabel}"/>
+              <TextBlock Text="Title (stops at max — default 75)"/>
+            </DockPanel>
+            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                     MaxLength="{Binding TitleMaxLength}"/>
+            <DockPanel Margin="0,12,0,8">
+              <TextBlock DockPanel.Dock="Right" Foreground="#94A3B8" Text="{Binding SubjectCountLabel}"/>
+              <TextBlock Text="Subject (stops at max — default 125)"/>
+            </DockPanel>
+            <TextBox Text="{Binding Subject, UpdateSourceTrigger=PropertyChanged}"
+                     MaxLength="{Binding SubjectMaxLength}"/>
+            <DockPanel Margin="0,12,0,8">
+              <TextBlock DockPanel.Dock="Right" Foreground="#94A3B8" Text="{Binding DescriptionCountLabel}"/>
+              <TextBlock Text="Description (unlimited unless you set a max)"/>
+            </DockPanel>
             <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                     TextWrapping="Wrap" MinHeight="64" AcceptsReturn="True"/>
+                     TextWrapping="Wrap" MinHeight="64" AcceptsReturn="True"
+                     MaxLength="{Binding DescriptionMaxLength}"/>
             <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
               <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" Text="Title max"/>
               <TextBox Width="72" Text="{Binding TitleMaxLength, UpdateSourceTrigger=PropertyChanged}"/>
               <TextBlock VerticalAlignment="Center" Margin="16,0,8,0" Text="Subject max"/>
               <TextBox Width="72" Text="{Binding SubjectMaxLength, UpdateSourceTrigger=PropertyChanged}"/>
+              <TextBlock VerticalAlignment="Center" Margin="16,0,8,0" Text="Description max"/>
+              <TextBox Width="72" Text="{Binding DescriptionMaxLength, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <CheckBox Content="IsActive" IsChecked="{Binding IsActive}"/>
             <CheckBox Content="Attach Command (shows the button)" IsChecked="{Binding AttachCommand}"/>

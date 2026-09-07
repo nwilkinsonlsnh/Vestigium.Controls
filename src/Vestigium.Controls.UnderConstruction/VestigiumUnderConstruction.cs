@@ -30,23 +30,26 @@ public class VestigiumUnderConstruction : Control
 
     public static readonly DependencyProperty TitleProperty =
         DependencyProperty.Register(nameof(Title), typeof(string), typeof(VestigiumUnderConstruction),
-            new PropertyMetadata(UnderConstructionRules.DefaultTitle, OnTitleChanged, CoerceTitle));
+            new FrameworkPropertyMetadata(UnderConstructionRules.DefaultTitle,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnTitleChanged, CoerceTitle));
+
+    public static readonly DependencyProperty SubjectProperty =
+        DependencyProperty.Register(nameof(Subject), typeof(string), typeof(VestigiumUnderConstruction),
+            new FrameworkPropertyMetadata(string.Empty,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSubjectChanged, CoerceSubject));
+
+    public static readonly DependencyProperty DescriptionProperty =
+        DependencyProperty.Register(nameof(Description), typeof(string), typeof(VestigiumUnderConstruction),
+            new FrameworkPropertyMetadata(string.Empty,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnDescriptionChanged, CoerceDescription));
 
     public static readonly DependencyProperty TitleMaxLengthProperty =
         DependencyProperty.Register(nameof(TitleMaxLength), typeof(int), typeof(VestigiumUnderConstruction),
             new PropertyMetadata(UnderConstructionRules.DefaultTitleMaxLength, OnTitleMaxLengthChanged, CoerceTitleMax));
 
-    public static readonly DependencyProperty SubjectProperty =
-        DependencyProperty.Register(nameof(Subject), typeof(string), typeof(VestigiumUnderConstruction),
-            new PropertyMetadata(string.Empty, OnSubjectChanged, CoerceSubject));
-
     public static readonly DependencyProperty SubjectMaxLengthProperty =
         DependencyProperty.Register(nameof(SubjectMaxLength), typeof(int), typeof(VestigiumUnderConstruction),
             new PropertyMetadata(UnderConstructionRules.DefaultSubjectMaxLength, OnSubjectMaxLengthChanged, CoerceSubjectMax));
-
-    public static readonly DependencyProperty DescriptionProperty =
-        DependencyProperty.Register(nameof(Description), typeof(string), typeof(VestigiumUnderConstruction),
-            new PropertyMetadata(string.Empty, OnDescriptionChanged, CoerceDescription));
 
     public static readonly DependencyProperty DescriptionMaxLengthProperty =
         DependencyProperty.Register(nameof(DescriptionMaxLength), typeof(int), typeof(VestigiumUnderConstruction),

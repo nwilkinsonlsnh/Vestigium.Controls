@@ -51,6 +51,15 @@ public class UnderConstructionTests
     }
 
     [Fact]
+    public void Limit_drops_overflow_on_paste()
+    {
+        var pasted = string.Concat(Enumerable.Repeat("Vestigium", 12));
+        var limited = UnderConstructionRules.Limit(pasted, 75);
+        Assert.Equal(75, limited.Length);
+        Assert.StartsWith("Vestigium", limited);
+    }
+
+    [Fact]
     public void Command_null_hides_action()
     {
         Assert.False(UnderConstructionRules.ShowAction(null));
