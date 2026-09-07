@@ -1,0 +1,28 @@
+<Window x:Class="Vestigium.Controls.StatusBar.Demo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vsb="clr-namespace:Vestigium.Controls.StatusBar;assembly=Vestigium.Controls.StatusBar"
+        Title="Vestigium.Controls.StatusBar — laboratory"
+        Height="480" Width="720"
+        Background="#0B1A30" Foreground="#E2E8F0"
+        FontFamily="Segoe UI" FontSize="13">
+  <DockPanel>
+    <vsb:VestigiumStatusBar Position="{Binding Position}"
+                            Message="{Binding Message}"/>
+
+    <StackPanel Margin="20">
+      <TextBlock FontSize="20" FontWeight="SemiBold" Text="StatusBar laboratory"/>
+      <TextBlock Margin="0,4,0,16" Opacity="0.7"
+                 Text="Skeleton only. Position and Message are live. Progress, clock, and trailing text wait for SRS acceptance."/>
+
+      <TextBlock Text="Message"/>
+      <TextBox Margin="0,4,0,12" Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"/>
+
+      <TextBlock Text="Position"/>
+      <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+        <Button Content="Bottom" Command="{Binding DockBottomCommand}" Margin="0,0,8,0" Padding="12,4"/>
+        <Button Content="Top" Command="{Binding DockTopCommand}" Padding="12,4"/>
+      </StackPanel>
+    </StackPanel>
+  </DockPanel>
+</Window>

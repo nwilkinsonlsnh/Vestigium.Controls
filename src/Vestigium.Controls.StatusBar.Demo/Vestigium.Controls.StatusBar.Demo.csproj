@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Vestigium.Controls.StatusBar.Demo</RootNamespace>
+    <AssemblyName>Vestigium.Controls.StatusBar.Demo</AssemblyName>
+    <ApplicationTitle>Vestigium.Controls.StatusBar Demo</ApplicationTitle>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vestigium.Controls.StatusBar\Vestigium.Controls.StatusBar.csproj" />
+  </ItemGroup>
+</Project>
