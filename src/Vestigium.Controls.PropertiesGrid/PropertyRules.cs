@@ -1,6 +1,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
@@ -94,9 +95,7 @@ internal static class PropertyRules
     public static bool HasDeclaredReadOnly(PropertyDescriptor pd)
     {
         var prop = pd.ComponentType.GetProperty(pd.Name,
-            System.Reflection.BindingFlags.Instance
-            | System.Reflection.BindingFlags.Public
-            | System.Reflection.BindingFlags.NonPublic);
+            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
         return prop?.GetCustomAttribute<ReadOnlyAttribute>() is { IsReadOnly: true };
     }
 
