@@ -2,9 +2,8 @@
 
 **Document ID:** VEST-CTL-BASE-DEV-001  
 **Version:** 1.3  
-**Status:** Implemented  
-**Date:** 7 September 2026  
-**Contract:** [`Requirements_v1.3.md`](Requirements_v1.3.md)
+**Status:** Superseded by v1.4  
+**Contract:** [`Requirements_v1.4.md`](Requirements_v1.4.md) — this file is superseded.
 
 ## Project
 

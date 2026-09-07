@@ -2,7 +2,7 @@
 
 **Document ID:** VEST-CTL-BASE-SRS-001  
 **Version:** 1.3  
-**Status:** Implemented  
+**Status:** Superseded by v1.4  
 **Date:** 7 September 2026  
 **Target:** .NET 10 LTS, Visual Studio 2026, WPF MVVM  
 **Supersedes:** v1.0 / v1.1 / v1.2
