@@ -19,7 +19,7 @@ Umbrella developer notes: [`_Documentation/DevelopersGuide_v1.0.md`](_Documentat
 |---|---|---|
 | `Vestigium.Controls` | Shared primitives, DI host, **default Vestigium form** (menu + content + status bar) | [`src/Vestigium.Controls/_Documentation`](src/Vestigium.Controls/_Documentation) |
 | `Vestigium.Controls.StatusBar` | Bindable status bar, dock **Top** or **Bottom**, Left/Center/Right slots | [SRS v1.3](src/Vestigium.Controls.StatusBar/_Documentation/Requirements_v1.3.md) · [Guide v1.3](src/Vestigium.Controls.StatusBar/_Documentation/DevelopersGuide_v1.3.md) |
-| `Vestigium.Controls.NumericUpDown` | Decimal spinner, Immediate/Deferred drain, Full/SpinOnly/ReadOnly | [SRS v1.1](src/Vestigium.Controls.NumericUpDown/_Documentation/Requirements_v1.1.md) · [Guide v1.1](src/Vestigium.Controls.NumericUpDown/_Documentation/DevelopersGuide_v1.1.md) |
+| `Vestigium.Controls.NumericUpDown` | Decimal spinner, Immediate/Deferred, Signed/Unsigned, snap Round/Floor/Ceiling | [SRS v1.2](src/Vestigium.Controls.NumericUpDown/_Documentation/Requirements_v1.2.md) · [Guide v1.2](src/Vestigium.Controls.NumericUpDown/_Documentation/DevelopersGuide_v1.2.md) |
 | `Vestigium.Controls.PropertiesGrid` | Property inspector (stub) | [`src/Vestigium.Controls.PropertiesGrid/_Documentation`](src/Vestigium.Controls.PropertiesGrid/_Documentation) |
 | `Vestigium.Controls.UnderConstruction` | Placeholder surface used by unfinished chrome | [`src/Vestigium.Controls.UnderConstruction/_Documentation`](src/Vestigium.Controls.UnderConstruction/_Documentation) |
 

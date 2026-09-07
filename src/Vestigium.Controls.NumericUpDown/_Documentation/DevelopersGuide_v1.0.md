@@ -2,4 +2,4 @@
 
 **This file is superseded.**
 
-Current guide: [`DevelopersGuide_v1.1.md`](DevelopersGuide_v1.1.md)
+Current guide: [`DevelopersGuide_v1.2.md`](DevelopersGuide_v1.2.md)

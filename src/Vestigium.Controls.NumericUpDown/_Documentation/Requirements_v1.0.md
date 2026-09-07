@@ -2,4 +2,4 @@
 
 **This file is superseded.**
 
-Current contract: [`Requirements_v1.1.md`](Requirements_v1.1.md)
+Current contract: [`Requirements_v1.2.md`](Requirements_v1.2.md)
