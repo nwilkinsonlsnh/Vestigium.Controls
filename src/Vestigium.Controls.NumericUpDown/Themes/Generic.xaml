@@ -30,6 +30,7 @@
                        BorderThickness="0"
                        CaretBrush="{TemplateBinding Foreground}"
                        VerticalContentAlignment="Center"
+                       TextAlignment="{TemplateBinding TextAlignment}"
                        HorizontalContentAlignment="Right"
                        Padding="8,0,6,0"
                        FontSize="13"/>

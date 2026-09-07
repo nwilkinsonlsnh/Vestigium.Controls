@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Vestigium.Controls.PropertiesGrid;
@@ -16,6 +17,7 @@ public partial class MainViewModel : ObservableObject
         West.Self = West;
         Selected = East;
         SelectedSet.Add(East);
+        CategoryIcons = VestigiumCategoryGlyphs.CreateStandard();
         HostItems =
         [
             new VestigiumPropertyItem { Name = "Region", Category = "Host", Description = "Hand-built item. No reflection.", Kind = VestigiumPropertyEditorKind.Text, Value = "us-east" },
@@ -28,9 +30,11 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private bool _multiSelect;
     [ObservableProperty] private string _log = "Ready.";
     [ObservableProperty] private VestigiumPropertySort _sort = VestigiumPropertySort.Categorized;
+    [ObservableProperty] private TextAlignment _editorTextAlignment = TextAlignment.Left;
 
     public ObservableCollection<ProbeSettings> SelectedSet { get; } = [];
     public IList<VestigiumPropertyItem> HostItems { get; }
+    public VestigiumCategoryIconCollection CategoryIcons { get; }
 
     public object? GridTarget => MultiSelect ? null : Selected;
     public System.Collections.IList? GridTargets => MultiSelect ? SelectedSet : null;
@@ -83,4 +87,8 @@ public partial class MainViewModel : ObservableObject
 
     [RelayCommand]
     private void Alphabetical() => Sort = VestigiumPropertySort.Alphabetical;
+
+    [RelayCommand] private void AlignLeft() => EditorTextAlignment = TextAlignment.Left;
+    [RelayCommand] private void AlignCenter() => EditorTextAlignment = TextAlignment.Center;
+    [RelayCommand] private void AlignRight() => EditorTextAlignment = TextAlignment.Right;
 }

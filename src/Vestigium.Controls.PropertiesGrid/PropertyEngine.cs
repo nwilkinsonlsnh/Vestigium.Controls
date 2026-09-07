@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Media;
 
 namespace Vestigium.Controls.PropertiesGrid;
 
@@ -25,6 +27,8 @@ public sealed class PropertyEngine
     public VestigiumPropertyItem? SelectedProperty { get; set; }
     public bool IsReadOnly { get; set; }
     public int MaxExpandDepth { get; set; } = PropertyRules.DefaultMaxExpandDepth;
+    public TextAlignment EditorTextAlignment { get; set; } = TextAlignment.Left;
+    public IList? CategoryIcons { get; set; }
 
     public VestigiumPropertySort Sort
     {
@@ -101,6 +105,7 @@ public sealed class PropertyEngine
                 if (item is not VestigiumPropertyItem row) continue;
                 row.Engine = this;
                 row.IsReadOnly = IsReadOnly || row.IsReadOnly;
+                row.EffectiveTextAlignment = row.TextAlignment ?? EditorTextAlignment;
                 _roots.Add(row);
             }
         }
@@ -392,6 +397,7 @@ public sealed class PropertyEngine
         child.CanExpand = expandable && !circular && child.Depth < MaxExpandDepth && value is not null;
         child.IsUnsigned = PropertyRules.IsUnsigned(elType);
         child.DecimalPlaces = PropertyRules.IsInteger(elType) ? 0 : 4;
+        child.EffectiveTextAlignment = EditorTextAlignment;
         foreach (var a in parent.Ancestors)
             child.Ancestors.Add(a);
         if (value is not null)
@@ -479,6 +485,9 @@ public sealed class PropertyEngine
         item.IsCircular = circular;
         item.IsUnsigned = PropertyRules.IsUnsigned(type);
         item.DecimalPlaces = PropertyRules.IsInteger(type) ? 0 : 4;
+        var alignAttr = pd.Attributes[typeof(VestigiumTextAlignmentAttribute)] as VestigiumTextAlignmentAttribute;
+        item.TextAlignment = alignAttr?.Alignment;
+        item.EffectiveTextAlignment = item.TextAlignment ?? EditorTextAlignment;
         foreach (var owner in owners)
             item.Owners.Add(owner);
         foreach (var a in ancestors)
@@ -550,8 +559,10 @@ public sealed class PropertyEngine
                     IsReadOnly = true,
                     CanExpand = true,
                     IsExpanded = !_collapsedCats.Contains(cat),
+                    EffectiveTextAlignment = EditorTextAlignment,
                 };
                 header.Engine = this;
+                ApplyCategoryIcon(header);
                 _categoryRows[cat] = header;
                 _visible.Add(header);
                 if (!header.IsExpanded) continue;
@@ -578,6 +589,28 @@ public sealed class PropertyEngine
             if (string.IsNullOrEmpty(search) || Matches(child, search))
                 AddVisible(child, search);
         }
+    }
+
+    public void ApplyAlignment()
+    {
+        foreach (var item in Walk(_roots))
+            item.EffectiveTextAlignment = item.TextAlignment ?? EditorTextAlignment;
+        foreach (var header in _categoryRows.Values)
+            header.EffectiveTextAlignment = EditorTextAlignment;
+    }
+
+    public void ApplyCategoryIcons() => RebuildVisible();
+
+    private void ApplyCategoryIcon(VestigiumPropertyItem header)
+    {
+        header.CategoryImage = null;
+        header.CategoryGeometry = null;
+        var icon = PropertyRules.FindCategoryIcon(CategoryIcons, header.Category);
+        if (icon is null) return;
+        header.CategoryImage = icon.ResolveImage();
+        header.CategoryGeometry = header.CategoryImage is null ? icon.ResolveGeometry() : null;
+        if (header.CategoryGeometry is { CanFreeze: true } geo)
+            geo.Freeze();
     }
 
     private bool Matches(VestigiumPropertyItem item, string search)

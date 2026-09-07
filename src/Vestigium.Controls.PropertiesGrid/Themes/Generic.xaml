@@ -9,6 +9,8 @@
   <local:SignModeConverter x:Key="SignMode"/>
   <local:InputModeConverter x:Key="InputMode"/>
   <local:DoubleToGridLengthConverter x:Key="GridLen"/>
+  <local:TextAlignmentToHorizontalConverter x:Key="AlignH"/>
+  <local:NullToVisibilityConverter x:Key="NullVis"/>
 
   <Style x:Key="GridButton" TargetType="Button">
     <Setter Property="Background" Value="#132744"/>
@@ -153,6 +155,15 @@
                                     <StackPanel Orientation="Horizontal">
                                       <TextBlock VerticalAlignment="Center" Margin="8,0,6,0" Foreground="#4A90C8"
                                                  Text="{Binding IsExpanded, Converter={StaticResource ExpandGlyph}}"/>
+                                      <Image Width="14" Height="14" Margin="0,0,6,0" VerticalAlignment="Center"
+                                             RenderOptions.BitmapScalingMode="HighQuality"
+                                             Source="{Binding CategoryImage}"
+                                             Visibility="{Binding CategoryImage, Converter={StaticResource NullVis}}"/>
+                                      <Path Width="14" Height="14" Margin="0,0,6,0" Stretch="Uniform"
+                                            Fill="#94A3B8" Stroke="#94A3B8" StrokeThickness="1"
+                                            StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                                            Data="{Binding CategoryGeometry}"
+                                            Visibility="{Binding CategoryGeometry, Converter={StaticResource NullVis}}"/>
                                       <TextBlock VerticalAlignment="Center" FontSize="11" FontWeight="SemiBold"
                                                  Foreground="#94A3B8" Text="{Binding Name}"/>
                                     </StackPanel>
@@ -173,6 +184,8 @@
                                   <TextBox Grid.Column="2" Margin="4,2" VerticalContentAlignment="Center"
                                            Background="#132744" Foreground="#E2E8F0" BorderBrush="#1E3A5F" CaretBrush="#E2E8F0"
                                            IsReadOnly="{Binding IsReadOnly}"
+                                           TextAlignment="{Binding EffectiveTextAlignment}"
+                                           HorizontalContentAlignment="{Binding EffectiveTextAlignment, Converter={StaticResource AlignH}}"
                                            Text="{Binding EditText, UpdateSourceTrigger=LostFocus}"/>
                                 </Grid>
                               </DataTemplate>
@@ -190,6 +203,8 @@
                                   <TextBox Grid.Column="2" Margin="4,2" VerticalContentAlignment="Center"
                                            Background="#132744" Foreground="#64748B" BorderBrush="#1E3A5F" CaretBrush="#E2E8F0"
                                            ToolTip="Multiple values"
+                                           TextAlignment="{Binding EffectiveTextAlignment}"
+                                           HorizontalContentAlignment="{Binding EffectiveTextAlignment, Converter={StaticResource AlignH}}"
                                            Text="{Binding EditText, UpdateSourceTrigger=LostFocus}"/>
                                 </Grid>
                               </DataTemplate>
@@ -222,6 +237,7 @@
                                              Margin="{Binding Depth, Converter={StaticResource DepthMargin}}" TextTrimming="CharacterEllipsis"/>
                                   <ComboBox Grid.Column="2" Margin="4,2" ItemsSource="{Binding Choices}"
                                             IsEnabled="{Binding IsReadOnly, Converter={StaticResource BoolNot}}"
+                                            HorizontalContentAlignment="{Binding EffectiveTextAlignment, Converter={StaticResource AlignH}}"
                                             SelectedItem="{Binding EnumValue}"/>
                                 </Grid>
                               </DataTemplate>
@@ -240,7 +256,8 @@
                                       Value="{Binding NumericValue, UpdateSourceTrigger=PropertyChanged}"
                                       DecimalPlaces="{Binding DecimalPlaces}"
                                       SignMode="{Binding IsUnsigned, Converter={StaticResource SignMode}}"
-                                      InputMode="{Binding IsReadOnly, Converter={StaticResource InputMode}}"/>
+                                      InputMode="{Binding IsReadOnly, Converter={StaticResource InputMode}}"
+                                      TextAlignment="{Binding EffectiveTextAlignment}"/>
                                 </Grid>
                               </DataTemplate>
                             </local:PropertyEditorSelector.Numeric>
@@ -254,7 +271,8 @@
                                   </Grid.ColumnDefinitions>
                                   <TextBlock VerticalAlignment="Center" Text="{Binding Name}"
                                              Margin="{Binding Depth, Converter={StaticResource DepthMargin}}" TextTrimming="CharacterEllipsis"/>
-                                  <DatePicker Grid.Column="2" Margin="4,2" SelectedDate="{Binding DateValue}"/>
+                                  <DatePicker Grid.Column="2" Margin="4,2" SelectedDate="{Binding DateValue}"
+                                              HorizontalContentAlignment="{Binding EffectiveTextAlignment, Converter={StaticResource AlignH}}"/>
                                 </Grid>
                               </DataTemplate>
                             </local:PropertyEditorSelector.DateTime>
@@ -276,6 +294,8 @@
                                     </Border>
                                     <TextBox VerticalContentAlignment="Center" Background="#132744" Foreground="#E2E8F0"
                                              BorderBrush="#1E3A5F" CaretBrush="#E2E8F0"
+                                             TextAlignment="{Binding EffectiveTextAlignment}"
+                                             HorizontalContentAlignment="{Binding EffectiveTextAlignment, Converter={StaticResource AlignH}}"
                                              Text="{Binding EditText, UpdateSourceTrigger=LostFocus}"/>
                                   </DockPanel>
                                 </Grid>
@@ -292,6 +312,7 @@
                                   <TextBlock VerticalAlignment="Center" Text="{Binding Name}"
                                              Margin="{Binding Depth, Converter={StaticResource DepthMargin}}" TextTrimming="CharacterEllipsis"/>
                                   <TextBlock Grid.Column="2" Margin="8,0" VerticalAlignment="Center" Foreground="#94A3B8"
+                                             HorizontalAlignment="{Binding EffectiveTextAlignment, Converter={StaticResource AlignH}}"
                                              Text="{Binding Display}"/>
                                 </Grid>
                               </DataTemplate>
@@ -311,6 +332,7 @@
                                     <TextBlock VerticalAlignment="Center" Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
                                   </StackPanel>
                                   <TextBlock Grid.Column="2" Margin="8,0" VerticalAlignment="Center" Foreground="#94A3B8"
+                                             HorizontalAlignment="{Binding EffectiveTextAlignment, Converter={StaticResource AlignH}}"
                                              Text="{Binding Display}"/>
                                 </Grid>
                               </DataTemplate>

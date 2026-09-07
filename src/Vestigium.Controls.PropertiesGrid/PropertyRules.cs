@@ -1,5 +1,8 @@
+using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
+using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Media;
 
 namespace Vestigium.Controls.PropertiesGrid;
@@ -258,4 +261,46 @@ internal static class PropertyRules
     }
 
     public static int CoerceMaxDepth(int value) => value <= 0 ? DefaultMaxExpandDepth : value;
+
+    public static Geometry? TryParseGeometry(string? data)
+    {
+        if (string.IsNullOrWhiteSpace(data)) return null;
+        try
+        {
+            var geometry = Geometry.Parse(data);
+            if (geometry.CanFreeze) geometry.Freeze();
+            return geometry;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public static Geometry? TryParseSvg(string? svg)
+    {
+        if (string.IsNullOrWhiteSpace(svg)) return null;
+        var match = Regex.Match(svg, "\\sd\\s*=\\s*\"([^\"]+)\"", RegexOptions.IgnoreCase);
+        if (!match.Success)
+            match = Regex.Match(svg, "\\sd\\s*=\\s*'([^']+)'", RegexOptions.IgnoreCase);
+        return match.Success ? TryParseGeometry(match.Groups[1].Value) : TryParseGeometry(svg);
+    }
+
+    public static VestigiumCategoryIcon? FindCategoryIcon(IEnumerable? icons, string category)
+    {
+        if (icons is null) return null;
+        foreach (var item in icons)
+        {
+            if (item is VestigiumCategoryIcon icon
+                && string.Equals(icon.Category, category, StringComparison.OrdinalIgnoreCase))
+                return icon;
+        }
+        return null;
+    }
+
+    public static TextAlignment CoerceTextAlignment(TextAlignment value) =>
+        value is TextAlignment.Center or TextAlignment.Right or TextAlignment.Justify
+            ? value
+            : TextAlignment.Left;
 }
+

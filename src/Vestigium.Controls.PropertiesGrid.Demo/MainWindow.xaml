@@ -22,10 +22,12 @@
           </Grid.ColumnDefinitions>
           <pg:VestigiumPropertiesGrid SelectedObject="{Binding Selected, Mode=OneWay}"
                                       Sort="{Binding Sort}"
-                                      IsReadOnly="{Binding IsReadOnly}"/>
+                                      IsReadOnly="{Binding IsReadOnly}"
+                                      EditorTextAlignment="{Binding EditorTextAlignment}"
+                                      CategoryIcons="{Binding CategoryIcons}"/>
           <DockPanel Grid.Column="1" Margin="12,0,0,0">
             <TextBlock DockPanel.Dock="Top" Margin="0,0,0,8" Foreground="#94A3B8" TextWrapping="Wrap"
-                       Text="Live object. Edits in the grid appear here."/>
+                       Text="Live object. Edits in the grid appear here. TTL and Timeout follow EditorTextAlignment."/>
             <StackPanel DockPanel.Dock="Top">
               <Button Content="East" Command="{Binding SelectEastCommand}" Margin="0,0,0,6"/>
               <Button Content="West" Command="{Binding SelectWestCommand}" Margin="0,0,0,6"/>
@@ -33,6 +35,12 @@
               <Button Content="Categorized" Command="{Binding CategorizedCommand}" Margin="0,0,0,6"/>
               <Button Content="Alphabetical" Command="{Binding AlphabeticalCommand}" Margin="0,0,0,6"/>
               <CheckBox Content="Grid IsReadOnly" IsChecked="{Binding IsReadOnly}" Margin="0,8,0,8"/>
+              <TextBlock Margin="0,4,0,6" Foreground="#94A3B8" Text="Editor text alignment"/>
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <Button Content="Left" Command="{Binding AlignLeftCommand}" Margin="0,0,6,0" Padding="10,4"/>
+                <Button Content="Center" Command="{Binding AlignCenterCommand}" Margin="0,0,6,0" Padding="10,4"/>
+                <Button Content="Right" Command="{Binding AlignRightCommand}" Padding="10,4"/>
+              </StackPanel>
             </StackPanel>
             <Border Background="#132744" BorderBrush="#1E3A5F" BorderThickness="1" Padding="10">
               <StackPanel>
@@ -61,7 +69,9 @@
               <ColumnDefinition Width="240"/>
             </Grid.ColumnDefinitions>
             <pg:VestigiumPropertiesGrid SelectedObject="{Binding GridTarget, Mode=OneWay}"
-                                        SelectedObjects="{Binding GridTargets, Mode=OneWay}"/>
+                                        SelectedObjects="{Binding GridTargets, Mode=OneWay}"
+                                        EditorTextAlignment="{Binding EditorTextAlignment}"
+                                        CategoryIcons="{Binding CategoryIcons}"/>
             <StackPanel Grid.Column="1" Margin="12,0,0,0">
               <TextBlock Text="{Binding East.DisplayName, StringFormat='East: {0}'}"/>
               <TextBlock Text="{Binding West.DisplayName, StringFormat='West: {0}'}"/>
@@ -92,7 +102,9 @@
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Trace"/>
           </Border>
           <pg:VestigiumPropertiesGrid Grid.Row="1" Grid.Column="1" Margin="4"
-                                      SelectedObject="{Binding East, Mode=OneWay}"/>
+                                      SelectedObject="{Binding East, Mode=OneWay}"
+                                      EditorTextAlignment="{Binding EditorTextAlignment}"
+                                      CategoryIcons="{Binding CategoryIcons}"/>
         </Grid>
       </TabItem>
 
@@ -100,7 +112,8 @@
         <DockPanel>
           <TextBlock DockPanel.Dock="Top" Margin="0,0,0,8" Foreground="#94A3B8"
                      Text="Hand-built VestigiumPropertyItem rows. No reflection."/>
-          <pg:VestigiumPropertiesGrid ItemsSource="{Binding HostItems, Mode=OneWay}"/>
+          <pg:VestigiumPropertiesGrid ItemsSource="{Binding HostItems, Mode=OneWay}"
+                                      EditorTextAlignment="{Binding EditorTextAlignment}"/>
         </DockPanel>
       </TabItem>
     </TabControl>

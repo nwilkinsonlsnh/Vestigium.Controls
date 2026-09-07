@@ -106,6 +106,10 @@ public class VestigiumNumericUpDown : Control
         DependencyProperty.Register(nameof(AccelerationDelay), typeof(int), typeof(VestigiumNumericUpDown),
             new PropertyMetadata(NumericDefaults.AccelerationDelayMs, OnAccelChanged));
 
+    public static readonly DependencyProperty TextAlignmentProperty =
+        DependencyProperty.Register(nameof(TextAlignment), typeof(TextAlignment), typeof(VestigiumNumericUpDown),
+            new FrameworkPropertyMetadata(TextAlignment.Right, FrameworkPropertyMetadataOptions.AffectsRender, OnTextAlignmentChanged));
+
     public static readonly RoutedEvent ValueChangedEvent =
         EventManager.RegisterRoutedEvent(nameof(ValueChanged), RoutingStrategy.Bubble,
             typeof(RoutedPropertyChangedEventHandler<decimal>), typeof(VestigiumNumericUpDown));
@@ -213,6 +217,12 @@ public class VestigiumNumericUpDown : Control
         set => SetValue(AccelerationDelayProperty, value);
     }
 
+    public TextAlignment TextAlignment
+    {
+        get => (TextAlignment)GetValue(TextAlignmentProperty);
+        set => SetValue(TextAlignmentProperty, value);
+    }
+
     public event RoutedPropertyChangedEventHandler<decimal> ValueChanged
     {
         add => AddHandler(ValueChangedEvent, value);
@@ -231,6 +241,7 @@ public class VestigiumNumericUpDown : Control
         SyncTextFromEngine();
         ApplyInputMode();
         ApplyRepeatTiming();
+        ApplyTextAlignment();
         UpdateButtons();
     }
 
@@ -371,6 +382,9 @@ public class VestigiumNumericUpDown : Control
 
     private static void OnAccelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
         ((VestigiumNumericUpDown)d)._engine.AccelerationDelayMs = (int)e.NewValue;
+
+    private static void OnTextAlignmentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
+        ((VestigiumNumericUpDown)d).ApplyTextAlignment();
 
     private void OnEngineChanged()
     {
@@ -580,6 +594,18 @@ public class VestigiumNumericUpDown : Control
         if (_textBox is not null)
             _textBox.IsReadOnly = !_engine.CanType;
         UpdateButtons();
+    }
+
+    private void ApplyTextAlignment()
+    {
+        if (_textBox is null) return;
+        _textBox.TextAlignment = TextAlignment;
+        _textBox.HorizontalContentAlignment = TextAlignment switch
+        {
+            TextAlignment.Center => HorizontalAlignment.Center,
+            TextAlignment.Right => HorizontalAlignment.Right,
+            _ => HorizontalAlignment.Left
+        };
     }
 
     private void ApplyRepeatTiming()

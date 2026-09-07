@@ -2,7 +2,7 @@
 
 **Document ID:** VEST-CTL-PG-DEV-001  
 **Version:** 1.2  
-**Status:** Implemented  
+**Status:** Superseded by v1.3  
 **Date:** 7 September 2026  
 **Contract:** [`Requirements_v1.2.md`](Requirements_v1.2.md)
 

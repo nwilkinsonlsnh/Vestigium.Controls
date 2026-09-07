@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Windows;
 using System.Windows.Media;
 using Vestigium.Controls.PropertiesGrid;
 
@@ -238,6 +239,77 @@ public class PropertyEngineTests
         Assert.DoesNotContain("System.Windows.Forms", text);
     }
 
+    [Fact]
+    public void Editor_text_alignment_defaults_to_left()
+    {
+        var engine = EngineOf(new Probe());
+        Assert.Equal(TextAlignment.Left, engine.EditorTextAlignment);
+        Assert.Equal(TextAlignment.Left, engine.RootItems.First().EffectiveTextAlignment);
+    }
+
+    [Fact]
+    public void Grid_alignment_applies_to_rows()
+    {
+        var engine = EngineOf(new Probe());
+        engine.EditorTextAlignment = TextAlignment.Center;
+        engine.ApplyAlignment();
+        Assert.Equal(TextAlignment.Center, engine.RootItems.Single(r => r.Name == "TTL").EffectiveTextAlignment);
+    }
+
+    [Fact]
+    public void Alignment_attribute_overrides_grid()
+    {
+        var engine = EngineOf(new Probe());
+        engine.EditorTextAlignment = TextAlignment.Left;
+        engine.ApplyAlignment();
+        Assert.Equal(TextAlignment.Right, engine.RootItems.Single(r => r.Name == "Timeout").EffectiveTextAlignment);
+    }
+
+    [Fact]
+    public void Category_icon_attaches_to_header()
+    {
+        var engine = EngineOf(new Probe());
+        engine.CategoryIcons = VestigiumCategoryGlyphs.CreateStandard();
+        engine.ApplyCategoryIcons();
+        var timing = engine.VisibleRows.Single(r => r.IsCategory && r.Category == "Timing");
+        Assert.True(timing.HasCategoryGlyph);
+        Assert.NotNull(timing.CategoryGeometry);
+    }
+
+    [Fact]
+    public void Missing_category_icon_leaves_header_bare()
+    {
+        var engine = EngineOf(new Probe());
+        engine.CategoryIcons = new VestigiumCategoryIconCollection
+        {
+            new() { Category = "Timing", IconData = VestigiumCategoryGlyphs.Timing }
+        };
+        engine.ApplyCategoryIcons();
+        var general = engine.VisibleRows.Single(r => r.IsCategory && r.Category == "General");
+        Assert.False(general.HasCategoryGlyph);
+        Assert.True(engine.VisibleRows.Single(r => r.IsCategory && r.Category == "Timing").HasCategoryGlyph);
+    }
+
+    [Fact]
+    public void Svg_markup_yields_geometry()
+    {
+        var icon = new VestigiumCategoryIcon
+        {
+            Category = "Timing",
+            Svg = "<svg xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M2,2 H14 V14 H2 Z\"/></svg>"
+        };
+        Assert.NotNull(icon.ResolveGeometry());
+        Assert.True(icon.HasGlyph);
+    }
+
+    [Fact]
+    public void Bad_icon_data_does_not_throw()
+    {
+        var icon = new VestigiumCategoryIcon { Category = "Timing", IconData = "not-a-path" };
+        Assert.Null(icon.ResolveGeometry());
+        Assert.False(icon.HasGlyph);
+    }
+
     private static PropertyEngine EngineOf(object target)
     {
         var engine = new PropertyEngine();
@@ -279,6 +351,7 @@ public class PropertyEngineTests
         public int Ttl { get; set; } = 64;
 
         [Category("Timing"), DisplayName("Timeout")]
+        [VestigiumTextAlignment(TextAlignment.Right)]
         public decimal Timeout { get; set; } = 1.5m;
 
         [Category("Display")]

@@ -46,7 +46,7 @@ xmlns:nud="clr-namespace:Vestigium.Controls.NumericUpDown;assembly=Vestigium.Con
                             PageIncrement="10"/>
 ```
 
-Defaults are Immediate + Auto + Full + **Signed** + unbounded + snap **off**. That is the consumer-grade spinner.
+Defaults are Immediate + Auto + Full + **Signed** + unbounded + snap **off**. Text in the box is **Right** unless you set `TextAlignment`. That is the consumer-grade spinner.
 
 When the setter is expensive (starts a probe):
 

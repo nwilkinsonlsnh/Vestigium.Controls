@@ -2,7 +2,7 @@
 
 **Document ID:** VEST-CTL-PG-SRS-001  
 **Version:** 1.2  
-**Status:** Implemented  
+**Status:** Superseded by v1.3  
 **Date:** 7 September 2026  
 **Target:** .NET 10 LTS, Visual Studio 2026, WPF MVVM  
 **Supersedes:** v1.1

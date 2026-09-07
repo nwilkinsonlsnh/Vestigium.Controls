@@ -1,6 +1,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -66,6 +67,17 @@ public sealed class VestigiumPropertyItem : INotifyPropertyChanged
     public bool IsCircular { get; internal set; }
     public bool IsUnsigned { get; internal set; }
     public int DecimalPlaces { get; internal set; }
+    public TextAlignment? TextAlignment { get; set; }
+    public ImageSource? CategoryImage { get; set; }
+    public Geometry? CategoryGeometry { get; set; }
+
+    public TextAlignment EffectiveTextAlignment
+    {
+        get;
+        set => Set(ref field, value);
+    } = System.Windows.TextAlignment.Left;
+
+    public bool HasCategoryGlyph => CategoryImage is not null || CategoryGeometry is not null;
 
     public object? Value
     {

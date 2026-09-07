@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -54,6 +55,7 @@ public class VestigiumPropertiesGrid : Control
             (_, e) => e.CanExecute = !IsReadOnly));
         CommandBindings.Add(new CommandBinding(CategorizedCommand, (_, _) => Sort = VestigiumPropertySort.Categorized));
         CommandBindings.Add(new CommandBinding(AlphabeticalCommand, (_, _) => Sort = VestigiumPropertySort.Alphabetical));
+        SetCurrentValue(CategoryIconsProperty, new VestigiumCategoryIconCollection());
     }
 
     public PropertyEngine Engine => _engine;
@@ -110,6 +112,14 @@ public class VestigiumPropertiesGrid : Control
     public static readonly DependencyProperty MaxExpandDepthProperty =
         DependencyProperty.Register(nameof(MaxExpandDepth), typeof(int), typeof(VestigiumPropertiesGrid),
             new PropertyMetadata(PropertyRules.DefaultMaxExpandDepth, OnMaxDepthChanged, CoerceMaxDepth));
+
+    public static readonly DependencyProperty EditorTextAlignmentProperty =
+        DependencyProperty.Register(nameof(EditorTextAlignment), typeof(TextAlignment), typeof(VestigiumPropertiesGrid),
+            new FrameworkPropertyMetadata(TextAlignment.Left, OnEditorTextAlignmentChanged, CoerceEditorTextAlignment));
+
+    public static readonly DependencyProperty CategoryIconsProperty =
+        DependencyProperty.Register(nameof(CategoryIcons), typeof(IList), typeof(VestigiumPropertiesGrid),
+            new PropertyMetadata(null, OnCategoryIconsChanged));
 
     public static readonly DependencyProperty ObjectCountTextProperty =
         DependencyProperty.Register(nameof(ObjectCountText), typeof(string), typeof(VestigiumPropertiesGrid),
@@ -189,6 +199,18 @@ public class VestigiumPropertiesGrid : Control
     {
         get => (int)GetValue(MaxExpandDepthProperty);
         set => SetValue(MaxExpandDepthProperty, value);
+    }
+
+    public TextAlignment EditorTextAlignment
+    {
+        get => (TextAlignment)GetValue(EditorTextAlignmentProperty);
+        set => SetValue(EditorTextAlignmentProperty, value);
+    }
+
+    public IList? CategoryIcons
+    {
+        get => (IList?)GetValue(CategoryIconsProperty);
+        set => SetValue(CategoryIconsProperty, value);
     }
 
     public string ObjectCountText
@@ -350,8 +372,37 @@ public class VestigiumPropertiesGrid : Control
     private static object CoerceMaxDepth(DependencyObject d, object baseValue) =>
         PropertyRules.CoerceMaxDepth(baseValue is int n ? n : PropertyRules.DefaultMaxExpandDepth);
 
+    private static void OnEditorTextAlignmentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var grid = (VestigiumPropertiesGrid)d;
+        grid._engine.EditorTextAlignment = (TextAlignment)e.NewValue;
+        grid._engine.ApplyAlignment();
+    }
+
+    private static object CoerceEditorTextAlignment(DependencyObject d, object baseValue) =>
+        PropertyRules.CoerceTextAlignment(baseValue is TextAlignment t ? t : TextAlignment.Left);
+
+    private static void OnCategoryIconsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var grid = (VestigiumPropertiesGrid)d;
+        if (e.OldValue is INotifyCollectionChanged oldNcc)
+            oldNcc.CollectionChanged -= grid.OnCategoryIconsCollectionChanged;
+        if (e.NewValue is INotifyCollectionChanged newNcc)
+            newNcc.CollectionChanged += grid.OnCategoryIconsCollectionChanged;
+        grid._engine.CategoryIcons = e.NewValue as IList;
+        grid._engine.ApplyCategoryIcons();
+    }
+
+    private void OnCategoryIconsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        _engine.CategoryIcons = CategoryIcons;
+        _engine.ApplyCategoryIcons();
+    }
+
     private void ApplySource()
     {
+        _engine.EditorTextAlignment = EditorTextAlignment;
+        _engine.CategoryIcons = CategoryIcons;
         if (ItemsSource is not null)
         {
             _engine.SetItemsSource(ItemsSource);
