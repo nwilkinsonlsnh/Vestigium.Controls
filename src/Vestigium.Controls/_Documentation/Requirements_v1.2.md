@@ -36,7 +36,7 @@ Top to bottom when the status bar is Bottom:
 
 When position is Top: nav, status bar, content.
 
-Nav is always above the status bar. File → Exit lives on `VestigiumDefaultWindow` only, not on nested shells.
+Nav is always above the status bar. **File → Exit and View live only on `VestigiumDefaultWindow`.** Nested shells do not get another File / View menu. Module navigation is the underlined radio strip on the shell.
 
 ---
 
@@ -51,13 +51,13 @@ Each item **owns** its content. Selecting an item shows that item’s `DisplayCo
 | `Content` set | That object (view, `TabControl`, nested `VestigiumShell`) |
 | `Content` null | That item’s own `VestigiumUnderConstruction` |
 
-Three default items when the host passes no spec:
+Three default top-level items when the host passes no spec. **Home includes nested children** so a new form shows indent without extra staging:
 
-| Header | Own construction title |
+| Header | Children |
 |---|---|
-| Home | Home |
-| Workspace | Workspace |
-| Settings | Settings |
+| Home | Overview, Live, Shortcuts (Favorites, Recent) |
+| Workspace | — |
+| Settings | — |
 
 Each placeholder is a **separate** instance. Renaming `Header` updates the radio and, until Title is overridden, the placeholder Title.
 

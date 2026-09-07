@@ -239,6 +239,32 @@ public class VestigiumShell : Control
 
     public void SeedDefaults() => SeedDefaultsIfEmpty(force: true);
 
+    internal static List<VestigiumNavItem> CreateDefaultTree()
+    {
+        var home = Child("Home", "Start here",
+            "Nested radios under Home are child modules of this form. File and View stay on the outer window only — nested pages do not get another File menu.");
+        home.Children.Add(Child("Overview", "Home / Overview", "First nested page under Home."));
+        home.Children.Add(Child("Live", "Home / Live", "Second nested page under Home."));
+        var shortcuts = Child("Shortcuts", "Home / Shortcuts", "Select Shortcuts to open a third nav row.");
+        shortcuts.Children.Add(Child("Favorites", "Home / Shortcuts / Favorites", "Depth 3 — the last allowed indent."));
+        shortcuts.Children.Add(Child("Recent", "Home / Shortcuts / Recent", "Still depth 3."));
+        home.Children.Add(shortcuts);
+
+        return
+        [
+            home,
+            Child("Workspace", "Workspace", ShellRules.PlaceholderDescription),
+            Child("Settings", "Settings", ShellRules.PlaceholderDescription)
+        ];
+
+        static VestigiumNavItem Child(string header, string subject, string description)
+        {
+            var item = new VestigiumNavItem(header);
+            item.SetPlaceholder(title: header, subject: subject, description: description);
+            return item;
+        }
+    }
+
     private static VestigiumStatusBarViewModel CreateOwnedStatus()
     {
         var status = new VestigiumStatusBarViewModel();
@@ -256,7 +282,7 @@ public class VestigiumShell : Control
         _seeding = true;
         try
         {
-            ReplaceNavItems(ShellRules.DefaultHeaders.Select(h => new VestigiumNavItem(h)).ToList());
+            ReplaceNavItems(CreateDefaultTree());
         }
         finally
         {

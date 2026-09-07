@@ -23,7 +23,9 @@ var window = new VestigiumDefaultWindow();
 window.Show();
 ```
 
-No spec → three underlined radios (Home, Workspace, Settings), each with its own Under Construction page, status bar at the bottom.
+No spec → three underlined radios (Home, Workspace, Settings). Home ships with nested radios (Overview, Live, Shortcuts → Favorites / Recent) so you can see indent immediately. Each slot has its own Under Construction page. Status bar at the bottom.
+
+File and View are **window chrome** on `VestigiumDefaultWindow` only. A nested `VestigiumShell` never clones File / View.
 
 ## Stage named modules
 

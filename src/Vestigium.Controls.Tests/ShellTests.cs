@@ -14,6 +14,11 @@ public class ShellTests
         Assert.NotNull(shell["Workspace"]);
         Assert.NotNull(shell["Settings"]);
         Assert.NotSame(shell["Home"]!.Placeholder, shell["Workspace"]!.Placeholder);
+        Assert.Equal(3, shell["Home"]!.Children.Count);
+        Assert.NotNull(shell["Overview"]);
+        Assert.NotNull(shell["Shortcuts"]);
+        Assert.Equal(2, shell["Shortcuts"]!.Children.Count);
+        Assert.NotNull(shell["Favorites"]);
     }
 
     [Fact]

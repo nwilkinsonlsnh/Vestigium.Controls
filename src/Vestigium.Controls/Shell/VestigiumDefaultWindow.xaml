@@ -5,22 +5,49 @@
         Title="Vestigium"
         Height="720" Width="1100"
         MinHeight="480" MinWidth="720"
-        Background="#0B1524" Foreground="#E2E8F0"
+        Background="#0B1524" Foreground="#F8FAFC"
         FontFamily="Segoe UI" FontSize="13">
+  <Window.Resources>
+    <!-- File / View is window chrome only. Nested shells do not clone this menu. -->
+    <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}" Color="#F8FAFC"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.GrayTextBrushKey}" Color="#D6E8FA"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="#F8FAFC"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="#F8FAFC"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.MenuBrushKey}" Color="#132744"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#1B4F86"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#F8FAFC"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#1B4F86"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#F8FAFC"/>
+    <Style TargetType="Menu">
+      <Setter Property="Background" Value="#0F2744"/>
+      <Setter Property="Foreground" Value="#F8FAFC"/>
+      <Setter Property="FontFamily" Value="Segoe UI"/>
+      <Setter Property="FontSize" Value="13"/>
+    </Style>
+    <Style TargetType="MenuItem">
+      <Setter Property="Foreground" Value="#F8FAFC"/>
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="Padding" Value="12,6"/>
+    </Style>
+    <Style TargetType="Separator">
+      <Setter Property="Background" Value="#1E3A5F"/>
+      <Setter Property="Margin" Value="4,2"/>
+    </Style>
+  </Window.Resources>
   <DockPanel>
-    <Menu DockPanel.Dock="Top" Background="#0F2744" Foreground="#E2E8F0" Padding="4,2">
-      <MenuItem Header="_File">
-        <MenuItem Header="E_xit" Click="Exit_Click"/>
+    <Menu DockPanel.Dock="Top" Padding="4,0">
+      <MenuItem Header="_File" Foreground="#F8FAFC">
+        <MenuItem Header="E_xit" Click="Exit_Click" Foreground="#F8FAFC"/>
       </MenuItem>
-      <MenuItem Header="_View">
-        <MenuItem Header="Status bar _visible" IsCheckable="True" IsChecked="{Binding ShowStatusBar}"/>
+      <MenuItem Header="_View" Foreground="#F8FAFC">
+        <MenuItem Header="Status bar _visible" IsCheckable="True" IsChecked="{Binding ShowStatusBar}" Foreground="#F8FAFC"/>
         <Separator/>
-        <MenuItem Header="Status bar at _Bottom" Command="{Binding DockStatusBarBottomCommand}"/>
-        <MenuItem Header="Status bar at _Top" Command="{Binding DockStatusBarTopCommand}"/>
+        <MenuItem Header="Status bar at _Bottom" Command="{Binding DockStatusBarBottomCommand}" Foreground="#F8FAFC"/>
+        <MenuItem Header="Status bar at _Top" Command="{Binding DockStatusBarTopCommand}" Foreground="#F8FAFC"/>
         <Separator/>
-        <MenuItem Header="Stage _PingIQ suite" Command="{Binding StageIqSuiteCommand}"/>
-        <MenuItem Header="Replace PingIQ with _inner form" Command="{Binding ReplacePingWithInnerFormCommand}"/>
-        <MenuItem Header="_Reset Home / Workspace / Settings" Command="{Binding ResetDefaultsCommand}"/>
+        <MenuItem Header="Stage _PingIQ suite" Command="{Binding StageIqSuiteCommand}" Foreground="#F8FAFC"/>
+        <MenuItem Header="Replace PingIQ with _inner form" Command="{Binding ReplacePingWithInnerFormCommand}" Foreground="#F8FAFC"/>
+        <MenuItem Header="_Reset Home / Workspace / Settings" Command="{Binding ResetDefaultsCommand}" Foreground="#F8FAFC"/>
       </MenuItem>
     </Menu>
     <local:VestigiumShell x:Name="RootShell"
