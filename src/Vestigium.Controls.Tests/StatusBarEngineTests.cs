@@ -110,3 +110,17 @@ public class StatusBarEngineTests : IDisposable
         Assert.True(engine.Applied >= 1);
     }
 
+    [Fact]
+    public async Task Idle_rewrites_text_after_timeout()
+    {
+        var engine = new StatusBarEngine();
+        _engines.Add(engine);
+        engine.StartRuntime();
+        engine.SetIdlePolicy(40, StatusBarDefaults.IdleText);
+        engine.PostImmediate("message", new StatusBarUpdate { Text = "Working" });
+        await Task.Delay(250);
+        Assert.Equal(StatusBarDefaults.IdleText, engine.Columns[0].Text);
+        Assert.True(engine.Columns[0].IsIdle);
+    }
+}
+
