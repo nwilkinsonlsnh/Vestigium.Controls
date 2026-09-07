@@ -19,11 +19,11 @@ public partial class App : Application
         base.OnStartup(e);
 
         var vm = Services.GetRequiredService<DemoWindowViewModel>();
+        vm.Status.Message = "Ready. Home / Workspace / Settings are placeholders.";
         var window = new VestigiumDefaultWindow(vm)
         {
             Title = "Vestigium.Controls — default form"
         };
-        window.HostShell.Status.Message = "Ready. Home / Workspace / Settings are placeholders.";
         window.Show();
     }
 }

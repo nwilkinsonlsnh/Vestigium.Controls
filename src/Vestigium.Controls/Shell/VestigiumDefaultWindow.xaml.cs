@@ -11,9 +11,9 @@ public partial class VestigiumDefaultWindow : Window
 
     public VestigiumDefaultWindow(VestigiumDefaultWindowViewModel viewModel)
     {
-        InitializeComponent();
         ViewModel = viewModel;
         DataContext = viewModel;
+        InitializeComponent();
         viewModel.RootShell = RootShell;
         Loaded += (_, _) => viewModel.RootShell = RootShell;
     }

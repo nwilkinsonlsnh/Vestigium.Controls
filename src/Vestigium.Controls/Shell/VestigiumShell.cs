@@ -82,7 +82,7 @@ public class VestigiumShell : Control
 
     public static readonly DependencyProperty StatusProperty =
         DependencyProperty.Register(nameof(Status), typeof(VestigiumStatusBarViewModel), typeof(VestigiumShell),
-            new PropertyMetadata(null));
+            new PropertyMetadata(null, null, CoerceStatus));
 
     public static readonly DependencyProperty StatusBarPositionProperty =
         DependencyProperty.Register(nameof(StatusBarPosition), typeof(VestigiumStatusBarPosition), typeof(VestigiumShell),
@@ -168,8 +168,15 @@ public class VestigiumShell : Control
 
     public VestigiumStatusBarViewModel Status
     {
-        get => (VestigiumStatusBarViewModel)GetValue(StatusProperty);
-        set => SetValue(StatusProperty, value);
+        get
+        {
+            if (GetValue(StatusProperty) is VestigiumStatusBarViewModel current)
+                return current;
+            var created = CreateOwnedStatus();
+            SetCurrentValue(StatusProperty, created);
+            return created;
+        }
+        set => SetValue(StatusProperty, value ?? CreateOwnedStatus());
     }
 
     public VestigiumStatusBarPosition StatusBarPosition
@@ -504,6 +511,9 @@ public class VestigiumShell : Control
         if (d is VestigiumShell shell)
             shell.RefreshTree();
     }
+
+    private static object CoerceStatus(DependencyObject d, object baseValue) =>
+        baseValue as VestigiumStatusBarViewModel ?? CreateOwnedStatus();
 
     private static object CoerceMaxNavDepth(DependencyObject d, object baseValue) =>
         ShellRules.CoerceMaxNavDepth(baseValue is int i ? i : ShellRules.DefaultMaxNavDepth);
