@@ -32,7 +32,7 @@
     <vsb:VestigiumStatusBar Engine="{Binding Status.Engine}"
                             Position="{Binding Status.Position}"/>
 
-    <uc:UnderConstructionView Title="Vestigium"
-                              Detail="Default form client area. Feature views land here after their requirements are accepted."/>
+    <uc:VestigiumUnderConstruction Header="Vestigium"
+                                   Message="Default form client area. Feature views land here after their requirements are accepted."/>
   </DockPanel>
 </Window>

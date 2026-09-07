@@ -1,5 +1,5 @@
-# Vestigium.Controls.UnderConstruction — Developers Guide
+# Vestigium.Controls.UnderConstruction — Developers Guide pointer
 
-**Version:** 1.0
+**This file is superseded.**
 
-`UnderConstructionView` binds `Title` and `Detail`. The umbrella demo drops one instance into the default form content area.
+Current guide: [`DevelopersGuide_v1.1.md`](DevelopersGuide_v1.1.md)

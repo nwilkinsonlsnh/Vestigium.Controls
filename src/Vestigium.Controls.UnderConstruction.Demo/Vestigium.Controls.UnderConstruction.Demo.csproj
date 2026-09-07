@@ -8,6 +8,9 @@
     <ApplicationTitle>Vestigium.Controls.UnderConstruction Demo</ApplicationTitle>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Vestigium.Controls.UnderConstruction\Vestigium.Controls.UnderConstruction.csproj" />
   </ItemGroup>
 </Project>

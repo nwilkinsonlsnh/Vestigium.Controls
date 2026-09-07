@@ -20,7 +20,7 @@
 | DI registration | `src/Vestigium.Controls/DependencyInjection/ServiceCollectionExtensions.cs` |
 | StatusBar control | `src/Vestigium.Controls.StatusBar/VestigiumStatusBar.xaml` |
 | StatusBar requirements | `src/Vestigium.Controls.StatusBar/_Documentation/Requirements_v1.0.md` |
-| Placeholder surface | `src/Vestigium.Controls.UnderConstruction/UnderConstructionView.xaml` |
+| Placeholder surface | `src/Vestigium.Controls.UnderConstruction/VestigiumUnderConstruction.cs` |
 
 ## Conventions copied from the suite
 
