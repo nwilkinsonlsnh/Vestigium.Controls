@@ -20,7 +20,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="280"/>
           </Grid.ColumnDefinitions>
-          <pg:VestigiumPropertiesGrid SelectedObject="{Binding Selected}"
+          <pg:VestigiumPropertiesGrid SelectedObject="{Binding Selected, Mode=OneWay}"
                                       Sort="{Binding Sort}"
                                       IsReadOnly="{Binding IsReadOnly}"/>
           <DockPanel Grid.Column="1" Margin="12,0,0,0">
@@ -60,8 +60,8 @@
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="240"/>
             </Grid.ColumnDefinitions>
-            <pg:VestigiumPropertiesGrid SelectedObject="{Binding GridTarget}"
-                                        SelectedObjects="{Binding GridTargets}"/>
+            <pg:VestigiumPropertiesGrid SelectedObject="{Binding GridTarget, Mode=OneWay}"
+                                        SelectedObjects="{Binding GridTargets, Mode=OneWay}"/>
             <StackPanel Grid.Column="1" Margin="12,0,0,0">
               <TextBlock Text="{Binding East.DisplayName, StringFormat='East: {0}'}"/>
               <TextBlock Text="{Binding West.DisplayName, StringFormat='West: {0}'}"/>
@@ -92,7 +92,7 @@
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Trace"/>
           </Border>
           <pg:VestigiumPropertiesGrid Grid.Row="1" Grid.Column="1" Margin="4"
-                                      SelectedObject="{Binding East}"/>
+                                      SelectedObject="{Binding East, Mode=OneWay}"/>
         </Grid>
       </TabItem>
 
@@ -100,7 +100,7 @@
         <DockPanel>
           <TextBlock DockPanel.Dock="Top" Margin="0,0,0,8" Foreground="#94A3B8"
                      Text="Hand-built VestigiumPropertyItem rows. No reflection."/>
-          <pg:VestigiumPropertiesGrid ItemsSource="{Binding HostItems}"/>
+          <pg:VestigiumPropertiesGrid ItemsSource="{Binding HostItems, Mode=OneWay}"/>
         </DockPanel>
       </TabItem>
     </TabControl>
