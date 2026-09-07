@@ -1,0 +1,39 @@
+<Window x:Class="Vestigium.Controls.Shell.VestigiumDefaultWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:uc="clr-namespace:Vestigium.Controls.UnderConstruction;assembly=Vestigium.Controls.UnderConstruction"
+        xmlns:vsb="clr-namespace:Vestigium.Controls.StatusBar;assembly=Vestigium.Controls.StatusBar"
+        Title="Vestigium"
+        Height="640" Width="960"
+        MinHeight="480" MinWidth="720"
+        Background="#0B1A30" Foreground="#E2E8F0"
+        FontFamily="Segoe UI" FontSize="13">
+  <DockPanel>
+    <Menu DockPanel.Dock="Top"
+          Background="#0F2744"
+          Foreground="#E2E8F0"
+          Padding="4,2">
+      <MenuItem Header="_File">
+        <MenuItem Header="Under Construction" IsEnabled="False"/>
+        <Separator/>
+        <MenuItem Header="E_xit" Click="Exit_Click"/>
+      </MenuItem>
+      <MenuItem Header="_View">
+        <MenuItem Header="Status bar at _Bottom"
+                  Command="{Binding DockStatusBarBottomCommand}"/>
+        <MenuItem Header="Status bar at _Top"
+                  Command="{Binding DockStatusBarTopCommand}"/>
+      </MenuItem>
+      <MenuItem Header="_Help">
+        <MenuItem Header="Under Construction" IsEnabled="False"/>
+      </MenuItem>
+    </Menu>
+
+    <vsb:VestigiumStatusBar DockPanel.Dock="Bottom"
+                            Position="{Binding Status.Position}"
+                            Message="{Binding Status.Message}"/>
+
+    <uc:UnderConstructionView Title="Vestigium"
+                              Detail="Default form client area. Feature views land here after their requirements are accepted."/>
+  </DockPanel>
+</Window>
