@@ -48,22 +48,32 @@ using Vestigium.Controls.DependencyInjection;
 
 var services = new ServiceCollection();
 services.AddVestigiumControls();
-// later: services.AddVestigiumStatusBar();
 var provider = services.BuildServiceProvider();
 ```
 
 Do this during `Application.OnStartup` before the first window.
+
+Theming is **not** part of those two calls. A host that wants a Vestigium palette does this in the same `OnStartup`, from the host project, before the window is parsed:
+
+```csharp
+var themes = new ThemeManager();
+themes.Register(ThemeDefinition.FromPack(
+    "LightBlue", "Light Blue", "Vestigium.Themes.LightBlue", isDark: false));
+themes.Initialize(this, "LightBlue");
+```
+
+`Vestigium.Controls*` assemblies do not reference Themes. Controls consume `Vestigium.Brushes.*` when the host merged them; otherwise they use Generic.xaml fallbacks.
 
 ## Contracts that do not move
 
 - MVVM on every project. Code-behind only calls `InitializeComponent` and assigns `DataContext`.
 - Controls never throw on the dispatcher. Invalid input leaves the last good visual state.
 - Design-time XAML preview works without a live `IServiceProvider`.
-- Theme tokens come from `Vestigium.Themes` when the host has that package. Fallback brushes ship in each control's `Themes/Generic.xaml`.
+- No project under this umbrella references `Vestigium.Themes*`.
 - No project under this umbrella targets anything other than `net10.0-windows`.
 
 ## Suite neighbors
 
-- [Vestigium.Themes](https://github.com/nwilkinsonlsnh/Vestigium.Themes) — palettes and stock control styles (including `StatusBar.Standard`).
+- [Vestigium.Themes](https://github.com/nwilkinsonlsnh/Vestigium.Themes) — host-assigned palettes. Not a dependency of this repo.
 - [Vestigium.Converters](https://github.com/nwilkinsonlsnh/Vestigium.Converters) — DI-resolved `IValueConverter` catalog.
 - [Vestigium.Logging](https://github.com/nwilkinsonlsnh/Vestigium.Logging) — centralized Serilog module. StatusBar will subscribe later; not in v1 of the StatusBar requirements.
