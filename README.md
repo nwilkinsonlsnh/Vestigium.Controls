@@ -8,7 +8,7 @@ WPF control library for the Vestigium suite (PingIQ, DnsIQ, TraceIQ, HttpIQ, Pro
 **Architecture:** MVVM + `Microsoft.Extensions.DependencyInjection`  
 **Startup project:** `Vestigium.Controls.Demo` (default Vestigium shell form)
 
-This repository is in **skeleton / requirements** phase. Controls compile as stubs. StatusBar is the first control with a written requirements document. Implementation of StatusBar waits for that document to be accepted.
+This repository ships **Vestigium.Controls.StatusBar** as a working control and demo. NumericUpDown, PropertiesGrid, and UnderConstruction remain stubs until their SRS is accepted.
 
 Umbrella requirements: [`_Documentation/Requirements_v1.0.md`](_Documentation/Requirements_v1.0.md)  
 Umbrella developer notes: [`_Documentation/DevelopersGuide_v1.0.md`](_Documentation/DevelopersGuide_v1.0.md)
@@ -18,7 +18,7 @@ Umbrella developer notes: [`_Documentation/DevelopersGuide_v1.0.md`](_Documentat
 | Project | Role | Docs |
 |---|---|---|
 | `Vestigium.Controls` | Shared primitives, DI host, **default Vestigium form** (menu + content + status bar) | [`src/Vestigium.Controls/_Documentation`](src/Vestigium.Controls/_Documentation) |
-| `Vestigium.Controls.StatusBar` | Bindable status bar, dock **Top** or **Bottom** | [`src/Vestigium.Controls.StatusBar/_Documentation`](src/Vestigium.Controls.StatusBar/_Documentation) |
+| `Vestigium.Controls.StatusBar` | Bindable status bar, dock **Top** or **Bottom**, Left/Center/Right slots | [SRS v1.3](src/Vestigium.Controls.StatusBar/_Documentation/Requirements_v1.3.md) · [Guide v1.3](src/Vestigium.Controls.StatusBar/_Documentation/DevelopersGuide_v1.3.md) |
 | `Vestigium.Controls.NumericUpDown` | Numeric spinner (stub) | [`src/Vestigium.Controls.NumericUpDown/_Documentation`](src/Vestigium.Controls.NumericUpDown/_Documentation) |
 | `Vestigium.Controls.PropertiesGrid` | Property inspector (stub) | [`src/Vestigium.Controls.PropertiesGrid/_Documentation`](src/Vestigium.Controls.PropertiesGrid/_Documentation) |
 | `Vestigium.Controls.UnderConstruction` | Placeholder surface used by unfinished chrome | [`src/Vestigium.Controls.UnderConstruction/_Documentation`](src/Vestigium.Controls.UnderConstruction/_Documentation) |
