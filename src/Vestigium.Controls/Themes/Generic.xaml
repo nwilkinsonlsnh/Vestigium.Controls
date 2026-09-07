@@ -25,21 +25,27 @@
     <Setter Property="FontFamily" Value="Segoe UI"/>
     <Setter Property="FontSize" Value="13"/>
     <Setter Property="Cursor" Value="Hand"/>
-    <Setter Property="Padding" Value="14,10"/>
+    <Setter Property="MinHeight" Value="36"/>
+    <Setter Property="Padding" Value="16,0"/>
     <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="RadioButton">
-          <Border Background="Transparent" Padding="{TemplateBinding Padding}" Cursor="Hand">
-            <StackPanel>
-              <TextBlock x:Name="Label"
-                         Text="{TemplateBinding Content}"
-                         Foreground="{DynamicResource Vestigium.Brushes.OnChromeMuted}"
-                         FontFamily="Segoe UI"
-                         FontSize="13"/>
-              <Border x:Name="Underline" Height="2" Margin="0,8,0,0" Background="Transparent"/>
-            </StackPanel>
-          </Border>
+          <Grid x:Name="Root" Background="Transparent" MinHeight="36" Cursor="Hand">
+            <TextBlock x:Name="Label"
+                       Margin="{TemplateBinding Padding}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Text="{TemplateBinding Content}"
+                       Foreground="{DynamicResource Vestigium.Brushes.OnChromeMuted}"
+                       FontFamily="Segoe UI"
+                       FontSize="13"/>
+            <Border x:Name="Underline"
+                    Height="3"
+                    VerticalAlignment="Bottom"
+                    Margin="10,0"
+                    Background="Transparent"/>
+          </Grid>
           <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
               <Setter TargetName="Label" Property="Foreground" Value="{DynamicResource Vestigium.Brushes.OnChrome}"/>
@@ -49,6 +55,11 @@
               <Setter TargetName="Label" Property="FontWeight" Value="SemiBold"/>
               <Setter TargetName="Underline" Property="Background" Value="{DynamicResource Vestigium.Brushes.Accent}"/>
             </Trigger>
+            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+              <Setter TargetName="Label" Property="Foreground" Value="{DynamicResource Vestigium.Brushes.OnChrome}"/>
+              <Setter TargetName="Label" Property="FontWeight" Value="SemiBold"/>
+              <Setter TargetName="Underline" Property="Background" Value="{DynamicResource Vestigium.Brushes.Accent}"/>
+            </DataTrigger>
             <Trigger Property="IsEnabled" Value="False">
               <Setter Property="Opacity" Value="0.45"/>
             </Trigger>
@@ -118,8 +129,10 @@
                                       DockPanel.Dock="{Binding StatusBarPosition, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource PosDock}}"
                                       Visibility="{Binding ShowStatusBar, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolVis}}"/>
 
-              <ContentPresenter x:Name="PART_ContentHost"
-                                Content="{Binding DisplayContent, RelativeSource={RelativeSource TemplatedParent}}"/>
+              <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <ContentPresenter x:Name="PART_ContentHost"
+                                  Content="{Binding DisplayContent, RelativeSource={RelativeSource TemplatedParent}}"/>
+              </ScrollViewer>
             </DockPanel>
           </Border>
         </ControlTemplate>

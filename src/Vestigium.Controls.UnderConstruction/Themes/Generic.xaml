@@ -13,20 +13,23 @@
         <ControlTemplate TargetType="{x:Type local:VestigiumUnderConstruction}">
           <Border x:Name="Root"
                   Background="{TemplateBinding Background}"
-                  Padding="32,24"
+                  Padding="16,12"
                   SnapsToDevicePixels="True">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto"
+                          CanContentScroll="False">
             <StackPanel VerticalAlignment="Center"
                         HorizontalAlignment="Stretch"
                         MaxWidth="720">
               <Image x:Name="PART_Image"
-                     MaxHeight="160"
-                     MaxWidth="220"
+                     MaxHeight="96"
+                     MaxWidth="140"
                      Stretch="Uniform"
                      HorizontalAlignment="Center"
                      Visibility="Collapsed"
                      Source="{TemplateBinding ImageSource}"/>
               <Viewbox x:Name="PART_DefaultArt"
-                       Width="120" Height="150"
+                       Width="72" Height="88"
                        HorizontalAlignment="Center"
                        Stretch="Uniform">
                 <Canvas Width="96" Height="120">
@@ -52,8 +55,8 @@
                     Visibility="Collapsed"
                     Data="{TemplateBinding IconData}"/>
               <TextBlock x:Name="PART_Title"
-                         Margin="0,20,0,0"
-                         FontSize="24"
+                         Margin="0,12,0,0"
+                         FontSize="20"
                          FontWeight="SemiBold"
                          TextAlignment="Center"
                          TextWrapping="Wrap"
@@ -116,6 +119,7 @@
                 </Button.Template>
               </Button>
             </StackPanel>
+            </ScrollViewer>
           </Border>
           <ControlTemplate.Triggers>
             <Trigger Property="IsActive" Value="False">
