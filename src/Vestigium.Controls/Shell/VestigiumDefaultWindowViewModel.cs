@@ -21,17 +21,25 @@ public partial class VestigiumDefaultWindowViewModel : ObservableObject
     public VestigiumStatusBarViewModel Status { get; }
 
     [ObservableProperty] private bool _showStatusBar = true;
-    [ObservableProperty] private int _navIndent = ShellRules.DefaultNavIndent;
+
+    private int _navIndent = ShellRules.DefaultNavIndent;
+
+    public int NavIndent
+    {
+        get => _navIndent;
+        set
+        {
+            var coerced = ShellRules.CoerceNavIndent(value);
+            if (!SetProperty(ref _navIndent, coerced))
+                return;
+            if (RootShell is not null)
+                RootShell.NavIndent = coerced;
+        }
+    }
 
     public VestigiumShell? RootShell { get; set; }
 
     public VestigiumNavItem? this[string name] => RootShell?[name];
-
-    partial void OnNavIndentChanged(int value)
-    {
-        if (RootShell is not null)
-            RootShell.NavIndent = value;
-    }
 
     [RelayCommand]
     private void DockStatusBarBottom() => Status.Position = VestigiumStatusBarPosition.Bottom;

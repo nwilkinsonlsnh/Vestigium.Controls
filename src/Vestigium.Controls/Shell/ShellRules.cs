@@ -42,4 +42,7 @@ public static class ShellRules
         var left = (CoerceShellDepth(shellDepth) + Math.Max(0, row)) * dip;
         return new Thickness(left, 0, 0, 0);
     }
+
+    public static string NormalizeKey(string? header) =>
+        string.IsNullOrWhiteSpace(header) ? string.Empty : header.Trim();
 }
