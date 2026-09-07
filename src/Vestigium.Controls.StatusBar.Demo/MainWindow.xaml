@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vsb="clr-namespace:Vestigium.Controls.StatusBar;assembly=Vestigium.Controls.StatusBar"
         Title="Vestigium.Controls.StatusBar — gallery"
-        Height="780" Width="1100"
-        MinHeight="560" MinWidth="860"
+        Height="860" Width="1180"
+        MinHeight="620" MinWidth="920"
         Background="#0B1524" Foreground="#E2E8F0"
         FontFamily="Segoe UI" FontSize="13">
   <DockPanel>
-    <Menu DockPanel.Dock="Top" Background="#0F2744" Foreground="#E2E8F0" Padding="4,2">
+    <Menu DockPanel.Dock="Top" Padding="4,2">
       <MenuItem Header="_File">
         <MenuItem Header="Under Construction" IsEnabled="False"/>
         <Separator/>
@@ -28,54 +28,127 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20">
       <StackPanel>
-        <TextBlock FontSize="11" Foreground="#94A3B8" Text="VESTIGIUM.CONTROLS"/>
-        <DockPanel LastChildFill="False" Margin="0,4,0,12">
+        <TextBlock FontSize="11" Foreground="#94A3B8" Text="VESTIGIUM.CONTROLS.STATUSBAR"/>
+        <DockPanel LastChildFill="False" Margin="0,4,0,8">
           <TextBlock FontSize="24" FontWeight="SemiBold" Text="StatusBar gallery"/>
           <TextBlock DockPanel.Dock="Right" VerticalAlignment="Bottom" Foreground="#94A3B8"
                      Text="{Binding IdleCountdown}"/>
         </DockPanel>
         <TextBlock TextWrapping="Wrap" Foreground="#94A3B8" Margin="0,0,0,16"
-                   Text="Window chrome plus nested bars. Idle defaults to Idle. . . after 3 seconds. Settings change the idle string and timeout. Each nested surface owns its own StatusBarEngine."/>
+                   Text="Three slots: far left, center, far right. Window chrome docks Top or Bottom. Nested panes own their own engine. Idle defaults to Idle. . . after 3 seconds."/>
 
-        <TabControl Background="#102038" BorderBrush="#1E3A5F">
+        <TabControl>
           <TabItem Header="Gallery">
-            <UniformGrid Columns="2" Margin="12">
-              <GroupBox Header="Standard chrome">
-                <DockPanel Height="120">
-                  <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding WindowBar}"/>
-                  <TextBlock Margin="8" Foreground="#94A3B8" Text="Same engine as the window bar."/>
-                </DockPanel>
-              </GroupBox>
-              <GroupBox Header="Idle fallback">
-                <DockPanel Height="120">
-                  <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding IdleBar}"/>
-                  <StackPanel Margin="8">
-                    <TextBlock Foreground="#94A3B8" TextWrapping="Wrap"
-                               Text="Default Idle. . . after 3 s. Touch resets the timer."/>
-                    <Button Content="Touch" Command="{Binding TouchIdleCommand}"/>
+            <StackPanel Margin="12">
+              <GroupBox Header="Left / Center / Right slots">
+                <StackPanel>
+                  <TextBlock Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,8"
+                             Text="Each column has a Slot. Left packs from the left edge, Right from the right, Center sits in the middle band. Pick an item, then move it."/>
+                  <vsb:VestigiumStatusBar Engine="{Binding GroupsBar}"/>
+                  <UniformGrid Columns="3" Margin="0,8,0,4">
+                    <TextBlock HorizontalAlignment="Left" Foreground="#94A3B8" Text="LEFT"/>
+                    <TextBlock HorizontalAlignment="Center" Foreground="#94A3B8" Text="CENTER"/>
+                    <TextBlock HorizontalAlignment="Right" Foreground="#94A3B8" Text="RIGHT"/>
+                  </UniformGrid>
+                  <StackPanel Orientation="Horizontal">
+                    <Button Content="Select left" Command="{Binding SelectTargetCommand}" CommandParameter="left"/>
+                    <Button Content="Select center" Command="{Binding SelectTargetCommand}" CommandParameter="center"/>
+                    <Button Content="Select right" Command="{Binding SelectTargetCommand}" CommandParameter="right"/>
                   </StackPanel>
-                </DockPanel>
-              </GroupBox>
-              <GroupBox Header="Probe in flight">
-                <DockPanel Height="140">
-                  <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding ProbeBar}"/>
-                  <StackPanel Margin="8" Orientation="Horizontal">
-                    <Button Content="Run ping" Command="{Binding RunPingCommand}"/>
-                    <Button Content="Indeterminate" Command="{Binding IndeterminateProbeCommand}"/>
+                  <StackPanel Orientation="Horizontal">
+                    <Button Content="Place far left" Command="{Binding MoveToLeftCommand}"/>
+                    <Button Content="Place center" Command="{Binding MoveToCenterCommand}"/>
+                    <Button Content="Place far right" Command="{Binding MoveToRightCommand}"/>
+                    <TextBlock VerticalAlignment="Center" Foreground="#94A3B8"
+                               Text="{Binding MoveTarget, StringFormat='Moving: {0}'}"/>
                   </StackPanel>
-                </DockPanel>
+                </StackPanel>
               </GroupBox>
-              <GroupBox Header="Compact 20 dip">
-                <DockPanel Height="80">
-                  <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding IdleBar}" Height="20"/>
-                  <TextBlock Margin="8" Foreground="#94A3B8" Text="Thickness floor is 20 dip."/>
-                </DockPanel>
+
+              <GroupBox Header="Window placement — Top vs Bottom">
+                <StackPanel>
+                  <TextBlock Text="{Binding DockLabel}" Margin="0,0,0,8"/>
+                  <StackPanel Orientation="Horizontal">
+                    <RadioButton Content="Dock window bar Bottom" IsChecked="{Binding IsDockedBottom, Mode=TwoWay}"/>
+                    <RadioButton Content="Dock window bar Top" IsChecked="{Binding IsDockedTop, Mode=TwoWay}"/>
+                  </StackPanel>
+                  <TextBlock Foreground="#94A3B8" Margin="0,4,0,12" TextWrapping="Wrap"
+                             Text="Top sits under the menu, never over it. Watch the chrome bar on this window, then compare the two mini frames."/>
+                  <UniformGrid Columns="2">
+                    <Border BorderBrush="#1E3A5F" BorderThickness="1" Margin="0,0,8,0">
+                      <DockPanel Height="140">
+                        <Border DockPanel.Dock="Top" Background="#0F2744" Padding="6">
+                          <TextBlock Text="Mini window — bar Top"/>
+                        </Border>
+                        <vsb:VestigiumStatusBar DockPanel.Dock="Top"
+                                                Engine="{Binding TopSample}"
+                                                Position="Top"/>
+                        <TextBlock Margin="8" Foreground="#94A3B8" Text="Client area under the bar."/>
+                      </DockPanel>
+                    </Border>
+                    <Border BorderBrush="#1E3A5F" BorderThickness="1">
+                      <DockPanel Height="140">
+                        <Border DockPanel.Dock="Top" Background="#0F2744" Padding="6">
+                          <TextBlock Text="Mini window — bar Bottom"/>
+                        </Border>
+                        <vsb:VestigiumStatusBar DockPanel.Dock="Bottom"
+                                                Engine="{Binding BottomSample}"
+                                                Position="Bottom"/>
+                        <TextBlock Margin="8" Foreground="#94A3B8" Text="Client area above the bar."/>
+                      </DockPanel>
+                    </Border>
+                  </UniformGrid>
+                </StackPanel>
               </GroupBox>
-            </UniformGrid>
+
+              <UniformGrid Columns="2">
+                <GroupBox Header="Idle fallback">
+                  <DockPanel Height="130">
+                    <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding IdleBar}"/>
+                    <StackPanel Margin="8">
+                      <TextBlock Foreground="#94A3B8" TextWrapping="Wrap"
+                                 Text="Idle. . . after 3 s with no posts. Touch resets the timer."/>
+                      <Button Content="Touch" Command="{Binding TouchIdleCommand}"/>
+                    </StackPanel>
+                  </DockPanel>
+                </GroupBox>
+                <GroupBox Header="Probe in flight">
+                  <DockPanel Height="130">
+                    <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding ProbeBar}"/>
+                    <StackPanel Margin="8" Orientation="Horizontal">
+                      <Button Content="Run ping" Command="{Binding RunPingCommand}"/>
+                      <Button Content="Indeterminate" Command="{Binding IndeterminateProbeCommand}"/>
+                    </StackPanel>
+                  </DockPanel>
+                </GroupBox>
+                <GroupBox Header="Status glyphs">
+                  <DockPanel Height="130">
+                    <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding IconsBar}"/>
+                    <StackPanel Margin="8">
+                      <TextBlock Foreground="#94A3B8" Text="Built-in Success, Warning, Error, Info, Busy. No SVG parser."/>
+                      <StackPanel Orientation="Horizontal">
+                        <Button Content="Success" Command="{Binding SetIconCommand}" CommandParameter="Success"/>
+                        <Button Content="Warning" Command="{Binding SetIconCommand}" CommandParameter="Warning"/>
+                        <Button Content="Error" Command="{Binding SetIconCommand}" CommandParameter="Error"/>
+                        <Button Content="Info" Command="{Binding SetIconCommand}" CommandParameter="Info"/>
+                        <Button Content="Busy" Command="{Binding SetIconCommand}" CommandParameter="Busy"/>
+                      </StackPanel>
+                    </StackPanel>
+                  </DockPanel>
+                </GroupBox>
+                <GroupBox Header="Standard chrome (left message, center progress, right clock)">
+                  <DockPanel Height="130">
+                    <vsb:VestigiumStatusBar DockPanel.Dock="Bottom" Engine="{Binding WindowBar}"/>
+                    <TextBlock Margin="8" Foreground="#94A3B8" TextWrapping="Wrap"
+                               Text="Same engine as the window chrome. CreateStandardColumns seeds the three slots."/>
+                  </DockPanel>
+                </GroupBox>
+              </UniformGrid>
+            </StackPanel>
           </TabItem>
 
           <TabItem Header="Nested">
-            <Grid Margin="12">
+            <Grid Margin="12" MinHeight="420">
               <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -143,7 +216,7 @@
 
           <TabItem Header="Lab">
             <StackPanel Margin="12">
-              <TextBlock Text="Message column"/>
+              <TextBlock Text="Message column (window chrome engine)"/>
               <TextBox Margin="0,4,0,8" Text="{Binding LabMessage, UpdateSourceTrigger=PropertyChanged}"/>
               <StackPanel Orientation="Horizontal">
                 <Button Content="Post" Command="{Binding PostLabCommand}"/>
@@ -159,13 +232,13 @@
                 <Button Content="Info" Command="{Binding SetIconCommand}" CommandParameter="Info"/>
                 <Button Content="Busy" Command="{Binding SetIconCommand}" CommandParameter="Busy"/>
               </StackPanel>
-              <TextBlock Margin="0,16,0,0" Foreground="#94A3B8"
-                         Text="Posts a hop every 8 ms. Drain floor is 100 ms so the bar coalesces."/>
+              <TextBlock Margin="0,16,0,0" Foreground="#94A3B8" TextWrapping="Wrap"
+                         Text="Post coalesces on the 100–250 ms drain. Immediate skips backoff. Flood posts a hop every 8 ms so you can see Compacted climb."/>
             </StackPanel>
           </TabItem>
 
           <TabItem Header="Settings">
-            <StackPanel Margin="12" MaxWidth="520" HorizontalAlignment="Left">
+            <StackPanel Margin="12" MaxWidth="560" HorizontalAlignment="Left">
               <CheckBox Content="Enable idle (default on)" IsChecked="{Binding IdleEnabled}"/>
               <TextBlock Margin="0,12,0,4" Text="Idle message"/>
               <TextBox Text="{Binding IdleText, UpdateSourceTrigger=PropertyChanged}"/>
@@ -179,8 +252,76 @@
           </TabItem>
 
           <TabItem Header="Snapshot">
-            <TextBox Margin="12" IsReadOnly="True" FontFamily="Consolas"
-                     Text="{Binding SnapshotText, Mode=OneWay}" MinHeight="160"/>
+            <ScrollViewer Margin="12" VerticalScrollBarVisibility="Auto">
+              <StackPanel>
+                <TextBlock TextWrapping="Wrap" Margin="0,0,0,12"
+                           Text="Snapshot is pull-only diagnostics for the window chrome engine. It does not flush the queue. Drive the pipeline with the buttons, then read the counters."/>
+                <TextBlock Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,12"
+                           Text="{Binding SnapshotHint}"/>
+                <StackPanel Orientation="Horizontal">
+                  <Button Content="Flood 100 hops" Command="{Binding FloodCommand}"/>
+                  <Button Content="Post a duplicate" Command="{Binding PostDuplicateCommand}"/>
+                  <Button Content="Post missing key" Command="{Binding PostMissingKeyCommand}"/>
+                  <Button Content="Capture snapshot" Command="{Binding CaptureSnapshotCommand}"/>
+                </StackPanel>
+                <UniformGrid Columns="4" Margin="0,8,0,12">
+                  <Border BorderBrush="#1E3A5F" BorderThickness="1" Padding="10" Margin="0,0,8,8">
+                    <StackPanel>
+                      <TextBlock FontSize="11" Foreground="#94A3B8" Text="APPLIED"/>
+                      <TextBlock FontSize="22" FontFamily="Consolas" Text="{Binding Applied}"/>
+                    </StackPanel>
+                  </Border>
+                  <Border BorderBrush="#1E3A5F" BorderThickness="1" Padding="10" Margin="0,0,8,8">
+                    <StackPanel>
+                      <TextBlock FontSize="11" Foreground="#94A3B8" Text="COMPACTED"/>
+                      <TextBlock FontSize="22" FontFamily="Consolas" Text="{Binding Compacted}"/>
+                    </StackPanel>
+                  </Border>
+                  <Border BorderBrush="#1E3A5F" BorderThickness="1" Padding="10" Margin="0,0,8,8">
+                    <StackPanel>
+                      <TextBlock FontSize="11" Foreground="#94A3B8" Text="DROPPED DUP"/>
+                      <TextBlock FontSize="22" FontFamily="Consolas" Text="{Binding DroppedDuplicate}"/>
+                    </StackPanel>
+                  </Border>
+                  <Border BorderBrush="#1E3A5F" BorderThickness="1" Padding="10" Margin="0,0,8,8">
+                    <StackPanel>
+                      <TextBlock FontSize="11" Foreground="#94A3B8" Text="HIGH WATER"/>
+                      <TextBlock FontSize="22" FontFamily="Consolas" Text="{Binding DroppedHighWater}"/>
+                    </StackPanel>
+                  </Border>
+                  <Border BorderBrush="#1E3A5F" BorderThickness="1" Padding="10" Margin="0,0,8,8">
+                    <StackPanel>
+                      <TextBlock FontSize="11" Foreground="#94A3B8" Text="MISSING KEY"/>
+                      <TextBlock FontSize="22" FontFamily="Consolas" Text="{Binding DroppedMissing}"/>
+                    </StackPanel>
+                  </Border>
+                  <Border BorderBrush="#1E3A5F" BorderThickness="1" Padding="10" Margin="0,0,8,8">
+                    <StackPanel>
+                      <TextBlock FontSize="11" Foreground="#94A3B8" Text="DISPOSED"/>
+                      <TextBlock FontSize="22" FontFamily="Consolas" Text="{Binding DroppedDisposed}"/>
+                    </StackPanel>
+                  </Border>
+                  <Border BorderBrush="#1E3A5F" BorderThickness="1" Padding="10" Margin="0,0,8,8">
+                    <StackPanel>
+                      <TextBlock FontSize="11" Foreground="#94A3B8" Text="DRAIN MS"/>
+                      <TextBlock FontSize="22" FontFamily="Consolas" Text="{Binding DrainMs}"/>
+                    </StackPanel>
+                  </Border>
+                  <Border BorderBrush="#1E3A5F" BorderThickness="1" Padding="10" Margin="0,0,8,8">
+                    <StackPanel>
+                      <TextBlock FontSize="11" Foreground="#94A3B8" Text="IDLE REMAIN"/>
+                      <TextBlock FontSize="22" FontFamily="Consolas" Text="{Binding IdleRemaining}"/>
+                    </StackPanel>
+                  </Border>
+                </UniformGrid>
+                <TextBlock Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,8"
+                           Text="Applied = paints that landed. Compacted = last-write-wins replacements while a column already had a pending record. Dropped duplicate = PostImmediate of the same payload. Missing key = worker used a key that is not a column. Drain ms = current AIMD interval (100–250)."/>
+                <TextBox IsReadOnly="True" FontFamily="Consolas" FontSize="12"
+                         Text="{Binding SnapshotJson, Mode=OneWay}"
+                         AcceptsReturn="True" VerticalScrollBarVisibility="Auto" MinHeight="220"
+                         HorizontalScrollBarVisibility="Auto"/>
+              </StackPanel>
+            </ScrollViewer>
           </TabItem>
         </TabControl>
       </StackPanel>

@@ -10,7 +10,7 @@
     <BooleanToVisibilityConverter x:Key="BoolVis"/>
     <local:IdleForegroundConverter x:Key="IdleFg"/>
     <local:IconVisibilityConverter x:Key="IconVis"/>
-    <Style TargetType="Separator">
+    <Style x:Key="SlotSeparator" TargetType="Separator">
       <Setter Property="Background" Value="#1E3A5F"/>
       <Setter Property="Width" Value="1"/>
       <Setter Property="Height" Value="14"/>
@@ -26,6 +26,86 @@
         </Setter.Value>
       </Setter>
     </Style>
+    <DataTemplate x:Key="ColumnTemplate" DataType="{x:Type local:StatusBarColumn}">
+      <StackPanel Orientation="Horizontal">
+        <Separator Style="{StaticResource SlotSeparator}"
+                   Visibility="{Binding IsSeparatorVisible, Converter={StaticResource BoolVis}}"/>
+        <Grid MinWidth="8" Margin="0,0,4,0">
+          <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <ContentControl Width="16" Height="16" Margin="0,0,6,0"
+                            Visibility="{Binding Icon, Converter={StaticResource IconVis}}">
+              <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding Icon}" Value="Success">
+                      <Setter Property="Content">
+                        <Setter.Value>
+                          <Viewbox>
+                            <Path Fill="#3BB273" Data="M8 1.2A6.8 6.8 0 1 0 8 14.8 6.8 6.8 0 0 0 8 1.2Zm3.05 4.62L7.2 10.7 4.95 8.45l.9-.9 1.35 1.35 2.95-3.98.9.9Z"/>
+                          </Viewbox>
+                        </Setter.Value>
+                      </Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Icon}" Value="Warning">
+                      <Setter Property="Content">
+                        <Setter.Value>
+                          <Viewbox>
+                            <Path Fill="#D83B01" Data="M8.9 2.4 14.6 13a1 1 0 0 1-.9 1.5H2.3a1 1 0 0 1-.9-1.5L7.1 2.4a1 1 0 0 1 1.8 0ZM8 6.2v3.3h.1V6.2H8Zm0 5.2a.8.8 0 1 0 0-1.6.8.8 0 0 0 0 1.6Z"/>
+                          </Viewbox>
+                        </Setter.Value>
+                      </Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Icon}" Value="Error">
+                      <Setter Property="Content">
+                        <Setter.Value>
+                          <Viewbox>
+                            <Path Fill="#E81123" Data="M8 1.2A6.8 6.8 0 1 0 8 14.8 6.8 6.8 0 0 0 8 1.2Zm2.4 3.5.9.9L8.9 8l2.4 2.4-.9.9L8 8.9 5.6 11.3l-.9-.9L7.1 8 4.7 5.6l.9-.9L8 7.1l2.4-2.4Z"/>
+                          </Viewbox>
+                        </Setter.Value>
+                      </Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Icon}" Value="Info">
+                      <Setter Property="Content">
+                        <Setter.Value>
+                          <Viewbox>
+                            <Path Fill="#4A90C8" Data="M8 1.2A6.8 6.8 0 1 0 8 14.8 6.8 6.8 0 0 0 8 1.2ZM8.7 4.6a.8.8 0 1 1-1.6 0 .8.8 0 0 1 1.6 0ZM7.2 6.8h1.6V12H7.2V6.8Z"/>
+                          </Viewbox>
+                        </Setter.Value>
+                      </Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Icon}" Value="Busy">
+                      <Setter Property="Content">
+                        <Setter.Value>
+                          <Viewbox>
+                            <Path Stroke="#4A90C8" StrokeThickness="2" Fill="Transparent"
+                                  Data="M 3,8 A 5,5 0 1 1 8,13"/>
+                          </Viewbox>
+                        </Setter.Value>
+                      </Setter>
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </ContentControl.Style>
+            </ContentControl>
+            <TextBlock VerticalAlignment="Center"
+                       TextTrimming="CharacterEllipsis"
+                       MaxWidth="420"
+                       Text="{Binding Text}"
+                       ToolTip="{Binding Text}"
+                       Foreground="{Binding IsIdle, Converter={StaticResource IdleFg}}"
+                       Visibility="{Binding ShowText, Converter={StaticResource BoolVis}}"/>
+          </StackPanel>
+          <ProgressBar Height="8" Width="120" Minimum="0" Maximum="100"
+                       Value="{Binding Progress}"
+                       IsIndeterminate="{Binding IsIndeterminate}"
+                       VerticalAlignment="Center"
+                       Visibility="{Binding ShowProgress, Converter={StaticResource BoolVis}}"/>
+        </Grid>
+      </StackPanel>
+    </DataTemplate>
+    <ItemsPanelTemplate x:Key="HorizontalPanel">
+      <StackPanel Orientation="Horizontal"/>
+    </ItemsPanelTemplate>
   </UserControl.Resources>
 
   <Border x:Name="RootBorder"
@@ -33,90 +113,31 @@
           BorderBrush="#1E3A5F"
           BorderThickness="0,1,0,0"
           Padding="8,0">
-    <ItemsControl x:Name="ColumnHost">
-      <ItemsControl.ItemsPanel>
-        <ItemsPanelTemplate>
-          <StackPanel Orientation="Horizontal"/>
-        </ItemsPanelTemplate>
-      </ItemsControl.ItemsPanel>
-      <ItemsControl.ItemTemplate>
-        <DataTemplate DataType="{x:Type local:StatusBarColumn}">
-          <StackPanel Orientation="Horizontal">
-            <Separator/>
-            <Grid MinWidth="8" Margin="0,0,4,0">
-              <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <ContentControl Width="16" Height="16" Margin="0,0,6,0"
-                                Visibility="{Binding Icon, Converter={StaticResource IconVis}}">
-                  <ContentControl.Style>
-                    <Style TargetType="ContentControl">
-                      <Style.Triggers>
-                        <DataTrigger Binding="{Binding Icon}" Value="Success">
-                          <Setter Property="Content">
-                            <Setter.Value>
-                              <Viewbox>
-                                <Path Fill="#3BB273" Data="M8 1.2A6.8 6.8 0 1 0 8 14.8 6.8 6.8 0 0 0 8 1.2Zm3.05 4.62L7.2 10.7 4.95 8.45l.9-.9 1.35 1.35 2.95-3.98.9.9Z"/>
-                              </Viewbox>
-                            </Setter.Value>
-                          </Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Icon}" Value="Warning">
-                          <Setter Property="Content">
-                            <Setter.Value>
-                              <Viewbox>
-                                <Path Fill="#D83B01" Data="M8.9 2.4 14.6 13a1 1 0 0 1-.9 1.5H2.3a1 1 0 0 1-.9-1.5L7.1 2.4a1 1 0 0 1 1.8 0ZM8 6.2v3.3h.1V6.2H8Zm0 5.2a.8.8 0 1 0 0-1.6.8.8 0 0 0 0 1.6Z"/>
-                              </Viewbox>
-                            </Setter.Value>
-                          </Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Icon}" Value="Error">
-                          <Setter Property="Content">
-                            <Setter.Value>
-                              <Viewbox>
-                                <Path Fill="#E81123" Data="M8 1.2A6.8 6.8 0 1 0 8 14.8 6.8 6.8 0 0 0 8 1.2Zm2.4 3.5.9.9L8.9 8l2.4 2.4-.9.9L8 8.9 5.6 11.3l-.9-.9L7.1 8 4.7 5.6l.9-.9L8 7.1l2.4-2.4Z"/>
-                              </Viewbox>
-                            </Setter.Value>
-                          </Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Icon}" Value="Info">
-                          <Setter Property="Content">
-                            <Setter.Value>
-                              <Viewbox>
-                                <Path Fill="#4A90C8" Data="M8 1.2A6.8 6.8 0 1 0 8 14.8 6.8 6.8 0 0 0 8 1.2ZM8.7 4.6a.8.8 0 1 1-1.6 0 .8.8 0 0 1 1.6 0ZM7.2 6.8h1.6V12H7.2V6.8Z"/>
-                              </Viewbox>
-                            </Setter.Value>
-                          </Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Icon}" Value="Busy">
-                          <Setter Property="Content">
-                            <Setter.Value>
-                              <Viewbox>
-                                <Path Stroke="#4A90C8" StrokeThickness="2" Fill="Transparent"
-                                      Data="M 3,8 A 5,5 0 1 1 8,13"/>
-                              </Viewbox>
-                            </Setter.Value>
-                          </Setter>
-                        </DataTrigger>
-                      </Style.Triggers>
-                    </Style>
-                  </ContentControl.Style>
-                </ContentControl>
-                <TextBlock VerticalAlignment="Center"
-                           TextTrimming="CharacterEllipsis"
-                           MaxWidth="420"
-                           Text="{Binding Text}"
-                           ToolTip="{Binding Text}"
-                           Foreground="{Binding IsIdle, Converter={StaticResource IdleFg}}"
-                           Visibility="{Binding ShowText, Converter={StaticResource BoolVis}}"/>
-              </StackPanel>
-              <ProgressBar Height="8" Width="120" Minimum="0" Maximum="100"
-                           Value="{Binding Progress}"
-                           IsIndeterminate="{Binding IsIndeterminate}"
-                           VerticalAlignment="Center"
-                           Visibility="{Binding ShowProgress, Converter={StaticResource BoolVis}}"/>
-            </Grid>
-          </StackPanel>
-        </DataTemplate>
-      </ItemsControl.ItemTemplate>
-    </ItemsControl>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <ItemsControl x:Name="LeftHost"
+                    Grid.Column="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    ItemTemplate="{StaticResource ColumnTemplate}"
+                    ItemsPanel="{StaticResource HorizontalPanel}"/>
+      <ItemsControl x:Name="CenterHost"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Margin="12,0"
+                    ItemTemplate="{StaticResource ColumnTemplate}"
+                    ItemsPanel="{StaticResource HorizontalPanel}"/>
+      <ItemsControl x:Name="RightHost"
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    ItemTemplate="{StaticResource ColumnTemplate}"
+                    ItemsPanel="{StaticResource HorizontalPanel}"/>
+    </Grid>
   </Border>
 </UserControl>

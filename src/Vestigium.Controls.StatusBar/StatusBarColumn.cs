@@ -18,11 +18,12 @@ public partial class StatusBarColumn : ObservableObject
     [ObservableProperty] private int _idleTimeoutMs;
     [ObservableProperty] private bool _isLiveRegion;
     [ObservableProperty] private bool _isIdle;
+    [ObservableProperty] private StatusBarSlot _slot = StatusBarSlot.Left;
+    [ObservableProperty] private bool _isSeparatorVisible;
 
     public bool ShowProgress => Kind == StatusBarColumnKind.Progress && IsProgressVisible;
     public bool ShowText => Kind is StatusBarColumnKind.Text or StatusBarColumnKind.Clock;
     public bool ShowIconOnly => Kind == StatusBarColumnKind.Icon;
-    public bool IsSeparatorVisible { get; set; } = true;
 
     partial void OnKindChanged(StatusBarColumnKind value) => NotifyLayout();
     partial void OnIsProgressVisibleChanged(bool value) => NotifyLayout();

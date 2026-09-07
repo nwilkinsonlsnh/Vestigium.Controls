@@ -20,11 +20,14 @@ public class StatusBarEngineTests : IDisposable
     }
 
     [Fact]
-    public void Default_position_is_bottom()
+    public void Standard_columns_use_left_center_right_slots()
     {
         var engine = Make();
-        Assert.Equal(VestigiumStatusBarPosition.Bottom, engine.Position);
+        Assert.Equal(StatusBarSlot.Left, engine.Columns.First(c => c.Key == "message").Slot);
+        Assert.Equal(StatusBarSlot.Center, engine.Columns.First(c => c.Key == "progress").Slot);
+        Assert.Equal(StatusBarSlot.Right, engine.Columns.First(c => c.Key == "clock").Slot);
     }
+
 
     [Fact]
     public void Message_column_defaults_to_three_second_idle()

@@ -26,6 +26,13 @@ public enum StatusBarIconKind
     Busy = 5
 }
 
+public enum StatusBarSlot
+{
+    Left = 0,
+    Center = 1,
+    Right = 2
+}
+
 public static class StatusBarDefaults
 {
     public const string ReadyText = "Ready";
