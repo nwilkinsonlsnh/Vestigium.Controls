@@ -6,9 +6,9 @@ WPF control library for the Vestigium suite (PingIQ, DnsIQ, TraceIQ, HttpIQ, Pro
 
 **Target:** .NET 10 LTS / WPF / Visual Studio 2026  
 **Architecture:** MVVM + `Microsoft.Extensions.DependencyInjection`  
-**Startup project:** `Vestigium.Controls.Demo` (default Vestigium shell form)
+**License:** MIT (`LICENSE`) — stamped onto every project by `Directory.Build.props`
 
-This repository ships **Vestigium.Controls.StatusBar**, **Vestigium.Controls.NumericUpDown**, **Vestigium.Controls.UnderConstruction**, and **Vestigium.Controls.PropertiesGrid**.
+This repository ships **Vestigium.Controls** (shared shell + DI), **Vestigium.Controls.StatusBar**, **Vestigium.Controls.NumericUpDown**, **Vestigium.Controls.UnderConstruction**, and **Vestigium.Controls.PropertiesGrid**. Hosts consume the libraries. There are no demo executables in this solution.
 
 Umbrella requirements: [`_Documentation/Requirements_v1.0.md`](_Documentation/Requirements_v1.0.md)  
 Umbrella developer notes: [`_Documentation/DevelopersGuide_v1.0.md`](_Documentation/DevelopersGuide_v1.0.md)
@@ -22,8 +22,7 @@ Umbrella developer notes: [`_Documentation/DevelopersGuide_v1.0.md`](_Documentat
 | `Vestigium.Controls.NumericUpDown` | Decimal spinner, Immediate/Deferred, Signed/Unsigned, snap Round/Floor/Ceiling | [SRS v1.2](src/Vestigium.Controls.NumericUpDown/_Documentation/Requirements_v1.2.md) · [Guide v1.2](src/Vestigium.Controls.NumericUpDown/_Documentation/DevelopersGuide_v1.2.md) |
 | `Vestigium.Controls.PropertiesGrid` | Windows 11 property inspector: multi-select, collections, reset, nested expand | [SRS v1.2](src/Vestigium.Controls.PropertiesGrid/_Documentation/Requirements_v1.2.md) · [Guide v1.2](src/Vestigium.Controls.PropertiesGrid/_Documentation/DevelopersGuide_v1.2.md) |
 | `Vestigium.Controls.UnderConstruction` | Page/overlay placeholder, Title 75 / Subject 125, multi-line Description, host PNG/SVG | [SRS v1.4](src/Vestigium.Controls.UnderConstruction/_Documentation/Requirements_v1.4.md) · [Guide v1.4](src/Vestigium.Controls.UnderConstruction/_Documentation/DevelopersGuide_v1.4.md) |
-
-Each library has a matching `*.Demo` WPF host. `Vestigium.Controls.Demo` is the suite default form.
+| `Vestigium.Controls.Tests` | STA and engine coverage for the libraries | — |
 
 ## Default form (this milestone)
 
@@ -33,12 +32,14 @@ Each library has a matching `*.Demo` WPF host. `Vestigium.Controls.Demo` is the 
 - Client area left empty for the consuming application.
 - `VestigiumStatusBar` attached to the shell. Default dock is **Bottom**. Position is bindable to **Top** or **Bottom**.
 
+A consuming application owns the executable and themes. This repo does not ship a sample WPF host.
+
 ## Open in Visual Studio
 
 1. Clone this repository.
 2. Open `Vestigium.Controls.slnx` in Visual Studio 2026.
-3. Restore NuGet, set **Vestigium.Controls.Demo** as the startup project.
-4. Run on Windows.
+3. Restore NuGet.
+4. Build. Run tests with `dotnet test Vestigium.Controls.slnx -c Release`.
 
 ## Host in two calls
 
@@ -71,6 +72,7 @@ themes.Initialize(this, "LightBlue");
 - Design-time XAML preview works without a live `IServiceProvider`.
 - No project under this umbrella references `Vestigium.Themes*`.
 - No project under this umbrella targets anything other than `net10.0-windows`.
+- MIT license and the root README are linked into every project from `Directory.Build.props`. Do not copy those files into `src/`.
 
 ## Suite neighbors
 

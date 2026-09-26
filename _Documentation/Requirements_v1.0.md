@@ -1,9 +1,9 @@
 # Vestigium.Controls — Umbrella Requirements
 
 **Document ID:** VEST-CTL-SRS-000  
-**Version:** 1.1  
-**Status:** Skeleton / planning  
-**Date:** 6 September 2026  
+**Version:** 1.2  
+**Status:** Active  
+**Date:** 25 September 2026  
 **Target:** .NET 10 LTS, Visual Studio 2026, WPF MVVM
 
 ## 1. Objective
@@ -19,8 +19,6 @@ This document is the umbrella. Each control library owns a separate requirements
 | `Vestigium.Controls.NumericUpDown` | `src/Vestigium.Controls.NumericUpDown/_Documentation/Requirements_v1.0.md` |
 | `Vestigium.Controls.PropertiesGrid` | `src/Vestigium.Controls.PropertiesGrid/_Documentation/Requirements_v1.0.md` |
 | `Vestigium.Controls.UnderConstruction` | `src/Vestigium.Controls.UnderConstruction/_Documentation/Requirements_v1.0.md` |
-
-StatusBar is the first control taken to a full first-stab requirements draft. The others are placeholders until their own planning pass.
 
 ## 2. Architectural constraints (binding)
 
@@ -54,30 +52,34 @@ Controls paint with `{DynamicResource Vestigium.Brushes.*}` and ship fallback he
 
 `net10.0-windows` + `UseWPF=true`. Visual Studio 2026. C# latest / C# 14 as provided by the SDK.
 
-### 2.6 Documentation layout
+### 2.6 Documentation and packaging layout
 
 Every library folder contains `_Documentation` with at least:
 
 - `Requirements_vN.md`
 - `DevelopersGuide_vN.md`
 
-Every library has a sibling `*.Demo` WPF executable.
+There is no sibling `*.Demo` WPF executable. Visual verification lives in consuming hosts, not in this repository.
 
-## 3. Solution shape (this skeleton)
+Root `LICENSE` (MIT) and `README.md` are the only license and package-readme files. `Directory.Build.props` links both into every project and sets `PackageLicenseExpression` to MIT. Do not duplicate those files under `src/`.
+
+### 2.7 License
+
+MIT. Copyright line matches `LICENSE`: Vestigium / Wilkinson Business, 2026.
+
+## 3. Solution shape
 
 ```
 Vestigium.Controls.slnx
+Directory.Build.props                    MIT + README stamp for every project
+LICENSE                                  MIT
+README.md
 _Documentation/                          umbrella docs
 src/Vestigium.Controls/                  base + default form
-src/Vestigium.Controls.Demo/             default-form host
 src/Vestigium.Controls.StatusBar/
-src/Vestigium.Controls.StatusBar.Demo/
 src/Vestigium.Controls.NumericUpDown/
-src/Vestigium.Controls.NumericUpDown.Demo/
 src/Vestigium.Controls.PropertiesGrid/
-src/Vestigium.Controls.PropertiesGrid.Demo/
 src/Vestigium.Controls.UnderConstruction/
-src/Vestigium.Controls.UnderConstruction.Demo/
 src/Vestigium.Controls.Tests/
 ```
 
@@ -85,21 +87,21 @@ src/Vestigium.Controls.Tests/
 
 | Phase | Scope | Status |
 |---|---|---|
-| 0 | Solution skeleton, default form chrome, stub controls, docs | This commit |
-| 1 | Accept and implement StatusBar per its SRS | Not started |
-| 2 | UnderConstruction visual language used by unfinished menus | Shipped — SRS v1.2 |
+| 0 | Solution skeleton, default form chrome, stub controls, docs | Shipped |
+| 1 | Accept and implement StatusBar per its SRS | Shipped |
+| 2 | UnderConstruction visual language used by unfinished menus | Shipped — SRS v1.4 |
 | 3 | NumericUpDown requirements + build | Shipped — SRS v1.2 |
-| 4 | PropertiesGrid requirements + build | Not started |
-
-Do not start Phase 1 until the StatusBar requirements document is accepted.
+| 4 | PropertiesGrid requirements + build | Shipped |
+| 5 | Remove in-repo demo hosts; libraries + tests only | This revision |
 
 ## 5. Non-goals (umbrella)
 
 - WinUI / MAUI / Avalonia ports
 - Designer-only packages in v1
-- Shipping NuGet to nuget.org in the skeleton phase
+- Shipping NuGet to nuget.org as a required step of this revision
 - Coupling any control to PingIQ / DnsIQ / TraceIQ / HttpIQ assemblies
 - Shipping or initializing Vestigium.Themes from this solution
+- In-repo `*.Demo` WPF hosts
 
 ## 6. Document control
 
@@ -107,3 +109,4 @@ Do not start Phase 1 until the StatusBar requirements document is accepted.
 |---|---|---|
 | 1.0 | Initial umbrella SRS and solution skeleton | Grok, 6 Sep 2026 |
 | 1.1 | Theming assigned by consuming hosts, not by this solution | Stakeholder, 6 Sep 2026 |
+| 1.2 | Demo hosts removed. MIT LICENSE + README stamped via Directory.Build.props | Stakeholder, 25 Sep 2026 |
