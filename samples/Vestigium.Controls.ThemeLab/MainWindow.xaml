@@ -1,0 +1,42 @@
+<Window x:Class="Vestigium.Controls.ThemeLab.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:nud="clr-namespace:Vestigium.Controls.NumericUpDown;assembly=Vestigium.Controls.NumericUpDown"
+        Title="Controls Theme Lab"
+        Width="720" Height="420"
+        Background="{DynamicResource Vestigium.Brushes.Surface.Window}">
+  <DockPanel Margin="16">
+    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,16">
+      <TextBlock FontSize="18" FontWeight="SemiBold"
+                 Foreground="{DynamicResource Vestigium.Brushes.Text.Primary}"
+                 Text="Controls Theme Lab" />
+      <TextBlock Margin="0,6,0,0" TextWrapping="Wrap"
+                 Foreground="{DynamicResource Vestigium.Brushes.Text.Secondary}"
+                 Text="Switch every Vestigium palette. The spinner buttons must follow Control.Fill and Text.Primary. Do not pack from this project." />
+      <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+        <TextBlock VerticalAlignment="Center" Margin="0,0,8,0"
+                   Foreground="{DynamicResource Vestigium.Brushes.Text.Primary}"
+                   Text="Theme" />
+        <ComboBox x:Name="ThemeBox" Width="220"
+                  DisplayMemberPath="DisplayName"
+                  SelectedValuePath="Id"
+                  SelectionChanged="ThemeBox_SelectionChanged" />
+      </StackPanel>
+    </StackPanel>
+
+    <StackPanel>
+      <TextBlock Margin="0,0,0,6"
+                 Foreground="{DynamicResource Vestigium.Brushes.Text.Primary}"
+                 Text="Port" />
+      <nud:VestigiumNumericUpDown Width="120" HorizontalAlignment="Left"
+                                  Minimum="1" Maximum="65535" Increment="1"
+                                  Value="53" />
+      <TextBlock Margin="0,16,0,6"
+                 Foreground="{DynamicResource Vestigium.Brushes.Text.Primary}"
+                 Text="Disabled" />
+      <nud:VestigiumNumericUpDown Width="120" HorizontalAlignment="Left"
+                                  IsEnabled="False"
+                                  Minimum="1" Maximum="65535" Value="53" />
+    </StackPanel>
+  </DockPanel>
+</Window>

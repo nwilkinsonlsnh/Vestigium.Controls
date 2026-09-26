@@ -6,6 +6,9 @@
     <Project Path="src/Vestigium.Controls.StatusBar/Vestigium.Controls.StatusBar.csproj" />
     <Project Path="src/Vestigium.Controls.UnderConstruction/Vestigium.Controls.UnderConstruction.csproj" />
   </Folder>
+  <Folder Name="/Samples/">
+    <Project Path="samples/Vestigium.Controls.ThemeLab/Vestigium.Controls.ThemeLab.csproj" />
+  </Folder>
   <Folder Name="/Tests/">
     <Project Path="src/Vestigium.Controls.Tests/Vestigium.Controls.Tests.csproj" />
   </Folder>
