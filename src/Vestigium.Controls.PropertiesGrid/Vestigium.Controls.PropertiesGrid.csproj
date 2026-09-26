@@ -4,7 +4,8 @@
     <UseWPF>true</UseWPF>
     <RootNamespace>Vestigium.Controls.PropertiesGrid</RootNamespace>
     <AssemblyName>Vestigium.Controls.PropertiesGrid</AssemblyName>
-    <IsPackable>false</IsPackable>
+    <Description>WPF property inspector with multi-select, collections, reset, and nested expand.</Description>
+    <PackageTags>wpf;mvvm;propertiesgrid;vestigium</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vestigium.Controls.NumericUpDown\Vestigium.Controls.NumericUpDown.csproj" />

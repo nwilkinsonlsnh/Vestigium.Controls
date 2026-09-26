@@ -4,7 +4,8 @@
     <UseWPF>true</UseWPF>
     <RootNamespace>Vestigium.Controls.StatusBar</RootNamespace>
     <AssemblyName>Vestigium.Controls.StatusBar</AssemblyName>
-    <IsPackable>false</IsPackable>
+    <Description>Bindable WPF status bar with Left/Center/Right slots and Top or Bottom dock.</Description>
+    <PackageTags>wpf;mvvm;statusbar;vestigium</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />

@@ -4,7 +4,8 @@
     <UseWPF>true</UseWPF>
     <RootNamespace>Vestigium.Controls</RootNamespace>
     <AssemblyName>Vestigium.Controls</AssemblyName>
-    <IsPackable>false</IsPackable>
+    <Description>Shared WPF shell, default Vestigium form, and DI host for the Vestigium suite.</Description>
+    <PackageTags>wpf;mvvm;controls;shell;vestigium</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />

@@ -4,6 +4,7 @@
     <UseWPF>true</UseWPF>
     <RootNamespace>Vestigium.Controls.NumericUpDown</RootNamespace>
     <AssemblyName>Vestigium.Controls.NumericUpDown</AssemblyName>
-    <IsPackable>false</IsPackable>
+    <Description>WPF decimal spinner with Immediate or Deferred commit and Round/Floor/Ceiling snap.</Description>
+    <PackageTags>wpf;mvvm;numericupdown;vestigium</PackageTags>
   </PropertyGroup>
 </Project>

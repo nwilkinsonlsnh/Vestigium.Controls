@@ -4,6 +4,7 @@
     <UseWPF>true</UseWPF>
     <RootNamespace>Vestigium.Controls.UnderConstruction</RootNamespace>
     <AssemblyName>Vestigium.Controls.UnderConstruction</AssemblyName>
-    <IsPackable>false</IsPackable>
+    <Description>WPF placeholder page and overlay with title, subject, and multi-line description.</Description>
+    <PackageTags>wpf;mvvm;placeholder;vestigium</PackageTags>
   </PropertyGroup>
 </Project>
