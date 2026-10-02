@@ -6,8 +6,8 @@
     <Setter Property="Focusable" Value="False"/>
     <Setter Property="IsTabStop" Value="False"/>
     <Setter Property="Padding" Value="0"/>
-    <Setter Property="Background" Value="{DynamicResource Vestigium.Brushes.Control.Fill}"/>
-    <Setter Property="BorderBrush" Value="{DynamicResource Vestigium.Brushes.Stroke.Input}"/>
+    <Setter Property="Background" Value="{DynamicResource Vestigium.Brushes.Surface.Card}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource Vestigium.Brushes.Stroke.Subtle}"/>
     <Setter Property="Foreground" Value="{DynamicResource Vestigium.Brushes.Text.Primary}"/>
     <Setter Property="Template">
       <Setter.Value>
@@ -35,9 +35,9 @@
   </Style>
 
   <Style TargetType="{x:Type local:VestigiumNumericUpDown}">
-    <Setter Property="Background" Value="{DynamicResource Vestigium.Brushes.Control.FillInput}"/>
+    <Setter Property="Background" Value="{DynamicResource Vestigium.Brushes.Surface.Card}"/>
     <Setter Property="Foreground" Value="{DynamicResource Vestigium.Brushes.Text.Primary}"/>
-    <Setter Property="BorderBrush" Value="{DynamicResource Vestigium.Brushes.Stroke.Input}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource Vestigium.Brushes.Stroke.Subtle}"/>
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="Height" Value="32"/>
     <Setter Property="MinWidth" Value="88"/>
