@@ -6,7 +6,7 @@
   <SolidColorBrush x:Key="Vestigium.Menu.Text" Color="#F8FAFC"/>
   <SolidColorBrush x:Key="Vestigium.Menu.Muted" Color="#D6E8FA"/>
   <SolidColorBrush x:Key="Vestigium.Menu.Hover" Color="#1B4F86"/>
-  <SolidColorBrush x:Key="Vestigium.Menu.Line" Color="#1E3A5F"/>
+  <SolidColorBrush x:Key="Vestigium.Menu.Line" Color="#9AA8B8"/>
 
   <Style TargetType="Menu">
     <Setter Property="Background" Value="{StaticResource Vestigium.Menu.Bar}"/>
@@ -23,7 +23,7 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="Separator">
-          <Border Height="1" Background="{TemplateBinding Background}" Margin="{TemplateBinding Margin}"/>
+          <Border Height="1" Background="#9AA8B8" Margin="8,6,8,6"/>
         </ControlTemplate>
       </Setter.Value>
     </Setter>
