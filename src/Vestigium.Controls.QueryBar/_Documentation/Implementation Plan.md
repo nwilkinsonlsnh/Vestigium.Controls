@@ -2,12 +2,12 @@
 
 **Document ID:** VEST-CTL-QRY-PLN-001
 **Version:** 1.0
-**Status:** Not started
+**Status:** Step 1 done
 **Date:** 4 October 2026
 
 ## Step 1 — Project
 
-Done. `src/Vestigium.Controls.QueryBar` is in the solution. The control is a shell. These three documents are the contract.
+Done. `src/Vestigium.Controls.QueryBar` is in the solution. The control is a shell. `AssemblyInfo` points the default style at this assembly. These three documents are the contract.
 
 ## Step 2 — Template
 
