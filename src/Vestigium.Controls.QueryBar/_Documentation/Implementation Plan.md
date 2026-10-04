@@ -2,7 +2,7 @@
 
 **Document ID:** VEST-CTL-QRY-PLN-001
 **Version:** 1.0
-**Status:** Step 2 done
+**Status:** Step 3 done
 **Date:** 4 October 2026
 
 ## Step 1 — Project
@@ -15,7 +15,7 @@ Done. Generic.xaml has the text box, the clear mark, and the chevron. Fallback b
 
 ## Step 3 — Text and clear
 
-Two-way Text. Clear raises Cleared and empties Text. Caret stays at the end after clear.
+Done. Text binds both ways. Clear empties Text, raises Cleared, and leaves the caret at the end.
 
 ## Step 4 — Completion
 
