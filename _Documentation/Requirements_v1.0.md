@@ -19,6 +19,7 @@ This document is the umbrella. Each control library owns a separate requirements
 | `Vestigium.Controls.NumericUpDown` | `src/Vestigium.Controls.NumericUpDown/_Documentation/Requirements_v1.0.md` |
 | `Vestigium.Controls.PropertiesGrid` | `src/Vestigium.Controls.PropertiesGrid/_Documentation/Requirements_v1.0.md` |
 | `Vestigium.Controls.UnderConstruction` | `src/Vestigium.Controls.UnderConstruction/_Documentation/Requirements_v1.0.md` |
+| `Vestigium.Controls.QueryBar` | `src/Vestigium.Controls.QueryBar/_Documentation/Requirements.md` |
 
 ## 2. Architectural constraints (binding)
 
@@ -79,6 +80,7 @@ src/Vestigium.Controls/                  base + default form
 src/Vestigium.Controls.StatusBar/
 src/Vestigium.Controls.NumericUpDown/
 src/Vestigium.Controls.PropertiesGrid/
+src/Vestigium.Controls.QueryBar/
 src/Vestigium.Controls.UnderConstruction/
 src/Vestigium.Controls.Tests/
 ```
@@ -93,6 +95,7 @@ src/Vestigium.Controls.Tests/
 | 3 | NumericUpDown requirements + build | Shipped — SRS v1.2 |
 | 4 | PropertiesGrid requirements + build | Shipped |
 | 5 | Remove in-repo demo hosts; libraries + tests only | This revision |
+| 6 | QueryBar requirements, design, and implementation plan | Draft |
 
 ## 5. Non-goals (umbrella)
 
@@ -110,3 +113,4 @@ src/Vestigium.Controls.Tests/
 | 1.0 | Initial umbrella SRS and solution skeleton | Grok, 6 Sep 2026 |
 | 1.1 | Theming assigned by consuming hosts, not by this solution | Stakeholder, 6 Sep 2026 |
 | 1.2 | Demo hosts removed. MIT LICENSE + README stamped via Directory.Build.props | Stakeholder, 25 Sep 2026 |
+| 1.3 | QueryBar library listed. Contract is draft. | Stakeholder, 4 Oct 2026 |
