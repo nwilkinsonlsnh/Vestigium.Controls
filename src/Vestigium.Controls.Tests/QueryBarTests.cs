@@ -52,11 +52,13 @@ public sealed class QueryBarTests
         var bar = Show(new VestigiumQueryBar
         {
             Session = KqlHelper.Create(KqlPack.Route),
-            CompletionDelay = 1,
-            Text = "route.prot"
+            CompletionDelay = 1
         });
+        bar.Text = "route.prot";
         var box = Part<TextBox>(bar, "PART_TextBox");
-        Pump(80);
+        box.CaretIndex = box.Text.Length;
+        Pump(200);
+        Assert.True(Part<Popup>(bar, "PART_Completion").IsOpen);
         box.RaiseEvent(new KeyEventArgs(Keyboard.PrimaryDevice, PresentationSource.FromVisual(box)!, 0, Key.Tab)
         {
             RoutedEvent = UIElement.PreviewKeyDownEvent
