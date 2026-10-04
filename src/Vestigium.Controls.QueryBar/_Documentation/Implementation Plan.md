@@ -2,7 +2,7 @@
 
 **Document ID:** VEST-CTL-QRY-PLN-001
 **Version:** 1.0
-**Status:** Step 7 done
+**Status:** Step 8 ready to push
 **Date:** 4 October 2026
 
 ## Step 1 — Project
@@ -35,4 +35,4 @@ Done. The three bars are `VestigiumQueryBar`. RouteIQ references `Vestigium.Cont
 
 ## Step 8 — Package
 
-Pack and push 1.0.0 so RouteIQ can restore. Do not pack again until that restore succeeds.
+Ready. Version is 1.0.0. Pack and push `src/Vestigium.Controls.QueryBar/Vestigium.Controls.QueryBar.csproj` from Vestigium.Nuget.Publish. The API key stays on that machine. After the push lists, restore RouteIQ.
