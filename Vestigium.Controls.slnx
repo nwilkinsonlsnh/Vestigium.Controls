@@ -3,6 +3,7 @@
   <Folder Name="/Library/">
     <Project Path="src/Vestigium.Controls.NumericUpDown/Vestigium.Controls.NumericUpDown.csproj" />
     <Project Path="src/Vestigium.Controls.PropertiesGrid/Vestigium.Controls.PropertiesGrid.csproj" />
+    <Project Path="src/Vestigium.Controls.QueryBar/Vestigium.Controls.QueryBar.csproj" />
     <Project Path="src/Vestigium.Controls.StatusBar/Vestigium.Controls.StatusBar.csproj" />
     <Project Path="src/Vestigium.Controls.UnderConstruction/Vestigium.Controls.UnderConstruction.csproj" />
   </Folder>

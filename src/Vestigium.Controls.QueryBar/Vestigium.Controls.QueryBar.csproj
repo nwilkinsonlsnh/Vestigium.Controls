@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Vestigium.Controls.QueryBar</RootNamespace>
+    <AssemblyName>Vestigium.Controls.QueryBar</AssemblyName>
+    <Description>WPF query bar for a KQL session: text, clear, saved queries, and completion.</Description>
+    <PackageTags>wpf;mvvm;kql;query;vestigium</PackageTags>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="Vestigium.Helpers.Kql" Version="1.0.2" />
+  </ItemGroup>
+</Project>
