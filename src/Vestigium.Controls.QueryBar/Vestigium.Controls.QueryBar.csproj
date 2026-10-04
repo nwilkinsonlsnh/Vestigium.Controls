@@ -6,7 +6,7 @@
     <AssemblyName>Vestigium.Controls.QueryBar</AssemblyName>
     <Description>WPF query bar for a KQL session: text, clear, saved queries, and completion.</Description>
     <PackageTags>wpf;mvvm;kql;query;vestigium</PackageTags>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />

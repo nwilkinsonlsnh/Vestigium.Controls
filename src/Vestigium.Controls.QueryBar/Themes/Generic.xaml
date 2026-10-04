@@ -69,8 +69,12 @@
                    IsOpen="{Binding IsChecked, ElementName=PART_Chevron}"
                    Width="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
               <Border Background="{StaticResource QueryBar.Fallback.Window}" BorderBrush="{StaticResource QueryBar.Fallback.Stroke}" BorderThickness="1" Padding="8">
-                <ItemsControl ItemsSource="{Binding Queries, RelativeSource={RelativeSource TemplatedParent}}">
-                  <ItemsControl.ItemTemplate>
+                <ListBox x:Name="PART_SavedList" Focusable="False"
+                         ItemsSource="{Binding Queries, RelativeSource={RelativeSource TemplatedParent}}"
+                         Background="{StaticResource QueryBar.Fallback.Window}"
+                         Foreground="{StaticResource QueryBar.Fallback.Text}"
+                         BorderThickness="0">
+                  <ListBox.ItemTemplate>
                     <DataTemplate>
                       <Grid Margin="0,2">
                         <Grid.ColumnDefinitions>
@@ -91,8 +95,8 @@
                                 CommandParameter="{Binding}" />
                       </Grid>
                     </DataTemplate>
-                  </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                  </ListBox.ItemTemplate>
+                </ListBox>
               </Border>
             </Popup>
           </Grid>
