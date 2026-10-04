@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -12,12 +13,15 @@ namespace Vestigium.Controls.QueryBar;
 [TemplatePart(Name = "PART_Chevron", Type = typeof(ToggleButton))]
 [TemplatePart(Name = "PART_Completion", Type = typeof(Popup))]
 [TemplatePart(Name = "PART_CompletionList", Type = typeof(ListBox))]
+[TemplatePart(Name = "PART_Saved", Type = typeof(Popup))]
 public class VestigiumQueryBar : Control
 {
     private readonly DispatcherTimer _timer;
     private TextBox? _box;
     private Button? _clear;
+    private ToggleButton? _chevron;
     private Popup? _popup;
+    private Popup? _saved;
     private ListBox? _list;
     private KqlCompletion _last = KqlCompletion.Empty;
     private bool _syncing;
@@ -32,6 +36,8 @@ public class VestigiumQueryBar : Control
     {
         _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(140) };
         _timer.Tick += (_, _) => Show();
+        ApplyQueryCommand = new Relay(ApplySaved);
+        PinQueryCommand = new Relay(Pin);
     }
 
     public static readonly DependencyProperty TextProperty =
@@ -41,12 +47,26 @@ public class VestigiumQueryBar : Control
     public static readonly DependencyProperty SessionProperty =
         DependencyProperty.Register(nameof(Session), typeof(KqlSession), typeof(VestigiumQueryBar));
 
+    public static readonly DependencyProperty QueriesProperty =
+        DependencyProperty.Register(nameof(Queries), typeof(IEnumerable), typeof(VestigiumQueryBar));
+
+    public static readonly DependencyProperty LimitProperty =
+        DependencyProperty.Register(nameof(Limit), typeof(int), typeof(VestigiumQueryBar),
+            new PropertyMetadata(10, OnLimitChanged));
+
+    public static readonly DependencyProperty CloseOnApplyProperty =
+        DependencyProperty.Register(nameof(CloseOnApply), typeof(bool), typeof(VestigiumQueryBar),
+            new PropertyMetadata(true));
+
     public static readonly DependencyProperty CompletionDelayProperty =
         DependencyProperty.Register(nameof(CompletionDelay), typeof(int), typeof(VestigiumQueryBar),
             new PropertyMetadata(140));
 
     public static readonly RoutedEvent ClearedEvent =
         EventManager.RegisterRoutedEvent(nameof(Cleared), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VestigiumQueryBar));
+
+    public static readonly RoutedEvent PinRequestedEvent =
+        EventManager.RegisterRoutedEvent(nameof(PinRequested), RoutingStrategy.Bubble, typeof(EventHandler<VestigiumQueryRowEventArgs>), typeof(VestigiumQueryBar));
 
     public string Text
     {
@@ -60,16 +80,44 @@ public class VestigiumQueryBar : Control
         set => SetValue(SessionProperty, value);
     }
 
+    public IEnumerable? Queries
+    {
+        get => (IEnumerable?)GetValue(QueriesProperty);
+        set => SetValue(QueriesProperty, value);
+    }
+
+    public int Limit
+    {
+        get => (int)GetValue(LimitProperty);
+        set => SetValue(LimitProperty, value);
+    }
+
+    public bool CloseOnApply
+    {
+        get => (bool)GetValue(CloseOnApplyProperty);
+        set => SetValue(CloseOnApplyProperty, value);
+    }
+
     public int CompletionDelay
     {
         get => (int)GetValue(CompletionDelayProperty);
         set => SetValue(CompletionDelayProperty, value);
     }
 
+    public ICommand ApplyQueryCommand { get; }
+
+    public ICommand PinQueryCommand { get; }
+
     public event RoutedEventHandler Cleared
     {
         add => AddHandler(ClearedEvent, value);
         remove => RemoveHandler(ClearedEvent, value);
+    }
+
+    public event EventHandler<VestigiumQueryRowEventArgs> PinRequested
+    {
+        add => AddHandler(PinRequestedEvent, value);
+        remove => RemoveHandler(PinRequestedEvent, value);
     }
 
     public override void OnApplyTemplate()
@@ -78,7 +126,9 @@ public class VestigiumQueryBar : Control
         base.OnApplyTemplate();
         _box = GetTemplateChild("PART_TextBox") as TextBox;
         _clear = GetTemplateChild("PART_Clear") as Button;
+        _chevron = GetTemplateChild("PART_Chevron") as ToggleButton;
         _popup = GetTemplateChild("PART_Completion") as Popup;
+        _saved = GetTemplateChild("PART_Saved") as Popup;
         _list = GetTemplateChild("PART_CompletionList") as ListBox;
         if (_box is not null)
         {
@@ -91,7 +141,47 @@ public class VestigiumQueryBar : Control
             _clear.Click += OnClear;
         if (_list is not null)
             _list.MouseDoubleClick += (_, _) => Accept();
+        if (_saved is not null)
+        {
+            _saved.Placement = PlacementMode.Custom;
+            _saved.PlacementTarget = this;
+            _saved.CustomPopupPlacementCallback = Place;
+        }
+
+        ApplyLimit();
     }
+
+    private void ApplySaved(object? row)
+    {
+        var text = Read(row, "Text");
+        _timer.Stop();
+        _applying = true;
+        if (_popup is not null)
+            _popup.IsOpen = false;
+        Text = text;
+        if (_box is not null)
+        {
+            _box.Text = text;
+            _box.CaretIndex = text.Length;
+            _box.Focus();
+        }
+
+        if (CloseOnApply && _chevron is not null)
+            _chevron.IsChecked = false;
+        Dispatcher.BeginInvoke(() =>
+        {
+            if (_box is not null)
+            {
+                _box.CaretIndex = _box.Text.Length;
+                _box.SelectionLength = 0;
+            }
+
+            _applying = false;
+        }, DispatcherPriority.Input);
+    }
+
+    private void Pin(object? row) =>
+        RaiseEvent(new VestigiumQueryRowEventArgs(PinRequestedEvent, this, row));
 
     private void OnClear(object sender, RoutedEventArgs e)
     {
@@ -222,6 +312,31 @@ public class VestigiumQueryBar : Control
         }, DispatcherPriority.Input);
     }
 
+    private void ApplyLimit()
+    {
+        if (_chevron is null)
+            return;
+        _chevron.Visibility = Limit > 0 ? Visibility.Visible : Visibility.Collapsed;
+        if (Limit == 0)
+            _chevron.IsChecked = false;
+    }
+
+    private CustomPopupPlacement[] Place(Size popupSize, Size targetSize, Point offset)
+    {
+        var x = 0d;
+        var window = Window.GetWindow(this);
+        if (window is not null)
+        {
+            var origin = PointToScreen(new Point(0, 0));
+            var right = origin.X + popupSize.Width;
+            var limit = window.PointToScreen(new Point(window.ActualWidth, 0)).X;
+            if (right > limit)
+                x = limit - right;
+        }
+
+        return [new CustomPopupPlacement(new Point(x, targetSize.Height), PopupPrimaryAxis.Horizontal)];
+    }
+
     private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var bar = (VestigiumQueryBar)d;
@@ -231,6 +346,17 @@ public class VestigiumQueryBar : Control
         bar._box.Text = e.NewValue as string ?? string.Empty;
         bar._box.CaretIndex = bar._box.Text.Length;
         bar._syncing = false;
+    }
+
+    private static void OnLimitChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
+        ((VestigiumQueryBar)d).ApplyLimit();
+
+    private static string Read(object? row, string name)
+    {
+        if (row is null)
+            return string.Empty;
+        var property = row.GetType().GetProperty(name);
+        return property?.GetValue(row) as string ?? string.Empty;
     }
 
     private void Detach()
@@ -243,5 +369,22 @@ public class VestigiumQueryBar : Control
 
         if (_clear is not null)
             _clear.Click -= OnClear;
+    }
+
+    private sealed class Relay : ICommand
+    {
+        private readonly Action<object?> _run;
+
+        public Relay(Action<object?> run) => _run = run;
+
+        public event EventHandler? CanExecuteChanged
+        {
+            add { }
+            remove { }
+        }
+
+        public bool CanExecute(object? parameter) => true;
+
+        public void Execute(object? parameter) => _run(parameter);
     }
 }

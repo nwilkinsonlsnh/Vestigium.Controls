@@ -65,6 +65,36 @@
                        Foreground="{StaticResource QueryBar.Fallback.Text}"
                        BorderBrush="{StaticResource QueryBar.Fallback.Stroke}" />
             </Popup>
+            <Popup x:Name="PART_Saved" Placement="Custom" StaysOpen="False" AllowsTransparency="True"
+                   IsOpen="{Binding IsChecked, ElementName=PART_Chevron}"
+                   Width="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
+              <Border Background="{StaticResource QueryBar.Fallback.Window}" BorderBrush="{StaticResource QueryBar.Fallback.Stroke}" BorderThickness="1" Padding="8">
+                <ItemsControl ItemsSource="{Binding Queries, RelativeSource={RelativeSource TemplatedParent}}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Grid Margin="0,2">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*" />
+                          <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" HorizontalContentAlignment="Left" Padding="6,2"
+                                Background="{StaticResource QueryBar.Fallback.Card}"
+                                Foreground="{StaticResource QueryBar.Fallback.Text}"
+                                Command="{Binding ApplyQueryCommand, RelativeSource={RelativeSource AncestorType=local:VestigiumQueryBar}}"
+                                CommandParameter="{Binding}">
+                          <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
+                        </Button>
+                        <Button Grid.Column="1" Width="28" Margin="6,0,0,0" FontFamily="Segoe MDL2 Assets" Content="&#xE718;"
+                                Background="{StaticResource QueryBar.Fallback.Card}"
+                                Foreground="{StaticResource QueryBar.Fallback.Text}"
+                                Command="{Binding PinQueryCommand, RelativeSource={RelativeSource AncestorType=local:VestigiumQueryBar}}"
+                                CommandParameter="{Binding}" />
+                      </Grid>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </Border>
+            </Popup>
           </Grid>
         </ControlTemplate>
       </Setter.Value>

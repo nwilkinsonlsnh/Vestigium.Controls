@@ -2,7 +2,7 @@
 
 **Document ID:** VEST-CTL-QRY-PLN-001
 **Version:** 1.0
-**Status:** Step 4 done
+**Status:** Step 5 done
 **Date:** 4 October 2026
 
 ## Step 1 — Project
@@ -23,7 +23,7 @@ Done. Complete runs after CompletionDelay. Tab accepts and leaves the caret at t
 
 ## Step 5 — Saved queries
 
-Chevron opens the host list. Placement stays inside the window. Selecting a row writes the text, puts the caret at the end, and does not open completion. CloseOnApply unchecks the chevron. Pin raises PinRequested and leaves the list open. Limit 0 hides the chevron.
+Done. The chevron opens the host list under the bar and keeps it inside the window. A row writes the text, puts the caret at the end, and does not open completion. CloseOnApply closes the list. Pin raises PinRequested and leaves the list open. Limit 0 hides the chevron and does not remove rows.
 
 ## Step 6 — Tests
 
