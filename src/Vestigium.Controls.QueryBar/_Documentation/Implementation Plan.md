@@ -2,7 +2,7 @@
 
 **Document ID:** VEST-CTL-QRY-PLN-001
 **Version:** 1.0
-**Status:** Step 6 done
+**Status:** Step 7 done
 **Date:** 4 October 2026
 
 ## Step 1 — Project
@@ -31,8 +31,8 @@ Done. `QueryBarTests` covers the template, clear, Tab accept caret, saved apply 
 
 ## Step 7 — RouteIQ
 
-Replace the three bars with VestigiumQueryBar. Delete the copied popups. Keep the sessions, the store, and the grid filter pause.
+Done. The three bars are `VestigiumQueryBar`. RouteIQ references `Vestigium.Controls.QueryBar` 1.0.0. The sessions, the store, and the grid filter pause stay in RouteIQ.
 
 ## Step 8 — Package
 
-Pack 1.0.0 only after RouteIQ runs on the control. Do not publish the shell.
+Pack and push 1.0.0 so RouteIQ can restore. Do not pack again until that restore succeeds.
