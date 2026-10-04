@@ -2,7 +2,7 @@
 
 **Document ID:** VEST-CTL-QRY-PLN-001
 **Version:** 1.0
-**Status:** Step 1 done
+**Status:** Step 2 done
 **Date:** 4 October 2026
 
 ## Step 1 — Project
@@ -11,7 +11,7 @@ Done. `src/Vestigium.Controls.QueryBar` is in the solution. The control is a she
 
 ## Step 2 — Template
 
-Build the bar in Generic.xaml. Text box, clear, chevron. Fallback brushes. No popup yet.
+Done. Generic.xaml has the text box, the clear mark, and the chevron. Fallback brushes cover a host that has not loaded a palette. No popup yet.
 
 ## Step 3 — Text and clear
 
