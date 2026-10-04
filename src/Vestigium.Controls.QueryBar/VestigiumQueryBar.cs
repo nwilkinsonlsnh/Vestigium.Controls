@@ -14,6 +14,7 @@ namespace Vestigium.Controls.QueryBar;
 [TemplatePart(Name = "PART_Completion", Type = typeof(Popup))]
 [TemplatePart(Name = "PART_CompletionList", Type = typeof(ListBox))]
 [TemplatePart(Name = "PART_Saved", Type = typeof(Popup))]
+[TemplatePart(Name = "PART_SavedList", Type = typeof(ListBox))]
 public class VestigiumQueryBar : Control
 {
     private readonly DispatcherTimer _timer;
@@ -23,6 +24,7 @@ public class VestigiumQueryBar : Control
     private Popup? _popup;
     private Popup? _saved;
     private ListBox? _list;
+    private ListBox? _savedList;
     private KqlCompletion _last = KqlCompletion.Empty;
     private bool _syncing;
     private bool _applying;
@@ -130,6 +132,7 @@ public class VestigiumQueryBar : Control
         _popup = GetTemplateChild("PART_Completion") as Popup;
         _saved = GetTemplateChild("PART_Saved") as Popup;
         _list = GetTemplateChild("PART_CompletionList") as ListBox;
+        _savedList = GetTemplateChild("PART_SavedList") as ListBox;
         if (_box is not null)
         {
             _box.Text = Text;
@@ -153,6 +156,13 @@ public class VestigiumQueryBar : Control
 
     private void ApplySaved(object? row)
     {
+        WriteSaved(row);
+        if (CloseOnApply && _chevron is not null)
+            _chevron.IsChecked = false;
+    }
+
+    private void WriteSaved(object? row)
+    {
         var text = Read(row, "Text");
         _timer.Stop();
         _applying = true;
@@ -166,8 +176,6 @@ public class VestigiumQueryBar : Control
             _box.Focus();
         }
 
-        if (CloseOnApply && _chevron is not null)
-            _chevron.IsChecked = false;
         Dispatcher.BeginInvoke(() =>
         {
             if (_box is not null)
@@ -230,6 +238,13 @@ public class VestigiumQueryBar : Control
             return;
         }
 
+        if (_chevron is { IsChecked: true } && e.Key is Key.Left or Key.Right)
+        {
+            MoveSaved(e.Key == Key.Right ? 1 : -1);
+            e.Handled = true;
+            return;
+        }
+
         if (e.Key == Key.Escape && _chevron is { IsChecked: true })
         {
             _chevron.IsChecked = false;
@@ -277,6 +292,18 @@ public class VestigiumQueryBar : Control
         if (_popup is not null)
             _popup.IsOpen = false;
         _chevron.IsChecked = true;
+        if (_savedList is { Items.Count: > 0, SelectedIndex: < 0 })
+            _savedList.SelectedIndex = 0;
+    }
+
+    private void MoveSaved(int delta)
+    {
+        if (_savedList is null || _savedList.Items.Count == 0)
+            return;
+        var next = _savedList.SelectedIndex < 0 ? 0 : _savedList.SelectedIndex + delta;
+        _savedList.SelectedIndex = Math.Clamp(next, 0, _savedList.Items.Count - 1);
+        _savedList.ScrollIntoView(_savedList.SelectedItem);
+        WriteSaved(_savedList.SelectedItem);
     }
 
     private void Show()
