@@ -15,7 +15,7 @@ namespace Vestigium.Controls.QueryBar;
 [TemplatePart(Name = "PART_CompletionList", Type = typeof(ListBox))]
 [TemplatePart(Name = "PART_Saved", Type = typeof(Popup))]
 [TemplatePart(Name = "PART_SavedList", Type = typeof(ListBox))]
-public class VestigiumQueryBar : Control
+public partial class VestigiumQueryBar : Control
 {
     private readonly DispatcherTimer _timer;
     private TextBox? _box;
