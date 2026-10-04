@@ -2,7 +2,7 @@
 
 **Document ID:** VEST-CTL-QRY-PLN-001
 **Version:** 1.0
-**Status:** Step 5 done
+**Status:** Step 6 done
 **Date:** 4 October 2026
 
 ## Step 1 — Project
@@ -27,7 +27,7 @@ Done. The chevron opens the host list under the bar and keeps it inside the wind
 
 ## Step 6 — Tests
 
-Template loads. Clear empties. Accept places the caret at the end. Saved apply does not open completion. Limit 0 hides the chevron and does not remove rows.
+Done. `QueryBarTests` covers the template, clear, Tab accept caret, saved apply without completion, and limit 0. Run `dotnet test --filter QueryBarTests`.
 
 ## Step 7 — RouteIQ
 
