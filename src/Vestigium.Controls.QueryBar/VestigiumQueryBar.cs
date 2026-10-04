@@ -223,6 +223,20 @@ public class VestigiumQueryBar : Control
 
     private void OnKey(object sender, KeyEventArgs e)
     {
+        if (e.Key == Key.Down && Keyboard.Modifiers == ModifierKeys.Control)
+        {
+            OpenSaved();
+            e.Handled = true;
+            return;
+        }
+
+        if (e.Key == Key.Escape && _chevron is { IsChecked: true })
+        {
+            _chevron.IsChecked = false;
+            e.Handled = true;
+            return;
+        }
+
         if (_popup is not { IsOpen: true })
             return;
 
@@ -252,6 +266,17 @@ public class VestigiumQueryBar : Control
 
         Accept();
         e.Handled = true;
+    }
+
+    private void OpenSaved()
+    {
+        if (Limit <= 0 || _chevron is null)
+            return;
+
+        _timer.Stop();
+        if (_popup is not null)
+            _popup.IsOpen = false;
+        _chevron.IsChecked = true;
     }
 
     private void Show()
