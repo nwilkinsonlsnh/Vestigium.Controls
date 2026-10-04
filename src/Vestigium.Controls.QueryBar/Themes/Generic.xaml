@@ -36,10 +36,7 @@
                     ToolTip="Clear">
               <Button.Template>
                 <ControlTemplate TargetType="Button">
-                  <Border Background="{DynamicResource Vestigium.Brushes.Surface.Card}" BorderBrush="{DynamicResource Vestigium.Brushes.Stroke.Subtle}" BorderThickness="1">
-                    <Border.Background>
-                      <SolidColorBrush Color="#FF3B4252" />
-                    </Border.Background>
+                  <Border Background="{StaticResource QueryBar.Fallback.Card}" BorderBrush="{StaticResource QueryBar.Fallback.Stroke}" BorderThickness="1">
                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                   </Border>
                 </ControlTemplate>
@@ -51,7 +48,7 @@
                           ToolTip="Recent queries">
               <ToggleButton.Template>
                 <ControlTemplate TargetType="ToggleButton">
-                  <Border x:Name="Chrome" Background="#FF3B4252" BorderBrush="#FF4C566A" BorderThickness="1">
+                  <Border x:Name="Chrome" Background="{StaticResource QueryBar.Fallback.Card}" BorderBrush="{StaticResource QueryBar.Fallback.Stroke}" BorderThickness="1">
                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                   </Border>
                   <ControlTemplate.Triggers>
@@ -62,6 +59,12 @@
                 </ControlTemplate>
               </ToggleButton.Template>
             </ToggleButton>
+            <Popup x:Name="PART_Completion" PlacementTarget="{Binding ElementName=PART_TextBox}" StaysOpen="False" AllowsTransparency="True">
+              <ListBox x:Name="PART_CompletionList" MinWidth="280" DisplayMemberPath="Display"
+                       Background="{StaticResource QueryBar.Fallback.Window}"
+                       Foreground="{StaticResource QueryBar.Fallback.Text}"
+                       BorderBrush="{StaticResource QueryBar.Fallback.Stroke}" />
+            </Popup>
           </Grid>
         </ControlTemplate>
       </Setter.Value>

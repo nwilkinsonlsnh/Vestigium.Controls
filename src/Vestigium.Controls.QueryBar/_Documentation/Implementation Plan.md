@@ -2,7 +2,7 @@
 
 **Document ID:** VEST-CTL-QRY-PLN-001
 **Version:** 1.0
-**Status:** Step 3 done
+**Status:** Step 4 done
 **Date:** 4 October 2026
 
 ## Step 1 — Project
@@ -19,7 +19,7 @@ Done. Text binds both ways. Clear empties Text, raises Cleared, and leaves the c
 
 ## Step 4 — Completion
 
-Call KqlHelper.Complete after CompletionDelay. Tab, Up, Down, Escape. Accept writes Insert, adds a trailing space unless the insert ends with `(`, and sets the caret at the end after the binding write-back. Enter does not accept.
+Done. Complete runs after CompletionDelay. Tab accepts and leaves the caret at the end. Up and Down move the highlight. Escape closes. Enter does not accept. A trailing space is added unless the insert ends with `(`.
 
 ## Step 5 — Saved queries
 
