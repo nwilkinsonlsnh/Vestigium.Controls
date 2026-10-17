@@ -1,9 +1,9 @@
 # Vestigium.Controls.QueryBar — Design
 
 **Document ID:** VEST-CTL-QRY-DES-001
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Draft
-**Date:** 4 October 2026
+**Date:** 17 October 2026
 
 ## 1. Place
 
@@ -21,12 +21,13 @@ The template holds the text box, the clear button, the chevron, the completion p
 
 | Property | Role |
 |---|---|
-| Text | The query. Two-way. |
+| Text | The query. Two-way. Live. |
 | Session | The KqlSession used by Complete. |
 | Queries | The saved rows for this bar. |
 | Limit | Rolling size. 0 hides the chevron. |
 | CloseOnApply | Close the saved list after a text selection. Default true. |
 | CompletionDelay | Pause before the list opens. Default 140 ms. |
+| FilterDelay | Pause before FilterRequested. Default 180 ms. 0 raises immediately. |
 
 ## 4. Events
 
@@ -36,7 +37,8 @@ The template holds the text box, the clear button, the chevron, the completion p
 | Cleared | Clear button. |
 | PinRequested | Pin clicked. Argument is the row. |
 | RemoveRequested | Host may ignore. Not on the bar. |
-| TextChanged | After the box text changes. The host may debounce its grid filter. |
+| TextChanged | After the box text changes. Live. |
+| FilterRequested | After FilterDelay, on Enter, on clear, and on a saved-query apply. The host filters the grid here. |
 
 ## 5. Completion
 
@@ -46,7 +48,7 @@ The list opens under the caret. It uses the window surface and the card highligh
 
 Accept replaces `ReplaceStart` for `ReplaceLength` with `Insert`. If the insert does not end with `(`, the control adds a trailing space. The caret is set after the binding writes the text back. A suppress flag stops the write-back from opening the list at position 0.
 
-A saved-query apply uses the same caret placement and does not call Complete.
+A saved-query apply uses the same caret placement and does not call Complete. It raises FilterRequested.
 
 ## 6. Saved-query popup
 
@@ -54,11 +56,11 @@ Placement target is the bar, not the chevron. A custom placement callback keeps 
 
 The pin glyph is Segoe MDL2 `E718`. A sticky row uses `E841`.
 
-## 7. What RouteIQ keeps
+## 7. What the host keeps
 
-RouteIQ keeps the three sessions, the grid filters, the settings store, and the sticky flag. The control does not write ProgramData.
+The host keeps the session, the grid, and the settings store. The control does not write ProgramData and does not refresh a grid.
 
-The grid filter stays on a short pause in the host. This control does not refresh a grid.
+The host binds FilterRequested and applies the predicate. It does not copy a timer.
 
 ## 8. Logging
 
