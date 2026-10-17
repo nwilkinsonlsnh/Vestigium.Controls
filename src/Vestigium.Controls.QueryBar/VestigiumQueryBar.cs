@@ -18,6 +18,7 @@ namespace Vestigium.Controls.QueryBar;
 public partial class VestigiumQueryBar : Control
 {
     private readonly DispatcherTimer _timer;
+    private readonly DispatcherTimer _filter;
     private TextBox? _box;
     private Button? _clear;
     private ToggleButton? _chevron;
@@ -38,6 +39,8 @@ public partial class VestigiumQueryBar : Control
     {
         _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(140) };
         _timer.Tick += (_, _) => Show();
+        _filter = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(180) };
+        _filter.Tick += (_, _) => RaiseFilter();
         ApplyQueryCommand = new Relay(ApplySaved);
         PinQueryCommand = new Relay(Pin);
     }
@@ -64,11 +67,18 @@ public partial class VestigiumQueryBar : Control
         DependencyProperty.Register(nameof(CompletionDelay), typeof(int), typeof(VestigiumQueryBar),
             new PropertyMetadata(140));
 
+    public static readonly DependencyProperty FilterDelayProperty =
+        DependencyProperty.Register(nameof(FilterDelay), typeof(int), typeof(VestigiumQueryBar),
+            new PropertyMetadata(180));
+
     public static readonly RoutedEvent ClearedEvent =
         EventManager.RegisterRoutedEvent(nameof(Cleared), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VestigiumQueryBar));
 
     public static readonly RoutedEvent PinRequestedEvent =
         EventManager.RegisterRoutedEvent(nameof(PinRequested), RoutingStrategy.Bubble, typeof(EventHandler<VestigiumQueryRowEventArgs>), typeof(VestigiumQueryBar));
+
+    public static readonly RoutedEvent FilterRequestedEvent =
+        EventManager.RegisterRoutedEvent(nameof(FilterRequested), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VestigiumQueryBar));
 
     public string Text
     {
@@ -106,6 +116,12 @@ public partial class VestigiumQueryBar : Control
         set => SetValue(CompletionDelayProperty, value);
     }
 
+    public int FilterDelay
+    {
+        get => (int)GetValue(FilterDelayProperty);
+        set => SetValue(FilterDelayProperty, value);
+    }
+
     public ICommand ApplyQueryCommand { get; }
 
     public ICommand PinQueryCommand { get; }
@@ -114,6 +130,12 @@ public partial class VestigiumQueryBar : Control
     {
         add => AddHandler(ClearedEvent, value);
         remove => RemoveHandler(ClearedEvent, value);
+    }
+
+    public event RoutedEventHandler FilterRequested
+    {
+        add => AddHandler(FilterRequestedEvent, value);
+        remove => RemoveHandler(FilterRequestedEvent, value);
     }
 
     public event EventHandler<VestigiumQueryRowEventArgs> PinRequested
@@ -185,6 +207,7 @@ public partial class VestigiumQueryBar : Control
             }
 
             _applying = false;
+            RaiseFilter();
         }, DispatcherPriority.Input);
     }
 
@@ -204,6 +227,7 @@ public partial class VestigiumQueryBar : Control
         }
 
         RaiseEvent(new RoutedEventArgs(ClearedEvent, this));
+        RaiseFilter();
     }
 
     private void OnBoxText(object sender, TextChangedEventArgs e)
@@ -217,6 +241,7 @@ public partial class VestigiumQueryBar : Control
             _syncing = false;
         }
 
+        ArmFilter();
         if (_applying || Session is null)
         {
             if (_popup is not null)
@@ -227,6 +252,26 @@ public partial class VestigiumQueryBar : Control
         _timer.Interval = TimeSpan.FromMilliseconds(Math.Max(40, CompletionDelay));
         _timer.Stop();
         _timer.Start();
+    }
+
+    private void ArmFilter()
+    {
+        var delay = Math.Max(0, FilterDelay);
+        if (delay == 0)
+        {
+            RaiseFilter();
+            return;
+        }
+
+        _filter.Interval = TimeSpan.FromMilliseconds(delay);
+        _filter.Stop();
+        _filter.Start();
+    }
+
+    private void RaiseFilter()
+    {
+        _filter.Stop();
+        RaiseEvent(new RoutedEventArgs(FilterRequestedEvent, this));
     }
 
     private void OnKey(object sender, KeyEventArgs e)
@@ -249,6 +294,12 @@ public partial class VestigiumQueryBar : Control
         {
             _chevron.IsChecked = false;
             e.Handled = true;
+            return;
+        }
+
+        if (e.Key == Key.Enter)
+        {
+            RaiseFilter();
             return;
         }
 
