@@ -80,6 +80,9 @@ public partial class VestigiumQueryBar : Control
     public static readonly RoutedEvent FilterRequestedEvent =
         EventManager.RegisterRoutedEvent(nameof(FilterRequested), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VestigiumQueryBar));
 
+    public static readonly RoutedEvent CommittedEvent =
+        EventManager.RegisterRoutedEvent(nameof(Committed), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VestigiumQueryBar));
+
     public string Text
     {
         get => (string)GetValue(TextProperty);
@@ -136,6 +139,12 @@ public partial class VestigiumQueryBar : Control
     {
         add => AddHandler(FilterRequestedEvent, value);
         remove => RemoveHandler(FilterRequestedEvent, value);
+    }
+
+    public event RoutedEventHandler Committed
+    {
+        add => AddHandler(CommittedEvent, value);
+        remove => RemoveHandler(CommittedEvent, value);
     }
 
     public event EventHandler<VestigiumQueryRowEventArgs> PinRequested
@@ -208,6 +217,7 @@ public partial class VestigiumQueryBar : Control
 
             _applying = false;
             RaiseFilter();
+            RaiseCommitted();
         }, DispatcherPriority.Input);
     }
 
@@ -274,6 +284,11 @@ public partial class VestigiumQueryBar : Control
         RaiseEvent(new RoutedEventArgs(FilterRequestedEvent, this));
     }
 
+    private void RaiseCommitted()
+    {
+        RaiseEvent(new RoutedEventArgs(CommittedEvent, this));
+    }
+
     private void OnKey(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Down && Keyboard.Modifiers == ModifierKeys.Control)
@@ -300,6 +315,8 @@ public partial class VestigiumQueryBar : Control
         if (e.Key == Key.Enter)
         {
             RaiseFilter();
+            RaiseCommitted();
+            e.Handled = true;
             return;
         }
 
