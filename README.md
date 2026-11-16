@@ -1,81 +1,13 @@
 # Vestigium.Controls
 
-[![build](https://github.com/nwilkinsonlsnh/Vestigium.Controls/actions/workflows/build.yml/badge.svg)](https://github.com/nwilkinsonlsnh/Vestigium.Controls/actions/workflows/build.yml)
+**This repository has moved.**
 
-WPF control library for the Vestigium suite (PingIQ, DnsIQ, TraceIQ, HttpIQ, ProbeHost).
+This library now lives in the Vestigium monorepo:
 
-**Target:** .NET 10 LTS / WPF / Visual Studio 2026  
-**Architecture:** MVVM + `Microsoft.Extensions.DependencyInjection`  
-**License:** MIT (`LICENSE`) — stamped onto every project by `Directory.Build.props`
+**https://github.com/nwilkinsonlsnh/Vestigium**
 
-This repository ships **Vestigium.Controls** (shared shell + DI), **Vestigium.Controls.StatusBar**, **Vestigium.Controls.NumericUpDown**, **Vestigium.Controls.UnderConstruction**, and **Vestigium.Controls.PropertiesGrid**. Hosts consume the libraries. There are no demo executables in this solution.
+Path: `Controls/`
 
-Umbrella requirements: [`_Documentation/Requirements_v1.0.md`](_Documentation/Requirements_v1.0.md)  
-Umbrella developer notes: [`_Documentation/DevelopersGuide_v1.0.md`](_Documentation/DevelopersGuide_v1.0.md)
+This repo is archived. It is read-only. History stays. Do not open issues or pull requests here. New work goes in `Vestigium`.
 
-## Libraries under this solution
-
-| Project | Role | Docs |
-|---|---|---|
-| `Vestigium.Controls` | Shared primitives, DI host, **default Vestigium form** (menu + content + status bar) | [`src/Vestigium.Controls/_Documentation`](src/Vestigium.Controls/_Documentation) |
-| `Vestigium.Controls.StatusBar` | Bindable status bar, dock **Top** or **Bottom**, Left/Center/Right slots | [SRS v1.3](src/Vestigium.Controls.StatusBar/_Documentation/Requirements_v1.3.md) · [Guide v1.3](src/Vestigium.Controls.StatusBar/_Documentation/DevelopersGuide_v1.3.md) |
-| `Vestigium.Controls.NumericUpDown` | Decimal spinner, Immediate/Deferred, Signed/Unsigned, snap Round/Floor/Ceiling | [SRS v1.2](src/Vestigium.Controls.NumericUpDown/_Documentation/Requirements_v1.2.md) · [Guide v1.2](src/Vestigium.Controls.NumericUpDown/_Documentation/DevelopersGuide_v1.2.md) |
-| `Vestigium.Controls.PropertiesGrid` | Windows 11 property inspector: multi-select, collections, reset, nested expand | [SRS v1.2](src/Vestigium.Controls.PropertiesGrid/_Documentation/Requirements_v1.2.md) · [Guide v1.2](src/Vestigium.Controls.PropertiesGrid/_Documentation/DevelopersGuide_v1.2.md) |
-| `Vestigium.Controls.UnderConstruction` | Page/overlay placeholder, Title 75 / Subject 125, multi-line Description, host PNG/SVG | [SRS v1.4](src/Vestigium.Controls.UnderConstruction/_Documentation/Requirements_v1.4.md) · [Guide v1.4](src/Vestigium.Controls.UnderConstruction/_Documentation/DevelopersGuide_v1.4.md) |
-| `Vestigium.Controls.Tests` | STA and engine coverage for the libraries | — |
-
-## Default form (this milestone)
-
-`VestigiumDefaultWindow` is an empty host:
-
-- Top-level horizontal `Menu` whose items currently resolve to **Under Construction**.
-- Client area left empty for the consuming application.
-- `VestigiumStatusBar` attached to the shell. Default dock is **Bottom**. Position is bindable to **Top** or **Bottom**.
-
-A consuming application owns the executable and themes. This repo does not ship a sample WPF host.
-
-## Open in Visual Studio
-
-1. Clone this repository.
-2. Open `Vestigium.Controls.slnx` in Visual Studio 2026.
-3. Restore NuGet.
-4. Build. Run tests with `dotnet test Vestigium.Controls.slnx -c Release`.
-
-## Host in two calls
-
-```csharp
-using Microsoft.Extensions.DependencyInjection;
-using Vestigium.Controls.DependencyInjection;
-
-var services = new ServiceCollection();
-services.AddVestigiumControls();
-var provider = services.BuildServiceProvider();
-```
-
-Do this during `Application.OnStartup` before the first window.
-
-Theming is **not** part of those two calls. A host that wants a Vestigium palette does this in the same `OnStartup`, from the host project, before the window is parsed:
-
-```csharp
-var themes = new ThemeManager();
-themes.Register(ThemeDefinition.FromPack(
-    "LightBlue", "Light Blue", "Vestigium.Themes.LightBlue", isDark: false));
-themes.Initialize(this, "LightBlue");
-```
-
-`Vestigium.Controls*` assemblies do not reference Themes. Controls consume `Vestigium.Brushes.*` when the host merged them; otherwise they use Generic.xaml fallbacks.
-
-## Contracts that do not move
-
-- MVVM on every project. Code-behind only calls `InitializeComponent` and assigns `DataContext`.
-- Controls never throw on the dispatcher. Invalid input leaves the last good visual state.
-- Design-time XAML preview works without a live `IServiceProvider`.
-- No project under this umbrella references `Vestigium.Themes*`.
-- No project under this umbrella targets anything other than `net10.0-windows`.
-- MIT license and the root README are linked into every project from `Directory.Build.props`. Do not copy those files into `src/`.
-
-## Suite neighbors
-
-- [Vestigium.Themes](https://github.com/nwilkinsonlsnh/Vestigium.Themes) — host-assigned palettes. Not a dependency of this repo.
-- [Vestigium.Converters](https://github.com/nwilkinsonlsnh/Vestigium.Converters) — DI-resolved `IValueConverter` catalog.
-- [Vestigium.Logging](https://github.com/nwilkinsonlsnh/Vestigium.Logging) — centralized Serilog module. StatusBar will subscribe later; not in v1 of the StatusBar requirements.
+Published NuGet packages are unchanged. Package source of truth for the next release is the monorepo.
